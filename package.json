@@ -14,5 +14,8 @@
     "publish": {
       "registry": "https://www.npmjs.com/"
     }
+  },
+  "devDependencies": {
+    "lerna": "^4.0.0"
   }
 }
