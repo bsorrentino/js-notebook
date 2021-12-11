@@ -7,7 +7,6 @@
       "ESNext"
     ],
     "types": [
-      "vite/client"
     ],
     "allowJs": false,
     "skipLibCheck": false,

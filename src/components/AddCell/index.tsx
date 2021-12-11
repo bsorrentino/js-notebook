@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./AddCell.module.css";
+import * as classes from "./AddCell.module.css";
 import { useActions } from "../../hooks";
 
 interface AddCellProps {
