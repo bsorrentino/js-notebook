@@ -3,8 +3,6 @@ import { Cell } from "../../redux";
 import TextCell from "../TextCell";
 import CodeCell from "../CodeCell";
 import ActionBar from "../ActionBar";
-import { useSelector } from "../../hooks";
-import classes from "./CellItem.module.css";
 
 interface CellItemProps {
   cell: Cell;

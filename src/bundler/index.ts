@@ -13,7 +13,8 @@ const esBundle = async (input: string): Promise<BundledResult> => {
   if (!hasService) {
     await esbuild.initialize({
       worker: true,
-      wasmURL: "https://unpkg.com/esbuild-wasm@0.11.0/esbuild.wasm",
+//      wasmURL: "https://unpkg.com/esbuild-wasm@0.14.2/esbuild.wasm",
+      wasmURL: "/esbuild.wasm",
     });
     hasService = true;
   }
