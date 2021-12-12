@@ -2,6 +2,25 @@
 # yarn lockfile v1
 
 
+"@azure/msal-browser@2.14.2":
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/@azure/msal-browser/-/msal-browser-2.14.2.tgz#4efa031ad16d5a3a527eddb6222e15dd6e2ea3e8"
+  integrity sha512-JKHE9Rer41CI8tweiyE91M8ZbGvQV9P+jOPB4ZtPxyxCi2f7ED3jNfdzyUJ1eGB+hCRnvO56M1Xc61T1R+JfYg==
+  dependencies:
+    "@azure/msal-common" "^4.3.0"
+
+"@azure/msal-common@^4.3.0":
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@azure/msal-common/-/msal-common-4.5.1.tgz#f35af8b634ae24aebd0906deb237c0db1afa5826"
+  integrity sha512-/i5dXM+QAtO+6atYd5oHGBAx48EGSISkXNXViheliOQe+SIFMDo3gSq3lL54W0suOSAsVPws3XnTaIHlla0PIQ==
+  dependencies:
+    debug "^4.1.1"
+
+"@azure/msal-react@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@azure/msal-react/-/msal-react-1.0.0.tgz#8428e51d395476ce13a2d8966d161bbd875e01f6"
+  integrity sha512-A5tnDSllpftXseippHyNG3vxbn2scYy8oH54nNbOr44kcrdrLaaCmByUCXpG9Smf7U3xvAPwT7w4jEcVTA9mOg==
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.0":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.16.0.tgz#0dfc80309beec8411e65e706461c408b0bb9b431"
@@ -234,6 +253,21 @@
   dependencies:
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
+
+"@bsorrentino/xrmtoolboxweb-core@^1.2.0":
+  version "1.2.0"
+  resolved "https://npm.pkg.github.com/download/@bsorrentino/xrmtoolboxweb-core/1.2.0/04445a5b674cfe636444019ea3c5309761b79a6aa255f46e3eb9d6a16a84402b#1284f3536b88d24a1186e0e6f2e2022479dd8363"
+  integrity sha512-dQCr94fLHTlJGQ2XHio75B4x8u3eEemBn2CWt9RSUp+RZEjzMk2I+WEoOW0ISWOMFBYy7VJELWuOxXxRb1wReA==
+  dependencies:
+    "@azure/msal-browser" "2.14.2"
+    "@azure/msal-react" "1.0.0"
+    "@bsorrentino/xrmtoolboxweb-webapiclient" "^1.2.0"
+    react-dom "^17.0.2"
+
+"@bsorrentino/xrmtoolboxweb-webapiclient@^1.2.0":
+  version "1.2.0"
+  resolved "https://npm.pkg.github.com/download/@bsorrentino/xrmtoolboxweb-webapiclient/1.2.0/4a4a12db568e3149b3a1af76782cb77c72709268e1b724b809eda8513121a3d5#73a10e1bc6dc296b94a3fbfac47de266d6601943"
+  integrity sha512-NxnARyFHPj0DTgNie061MZFeZxssjZOQojjmdNNd9bWf+UBNF6asbcrN1e0GJ+HTP9o1riPku5tsposJyVWRpw==
 
 "@iarna/toml@^2.2.0":
   version "2.2.5"
@@ -1943,7 +1977,7 @@ debug@2.6.9:
   dependencies:
     ms "2.0.0"
 
-debug@^4.0.0, debug@^4.1.0:
+debug@^4.0.0, debug@^4.1.0, debug@^4.1.1:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
   integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
@@ -4379,7 +4413,7 @@ range-parser@1.2.0:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
 
-react-dom@^17.0.0:
+react-dom@^17.0.0, react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
   integrity sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==
@@ -4633,15 +4667,7 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-sass@^1.32.8:
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.44.0.tgz#619aa0a2275c097f9af5e6b8fe8a95e3056430fb"
-  integrity sha512-0hLREbHFXGQqls/K8X+koeP+ogFRPF4ZqetVB19b7Cst9Er8cOR0rc6RU7MaI4W1JmUShd1BPgPoeqmmgMMYFw==
-  dependencies:
-    chokidar ">=3.0.0 <4.0.0"
-    immutable "^4.0.0"
-
-sass@^1.38.0:
+sass@^1.32.8, sass@^1.38.0:
   version "1.45.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.45.0.tgz#192ede1908324bb293a3e403d1841dbcaafdd323"
   integrity sha512-ONy5bjppoohtNkFJRqdz1gscXamMzN3wQy1YH9qO2FiNpgjLhpz/IPRGg0PpCjyz/pWfCOaNEaiEGCcjOFAjqw==
