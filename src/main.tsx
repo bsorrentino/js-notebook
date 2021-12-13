@@ -5,11 +5,16 @@ import { Provider } from "react-redux";
 import store from "./redux";
 import "./global.scss";
 
+import { MsalProvider } from "@azure/msal-react";
+import { PCA } from '@bsorrentino/xrmtoolboxweb-core'
+
 ReactDOM.render(
-  <Provider store={store}>
-    <Layout>
-      <App />
-    </Layout>
-  </Provider>,
+  <MsalProvider instance={PCA}>
+    <Provider store={store}>
+      <Layout>
+        <App />
+      </Layout>
+    </Provider>
+  </MsalProvider>,
   document.getElementById("root")
 );

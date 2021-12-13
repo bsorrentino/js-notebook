@@ -11,9 +11,9 @@ interface CellsState {
   };
 }
 
-const generateId = () => {
-  return Math.random().toString(36).substr(2, 5);
-};
+const generateId = () => 
+   Math.random().toString(36).substr(2, 5);
+
 
 const initialState: CellsState = {
   loading: false,
@@ -24,13 +24,26 @@ const initialState: CellsState = {
       id: "time",
       type: "text",
       content:
-        "# welcome to js-notebook \n There is a additional helper function `show()` to make it easier to display values in the preview window. `show()` can be called to display primitive values (`show('hello')`) and objects (`show({ language: 'javascript' })`). If you want to use `show()` multiple times in one code cell, you need to specify the second argument to be `true`. <br/> You can also use it with jsx elements or general React components, but `react` and `react-dom` must be imported first ",
+        `# welcome to js-notebook
+        
+        There is a additional helper function \`show()\` to make it easier to display values in the preview window. \`show()\` can be called to display primitive values (\`show('hello')\`) and objects (\`show({ language: 'javascript' })\`). 
+        
+        If you want to use \`show()\` multiple times in one code cell, you need to specify the second argument to be \`true\`. <br/> 
+        You can also use it with jsx elements or general React components, but \`react\` and \`react-dom\` must be imported first `,
     },
     time2: {
       id: "time2",
       type: "code",
       content:
-        "// use the show() helper to render a React component \n import React from 'react' \n import ReactDOM from 'react-dom' \n\n const App = () => <h1>hello world</h1> \n show(<App />)",
+        `// use the show() helper to render a React component
+        
+        import React from 'react'
+        import ReactDOM from 'react-dom' 
+        import { useRenderAfterLogin, PCA } from '@bsorrentino/xrmtoolboxweb-core'
+
+        const App = () => <h1>hello world</h1> 
+        
+        show(<App />)`,
     },
   },
 };

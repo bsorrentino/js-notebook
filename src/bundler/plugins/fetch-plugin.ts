@@ -57,14 +57,24 @@ export const fetchPlugin = (input: string) => {
 
       // handle js and jsx files
       build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
-        const { data: contents, request } = await axios.get(args.path);
-        const result: esbuild.OnLoadResult = {
-          loader: "jsx",
-          contents,
-          resolveDir: new URL("./", request.responseURL).pathname,
-        };
-        await fileCache.setItem(args.path, result);
-        return result;
+        try {
+        
+          console.log( 'fetch', args.path )
+          const { data: contents, request } = await axios.get(args.path);
+
+          const result: esbuild.OnLoadResult = {
+            loader: "jsx",
+            contents,
+            resolveDir: new URL("./", request.responseURL).pathname,
+          };
+          
+          await fileCache.setItem(args.path, result);
+          return result;  
+        
+        }
+        catch( e ) {
+          console.error( e)
+        }
       });
     },
   };
