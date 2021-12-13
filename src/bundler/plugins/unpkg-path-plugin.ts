@@ -1,9 +1,13 @@
 import * as esbuild from "esbuild-wasm";
 
+const LOCAL_DIR = 'local'
+const LOCAL_NAMESPACE = 'local'
+const UNPKG_URL = 'https://unpkg.com'
+const UNPKG_NAMESPACE = 'a'
 
 const isPackageInstalled = async (pkg: string): Promise<any | undefined> => {
   try {
-    const res = await fetch(`/local/${pkg}/package.json`)
+    const res = await fetch(`/${LOCAL_DIR}/${pkg}/package.json`)
 
     if (res.status !== 404) {
       return res.json()
@@ -23,7 +27,7 @@ export const unpkgPathPlugin = () => {
       build.onResolve({ filter: /(^index\.js$)/ }, (args: esbuild.OnResolveArgs) => {
         console.log("onResolve.root", args)
 
-        return { path: "index.js", namespace: "a" };
+        return { path: "index.js", namespace: UNPKG_NAMESPACE };
 
 
       });
@@ -34,20 +38,20 @@ export const unpkgPathPlugin = () => {
 
         let result: esbuild.OnResolveResult
 
-        if (args.namespace === 'local' && args.path.startsWith('./')) {
+        if (args.namespace === LOCAL_NAMESPACE && args.path.startsWith('./')) {
 
           const path = args.path.endsWith('.js') ? args.path : `${args.path}.js`
           result = {
             path: `${args.resolveDir}/${path}`,
-            namespace: "local",
+            namespace: LOCAL_NAMESPACE,
           };
         }
         else {
-          const baseUrl = `https://unpkg.com${args.resolveDir}/`
+          const baseUrl = `${UNPKG_URL}${args.resolveDir}/`
           try {
             result = {
               path: new URL(args.path, baseUrl).href,
-              namespace: "a",
+              namespace: UNPKG_NAMESPACE,
             };
           }
           catch (e) {
@@ -72,14 +76,14 @@ export const unpkgPathPlugin = () => {
           console.log(`package ${args.path} is locally installed`)
 
           result = {
-            path: `/local/${args.path}/${packageJson.main}`,
-            namespace: "local",
+            path: `/${LOCAL_DIR}/${args.path}/${packageJson.main}`,
+            namespace: LOCAL_NAMESPACE,
           }
         }
         else {
           result = {
-            path: `https://unpkg.com/${args.path}`,
-            namespace: "a",
+            path: `${UNPKG_URL}/${args.path}`,
+            namespace: UNPKG_NAMESPACE,
           };
         }
 
