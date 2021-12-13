@@ -1,3 +1,10 @@
+*.local
+.env
+*.log
+
+# PowerAppsCli
+PowerAppsCli/
+
 # Mac
 .DS_Store
 
@@ -9,6 +16,3 @@ node_modules
 dist
 
 
-*.local
-.env
-*.log
