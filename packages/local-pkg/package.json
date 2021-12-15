@@ -1,0 +1,12 @@
+{
+  "name": "@jscript-notebook/local-pkg",
+  "version": "0.2.3",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm i"
+  },
+  "dependencies": {
+    "@bsorrentino/xrmtoolboxweb-core": "^1.2.4",
+    "@bsorrentino/xrmtoolboxweb-webapiclient": "^1.2.4"
+  }
+}
