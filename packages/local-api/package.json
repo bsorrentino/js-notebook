@@ -10,8 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "start": "tsc --watch --preserveWatchOutput",
-    "prepublishOnly": "tsc"
+    "build": "tsc"
   },
   "license": "MIT",
   "devDependencies": {

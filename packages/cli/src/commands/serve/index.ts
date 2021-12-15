@@ -24,7 +24,7 @@ const serveAction = async (filename = "notebook.js", { port }: Options) => {
         `https://github.com/enixam/js-notebook`
       )}`
     );
-  } catch (error) {
+  } catch (error:any) {
     if (error.code === "EADDRINUSE") {
       log(
         chalk.red(

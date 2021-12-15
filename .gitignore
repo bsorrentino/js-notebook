@@ -1,8 +1,17 @@
 **/node_modules
-.DS_Store
 **/dist
 dist-ssr
 *.local
 .env
 **/*.log
 **/build
+
+# Parcel
+.parcel-cache/
+
+# Mac
+.DS_Store
+
+# PowerappsCli
+PowerAppsCli/
+
