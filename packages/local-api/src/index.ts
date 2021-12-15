@@ -12,6 +12,7 @@ export const serve = (
   const app = express();
 
   const cellsRouter = createCellsRouter(filename, dir);
+  
   app.use(cellsRouter);
 
   if (useProxy) {
@@ -23,10 +24,14 @@ export const serve = (
       })
     );
   } else {
+    
     const packagePath = require.resolve(
-      "@jscript-notebook/local-client/build/index.html"
+      "@jscript-notebook/local-client/dist/index.html"
     );
-    app.use(express.static(path.dirname(packagePath)));
+    
+    console.log( '@jscript-notebook path', packagePath)
+
+    app.use( express.static( path.dirname(packagePath) ) );
   }
 
   return new Promise<void>((resolve, reject) => {

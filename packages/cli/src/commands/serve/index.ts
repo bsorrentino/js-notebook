@@ -9,13 +9,11 @@ interface Options {
 // not used for now
 const isProduction = process.env.NODE_ENV === "production";
 
-const log = console.log;
-
 const serveAction = async (filename = "notebook.js", { port }: Options) => {
   const dir = path.join(process.cwd(), path.dirname(filename));
   try {
     await serve(parseFloat(port), path.basename(filename), dir, false);
-    log(
+    console.log(
       `Notebook live at ${chalk.inverse(
         `http://localhost:${port}`
       )} \n opened file ${chalk.underline(
@@ -26,13 +24,13 @@ const serveAction = async (filename = "notebook.js", { port }: Options) => {
     );
   } catch (error:any) {
     if (error.code === "EADDRINUSE") {
-      log(
+      console.log(
         chalk.red(
           `${port} already in use, try using a different port via the --port option`
         )
       );
     } else {
-      log(chalk.red(error));
+      console.log(chalk.red(error));
     }
     process.exit(1);
   }
