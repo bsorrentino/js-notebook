@@ -76,7 +76,7 @@ export const unpkgPathPlugin = () => {
           console.log(`package ${args.path} is locally installed`)
 
           result = {
-            path: `/${LOCAL_DIR}/${args.path}/${packageJson.main}`,
+            path: `/${LOCAL_DIR}/${args.path}/${packageJson.main ?? 'index.js'}`,
             namespace: LOCAL_NAMESPACE,
           }
         }
