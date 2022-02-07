@@ -34,7 +34,7 @@ const esBundle = async (
       code: result.outputFiles[0].text,
       error: "",
     };
-  } catch (error) {
+  } catch (error:any) {
     return {
       code: "",
       error: error.message,

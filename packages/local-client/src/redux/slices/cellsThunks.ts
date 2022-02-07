@@ -37,8 +37,8 @@ export const saveCells = createAsyncThunk<
   const { data, order } = getState().cells;
   const cells = order.map((id) => data[id]);
   try {
-    const res = await db.bulkDocs( cells )
-    console.log( 'bulkDocs', res )
+    // const res = await db.bulkDocs( cells )
+    //console.log( 'bulkDocs', res )
     await axios.post("/cells", { cells });
   } catch (error:any) {
     rejectWithValue(error.message);
