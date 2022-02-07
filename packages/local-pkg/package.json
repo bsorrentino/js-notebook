@@ -3,7 +3,7 @@
   "version": "0.2.3",
   "license": "MIT",
   "scripts": {
-    "prepare": "npm i"
+    "build": "npm i"
   },
   "dependencies": {
     "@bsorrentino/xrmtoolboxweb-core": "^1.2.4",

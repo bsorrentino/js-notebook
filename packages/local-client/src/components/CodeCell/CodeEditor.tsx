@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import Editor, { OnMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
-import classes from "./CodeEditor.module.css";
+import * as classes from "./CodeEditor.module.css";
 import { Cell, CellLanguages } from "../../redux";
 
 interface CodeEditorProps {

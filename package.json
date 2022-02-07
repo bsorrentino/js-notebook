@@ -6,9 +6,6 @@
   "author": "qiushi <qiushi.yann@gmail.com>",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "start": "lerna run start --parallel",
     "lerna:publish": "lerna publish --registry=https://registry.npmjs.org --force-publish",
@@ -20,9 +17,12 @@
     }
   },
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.2.1",
+    "@types/pouchdb": "^6.4.0",
     "http-server": "^14.1.0",
     "lerna": "^4.0.0",
     "parcel": "^2.2.1",
+    "sass": "^1.32.8",
     "typescript": "^4.5.5"
   }
 }
