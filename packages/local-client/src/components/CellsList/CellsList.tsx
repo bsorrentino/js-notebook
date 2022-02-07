@@ -31,9 +31,9 @@ const CellsList: React.FC = () => {
 
   const cells = cellsData.map((cell) => {
     return (
-      <div className="cells-list-item" key={cell._id}>
+      <div className="cells-list-item" key={cell.id}>
         <CellItem cell={cell} hasTypescript={hasTypescript} />
-        <AddCell prevCellId={cell._id} />
+        <AddCell prevCellId={cell.id} />
       </div>
     );
   });

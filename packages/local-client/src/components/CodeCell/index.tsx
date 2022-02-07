@@ -23,20 +23,20 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
   // const [prevContent, setPrevContent] = useState<undefined | string>(undefined);
   const { updateCellContent } = useActions();
   const dispatch = useDispatch();
-  const cumulativeCode = useCumulativeCode(cell._id);
+  const cumulativeCode = useCumulativeCode(cell.id);
 
   let keysPressed: KeysPressed = {};
   const handleSubmit = () => {
     // if (cell.content && cell.content !== prevContent) {
     //   setPrevContent(cell.content);
     //   dispatch(
-    //     createBundle({ id: cell._id, input: cumulativeCode, hasTypescript })
+    //     createBundle({ id: cell.id, input: cumulativeCode, hasTypescript })
     //   );
     // } else {
     //   console.log("the code cell may be empty or same as before");
     // }
     dispatch(
-      createBundle({ id: cell._id, input: cumulativeCode, hasTypescript })
+      createBundle({ id: cell.id, input: cumulativeCode, hasTypescript })
     );
   };
 
@@ -71,13 +71,13 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
             <CodeEditor
               initialValue={cell.content}
               onChange={(value) =>
-                updateCellContent({ id: cell._id, content: value })
+                updateCellContent({ id: cell.id, content: value })
               }
               handleSubmit={handleSubmit}
               language={cell.language || "javascript"}
             />
           </Resizable>
-          <Preview id={cell._id} />
+          <Preview id={cell.id} />
         </div>
       </Resizable>
     </div>

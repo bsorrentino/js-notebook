@@ -61,12 +61,12 @@ const cellsSlice = createSlice({
         type,
         language: "javascript",
       };
-      state.data[cell._id] = cell;
+      state.data[cell.id] = cell;
       if (id) {
         const index = state.order.findIndex((i) => i === id);
-        state.order.splice(index + 1, 0, cell._id);
+        state.order.splice(index + 1, 0, cell.id);
       } else {
-        state.order.unshift(cell._id);
+        state.order.unshift(cell.id);
       }
     },
     updateCellContent: (state, action: PayloadAction<UpdateCellContent>) => {
@@ -81,9 +81,9 @@ const cellsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchCells.fulfilled, (state, { payload }) => {
       if (payload.length !== 0) {
-        state.order = payload.map((cell) => cell._id);
+        state.order = payload.map((cell) => cell.id);
         state.data = payload.reduce((accumulator, cell) => {
-          accumulator[cell._id] = cell;
+          accumulator[cell.id] = cell;
           return accumulator;
         }, {} as CellsState["data"]);
       } else {
