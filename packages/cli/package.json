@@ -10,7 +10,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "prepare": "tsc",
     "start": "node dist/index.js serve -p 1234"
   },
   "devDependencies": {
