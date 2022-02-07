@@ -56,9 +56,9 @@ export const useCumulativeCode = (id: string) => {
       .filter((c) => c.type === "code");
     const cumulativeCodeArray = ["let show;"];
     for (let c of orderedCodeCells) {
-      if (c.id !== id) {
+      if (c._id !== id) {
         cumulativeCodeArray.push("show = () => {}" + "\n" + c.content);
-      } else if (c.id === id) {
+      } else if (c._id === id) {
         cumulativeCodeArray.push(defineShow + "\n" + c.content);
         break;
       }

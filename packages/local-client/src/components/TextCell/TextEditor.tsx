@@ -37,7 +37,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
       {editMode && (
         <MDEditor
           value={cell.content}
-          onChange={(e) => updateCellContent({ id: cell.id, content: e || "" })}
+          onChange={(e) => updateCellContent({ id: cell._id, content: e || "" })}
         />
       )}
     </div>

@@ -18,10 +18,10 @@ const CellItem: React.FC<CellItemProps> = ({ cell, hasTypescript }) => {
           <div className="code-cell">
             <div className="action-bar-wrapper">
               <LanguageDropdown
-                id={cell.id}
+                id={cell._id}
                 initialLanguage={cell.language || "javascript"}
               />
-              <ActionBar id={cell.id} />
+              <ActionBar id={cell._id} />
             </div>
             <CodeCell cell={cell} hasTypescript={hasTypescript} />
           </div>
@@ -31,7 +31,7 @@ const CellItem: React.FC<CellItemProps> = ({ cell, hasTypescript }) => {
         <div className="cell-list-item">
           <div className="text-cell">
             <TextCell cell={cell} />
-            <ActionBar id={cell.id} />
+            <ActionBar id={cell._id} />
           </div>
         </div>
       )}
