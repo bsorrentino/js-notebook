@@ -9,7 +9,7 @@
     "access": "public"
   },
   "scripts": {
-    "serve": "parcel serve index.html",
+    "serve": "parcel serve  --nocache index.html",
     "prepare": "parcel build index.html"
   },
   "gitHead": "03c0a809fc3245f27bff8fae0c7e7d56022891bf",
