@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import CellItem from "./CellItem";
 import { useDispatch, useSelector } from "../../hooks";
-import { Cell, fetchCells, saveCells } from "../../redux";
+import { fetchCells, saveCells } from "../../redux";
 import AddCell from "../AddCell";
 
 const CellsList: React.FC = () => {
