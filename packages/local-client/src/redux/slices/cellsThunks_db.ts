@@ -9,6 +9,7 @@ import {
   UpdateCellContent,
 } from "../payload-types";
 
+
 export interface CellsState {
   loading: boolean;
   error: string | null;
@@ -32,6 +33,13 @@ function makeDebounce(debounceTime:number) {
     saveTimer = setTimeout(task, debounceTime);
   }
 }
+
+const errorMessage = ( error:any ) => {
+  const result = error.message ?? error 
+  console.error( result )
+  return result
+}
+
 /**
  * fetchCells
  */
@@ -41,10 +49,18 @@ export const fetchCells = createAsyncThunk<
   { rejectValue: string }
 >("cells/fetchCells", async (_, thunkAPI) => {
   try {
-    return await db.loadCells();
+    let result =  await db.loadCells();
+
+    // if( result.length === 0 ) {
+    //   await db.saveCells( initData )
+
+    //   result = initData
+    // }
+
+    return result
 
   } catch (error: any) {
-    thunkAPI.rejectWithValue(error.message);
+    thunkAPI.rejectWithValue( errorMessage(error) )
   }
   return [];
 });
@@ -80,9 +96,8 @@ export const updateCellContent = createAsyncThunk<
       console.log(`cell content updated!`, result)
   
     } catch (error: any) {
-  
-      console.error(error.message)
-      rejectWithValue(error.message);
+ 
+      rejectWithValue(errorMessage(error));
       
     }
   
@@ -108,8 +123,7 @@ export const updateCellLanguage = createAsyncThunk<
 
   } catch (error: any) {
 
-    console.error(error.message)
-    rejectWithValue(error.message);
+    rejectWithValue(errorMessage(error));
     
   }
 
@@ -147,8 +161,7 @@ export const insertCell = createAsyncThunk<
 
   } catch (error: any) {
 
-    console.error(error.message)
-    rejectWithValue(error.message);
+    rejectWithValue(errorMessage(error));
 
   }
 
@@ -172,7 +185,8 @@ export const deleteCell = createAsyncThunk<
     console.log('cell deleted!', result)
 
   } catch (error: any) {
-    rejectWithValue(error.message);
+    
+    rejectWithValue(errorMessage(error));
   }
 
 });

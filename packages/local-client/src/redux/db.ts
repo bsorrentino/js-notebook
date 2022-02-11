@@ -1,5 +1,6 @@
 import {Cell} from './cell'
 import PouchDB from 'pouchdb'
+import { initData } from './initCellsData'
 
 export interface DBDocument {
     _id: string
@@ -75,6 +76,17 @@ export async function insertCellAtIndex( index:number, cell:Cell ) {
  * 
  * @returns 
  */
+ export async function saveCells( cells: Array<Cell> ) {
+        return await db.put( {
+             _id: DOCUMENT_ID,
+             cells: cells
+        })
+}
+
+/**
+ * 
+ * @returns 
+ */
 export async function loadCells( ) {
 
     try { 
@@ -85,10 +97,10 @@ export async function loadCells( ) {
     catch( err:any ) {
         console.warn( `doc '${DOCUMENT_ID} not found!`, err )
         
-        await db.put( { _id:DOCUMENT_ID, cells:[] })
-    }
+        await db.put( { _id:DOCUMENT_ID, cells:initData }, { force: true })
 
-    return []
+        return initData
+    }
     
 }
     

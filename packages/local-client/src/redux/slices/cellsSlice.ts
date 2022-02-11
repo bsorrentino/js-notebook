@@ -7,9 +7,8 @@ import {
   UpdateCellContent,
 } from "../payload-types";
 import { Cell } from "../cell";
-import { fetchCells, saveCells } from "./cellsThunks_db";
-//import { fetchCells, saveCells } from "./cellsThunks";
-import { sample } from './init-data'
+import { fetchCells, saveCells } from "./cellsThunks";
+import { initData } from '../initCellsData'
 
 export interface CellsState {
   loading: boolean;
@@ -80,16 +79,15 @@ const cellsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCells.fulfilled, (state, { payload }) => {
-      if (payload.length !== 0) {
-        state.order = payload.map((cell) => cell.id);
-        state.data = payload.reduce((accumulator, cell) => {
-          accumulator[cell.id] = cell;
-          return accumulator;
-        }, {} as CellsState["data"]);
-      } else {
-        state.data = sample.data 
-        state.order = sample.order
-      }
+
+      const cells = (payload.length !== 0) ? payload : initData 
+      
+      state.order = cells.map((cell) => cell.id);
+      state.data = cells.reduce<Record<string,Cell>>((accumulator, cell) => {
+        accumulator[cell.id] = cell;
+        return accumulator;
+      }, {});
+
     });
 
     builder.addCase(fetchCells.rejected, (state, { payload }) => {

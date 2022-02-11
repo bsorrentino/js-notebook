@@ -12,7 +12,7 @@ import {
   updateCellContent, 
   updateCellLanguage 
 } from "./cellsThunks_db";
-import { sample } from './init-data'
+import { initData } from './init-data'
 
 const initialState: CellsState = {
   loading: false,
@@ -75,16 +75,13 @@ const cellsSlice = createSlice({
     // fetchCells
     ////////////////////////
     builder.addCase(fetchCells.fulfilled, (state, { payload }) => {
-      if (payload.length !== 0) {
-        state.order = payload.map(cell => cell.id);
-        state.data = payload.reduce<Record<string,Cell>>((accumulator, cell) => {
-          accumulator[cell.id] = cell;
-          return accumulator;
-        }, {});
-      } else {
-        state.data = sample.data 
-        state.order = sample.order
-      }
+      const cells = (payload.length !== 0) ? payload : initData 
+      
+      state.order = cells.map((cell) => cell.id);
+      state.data = cells.reduce<Record<string,Cell>>((accumulator, cell) => {
+        accumulator[cell.id] = cell;
+        return accumulator;
+      }, {});
     });
     
     builder.addCase(fetchCells.pending, (state) => {
