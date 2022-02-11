@@ -1,13 +1,12 @@
-import React, { useState, useEffect, KeyboardEvent } from "react";
+import React, { KeyboardEvent } from "react";
 import CodeEditor from "./CodeEditor";
 import Preview from "./Preview";
 import Resizable from "../Resizable";
-import { Cell, createBundle } from "../../redux";
+import { Cell, createBundle, updateCellContent } from "../../redux";
 import {
   useActions,
   useCumulativeCode,
   useDispatch,
-  useSelector,
 } from "../../hooks";
 
 interface KeysPressed {
@@ -21,7 +20,7 @@ interface CodeCellProps {
 
 const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
   // const [prevContent, setPrevContent] = useState<undefined | string>(undefined);
-  const { updateCellContent } = useActions();
+  // const { updateCellContent } = useActions();
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
 
@@ -51,6 +50,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
     delete keysPressed[event.key];
   };
 
+
   // remove auto-execution for now
   // useEffect(() => {
   //   const timer = setTimeout(handleSubmit, 2000);
@@ -70,8 +70,8 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
           <Resizable direction="horizontal">
             <CodeEditor
               initialValue={cell.content}
-              onChange={(value) =>
-                updateCellContent({ id: cell.id, content: value })
+              onChange={(value) => 
+                dispatch( updateCellContent({ id: cell.id, content: value } ) )
               }
               handleSubmit={handleSubmit}
               language={cell.language || "javascript"}

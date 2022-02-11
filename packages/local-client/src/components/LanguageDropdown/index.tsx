@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
-import { useActions } from "../../hooks";
-import { CellLanguages } from "../../redux";
+import { useDispatch } from "react-redux";
+import { CellLanguages, updateCellLanguage } from "../../redux";
 
 interface LanguageDropdownProps {
   id: string;
@@ -11,12 +11,14 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   id,
   initialLanguage,
 }) => {
-  const { updateCellLanguage } = useActions();
+  //const { updateCellLanguage } = useActions();
+  const dispatch = useDispatch()
   const [language, setLanguage] = useState<CellLanguages>(initialLanguage);
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setLanguage(e.target.value as CellLanguages);
-    updateCellLanguage({ id, language: e.target.value as CellLanguages });
+    const lang = e.target.value as CellLanguages
+    setLanguage(lang);
+    dispatch( updateCellLanguage({ id, language: lang }) )
   };
 
   return (
