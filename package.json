@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "clean": "lerna clean -y",
+    "clean": "lerna clean -y && zx zx-clean.mjs",
     "build": "lerna bootstrap --hoist --strict",
     "start": "lerna run start --parallel",
     "lerna:publish": "lerna publish --registry=https://registry.npmjs.org --force-publish",
@@ -24,6 +24,7 @@
     "lerna": "^4.0.0",
     "parcel": "^2.2.1",
     "sass": "^1.32.8",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "zx": "^5.0.0"
   }
 }
