@@ -1,13 +1,15 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useActions } from "../../hooks";
-import { CellTypes } from "../../redux";
+import { deleteCell } from "../../redux";
 
 interface ActionBarProps {
   id: string;
 }
 
 const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
-  const { moveCell, deleteCell, updateCellLanguage } = useActions();
+  const dispatch = useDispatch()
+  const { moveCell } = useActions();
 
   return (
     <div className="action-bar">
@@ -17,7 +19,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
       <button onClick={() => moveCell({ id: id, direction: "down" })}>
         <span className="material-icons">arrow_downward</span>
       </button>
-      <button onClick={() => deleteCell({ id: id })}>
+      <button onClick={() => dispatch( deleteCell({ id: id }))}>
         <span className="material-icons">clear</span>
       </button>
     </div>

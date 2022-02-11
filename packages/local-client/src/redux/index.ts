@@ -10,5 +10,5 @@ export {
   deleteCell,
   fetchCells,
   saveCells,
-} from "./slices/cellsSlice";
+} from "./slices/cellsSlice_db";
 export { createBundle } from "./slices/bundlerSlice";

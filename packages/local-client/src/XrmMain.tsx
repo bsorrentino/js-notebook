@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import App from "./App.xrm";
+import App from "./XrmApp";
 import Layout from "./components/Layout/Layout";
 import { Provider } from "react-redux";
 import store from "./redux";
