@@ -8,7 +8,7 @@ import {
   UpdateCellLanguage,
   UpdateCellContent,
 } from "../payload-types";
-
+import { makeDebounce } from '../../debounce'
 
 export interface CellsState {
   loading: boolean;
@@ -21,18 +21,6 @@ export interface CellsState {
 const generateId = () => {
   return Math.random().toString(36).substr(2, 5);
 };
-
-
-function makeDebounce(debounceTime:number) {
-   let saveTimer:number
-
-   return ( task: () => void) => {
-    if (saveTimer) 
-      clearTimeout(saveTimer);
-  
-    saveTimer = setTimeout(task, debounceTime);
-  }
-}
 
 const errorMessage = ( error:any ) => {
   const result = error.message ?? error 
@@ -190,3 +178,4 @@ export const deleteCell = createAsyncThunk<
   }
 
 });
+
