@@ -12,7 +12,6 @@ import {
   updateCellContent, 
   updateCellLanguage 
 } from "./cellsThunks_db";
-import { initData } from './init-data'
 
 const initialState: CellsState = {
   loading: false,
@@ -74,11 +73,9 @@ const cellsSlice = createSlice({
     ////////////////////////
     // fetchCells
     ////////////////////////
-    builder.addCase(fetchCells.fulfilled, (state, { payload }) => {
-      const cells = (payload.length !== 0) ? payload : initData 
-      
-      state.order = cells.map((cell) => cell.id);
-      state.data = cells.reduce<Record<string,Cell>>((accumulator, cell) => {
+    builder.addCase(fetchCells.fulfilled, (state, { payload }) => {      
+      state.order = payload.map((cell) => cell.id);
+      state.data = payload.reduce<Record<string,Cell>>((accumulator, cell) => {
         accumulator[cell.id] = cell;
         return accumulator;
       }, {});
