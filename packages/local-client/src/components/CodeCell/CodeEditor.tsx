@@ -3,7 +3,7 @@ import Editor, { OnMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import * as classes from "./CodeEditor.module.css";
-import { Cell, CellLanguages } from "../../redux";
+import { CellLanguages } from "../../redux";
 
 interface CodeEditorProps {
   initialValue: string;

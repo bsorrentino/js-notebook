@@ -4,14 +4,11 @@ import Preview from "./Preview";
 import Resizable from "../Resizable";
 import { Cell, createBundle, updateCellContent } from "../../redux";
 import {
-  useActions,
   useCumulativeCode,
   useDispatch,
 } from "../../hooks";
 
-interface KeysPressed {
-  [index: string]: boolean;
-}
+type KeysPressed = Record<string,boolean>
 
 interface CodeCellProps {
   cell: Cell;
@@ -50,7 +47,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
     delete keysPressed[event.key];
   };
 
-
   // remove auto-execution for now
   // useEffect(() => {
   //   const timer = setTimeout(handleSubmit, 2000);
@@ -63,20 +59,20 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
     <div className="code-cell">
       <Resizable direction="vertical">
         <div
-          style={{ height: "100%", display: "flex", flexDirection: "row" }}
+          style={{ height: "100%", display: "flex", flexDirection: "column" }}
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
         >
-          <Resizable direction="horizontal">
+          { /* <Resizable direction="horizontal"> */ }
             <CodeEditor
               initialValue={cell.content}
-              onChange={(value) => 
-                dispatch( updateCellContent({ id: cell.id, content: value } ) )
+              onChange={ value => 
+                dispatch( updateCellContent({ id: cell.id, content: value }) )
               }
               handleSubmit={handleSubmit}
               language={cell.language || "javascript"}
             />
-          </Resizable>
+          { /* </Resizable> */ }
           <Preview id={cell.id} />
         </div>
       </Resizable>
