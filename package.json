@@ -8,6 +8,7 @@
   "private": true,
   "scripts": {
     "commit": "cz",
+    "cleanall": "lerna clean -y && zx zx-clean.mjs --all",
     "clean": "lerna clean -y && zx zx-clean.mjs",
     "build": "lerna bootstrap --hoist --strict",
     "start": "lerna run start --parallel",
