@@ -16,7 +16,7 @@
   "dependencies": {
     "@bsorrentino/xrmtoolboxweb-core": "^1.2.4",
     "@monaco-editor/react": "^4.3.1",
-    "@uiw/react-md-editor": "2.1.1",
+    "@uiw/react-md-editor": "3.9.5",
     "axios": "^0.21.1",
     "bulmaswatch": "^0.8.1",
     "esbuild-wasm": "0.14.22",
