@@ -1,13 +1,12 @@
-import {Cell} from './cell'
+import {Cell} from './redux/cell'
 import PouchDB from 'pouchdb'
-import { initData } from './initCellsData'
+import { initData } from './redux/initCellsData'
 
-export interface DBDocument {
-    _id: string
+export interface NotebookDoc extends PouchDB.Core.IdMeta {
     cells: Array<Cell>
 }
 
-const db = new PouchDB<DBDocument>('jsnotebook')
+const db = new PouchDB<NotebookDoc>('jsnotebook')
 
 const DOCUMENT_ID = "notebook#2"
 
@@ -76,12 +75,12 @@ export async function insertCellAtIndex( index:number, cell:Cell ) {
  * 
  * @returns 
  */
- export async function saveCells( cells: Array<Cell> ) {
-        return await db.put( {
+ export const saveCells = async ( cells: Array<Cell> ) =>
+        await db.put( {
              _id: DOCUMENT_ID,
              cells: cells
         })
-}
+
 
 /**
  * 
@@ -104,3 +103,21 @@ export async function loadCells( ) {
     
 }
     
+/* 
+* @returns 
+*/
+export const loadNotebooks = async() =>
+    await db.allDocs()
+
+/* 
+* @returns 
+*/
+export const addNotebooks = async ( notebook:NotebookDoc ) =>
+    await db.put( notebook )
+    
+/* 
+* @returns 
+*/
+export const removeNotebooks = async ( notebookRef: PouchDB.Core.IdMeta & PouchDB.Core.RevisionIdMeta ) =>
+    await db.remove( notebookRef )
+ 
