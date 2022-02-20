@@ -1,8 +1,8 @@
-import React from "react";
+import {FunctionComponent} from 'react'
 
-type NotebookListProps = void
+type NotebookListProps = {}
 
-const NotebookList: React.FC<NotebookListProps> = () => {
+const NotebookList: FunctionComponent<NotebookListProps> = () => {
     return (
         <nav className="panel">
             <p className="panel-heading">
@@ -70,3 +70,5 @@ const NotebookList: React.FC<NotebookListProps> = () => {
             </div>
         </nav>)
 }
+
+export default NotebookList

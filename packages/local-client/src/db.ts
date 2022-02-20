@@ -102,22 +102,3 @@ export async function loadCells( ) {
     }
     
 }
-    
-/* 
-* @returns 
-*/
-export const loadNotebooks = async() =>
-    await db.allDocs()
-
-/* 
-* @returns 
-*/
-export const addNotebooks = async ( notebook:NotebookDoc ) =>
-    await db.put( notebook )
-    
-/* 
-* @returns 
-*/
-export const removeNotebooks = async ( notebookRef: PouchDB.Core.IdMeta & PouchDB.Core.RevisionIdMeta ) =>
-    await db.remove( notebookRef )
- 
