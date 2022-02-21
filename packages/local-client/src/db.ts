@@ -6,9 +6,11 @@ export interface NotebookDoc extends PouchDB.Core.IdMeta {
     cells: Array<Cell>
 }
 
+export type NotebookID = string
+
 const db = new PouchDB<NotebookDoc>('jsnotebook')
 
-const DOCUMENT_ID = "notebook#2"
+// const DOCUMENT_ID = "notebook#2"
 
 /**
  * 
@@ -25,9 +27,9 @@ export async function info( ) {
  * @param process 
  * @returns 
  */
-export async function updateCellById( id:string, process:(cell:Cell) => void ) {
+export async function updateCellById( notebook:NotebookID, id:string, process:(cell:Cell) => void ) {
 
-    const doc = await db.get( DOCUMENT_ID )
+    const doc = await db.get( notebook )
     
     const cell = doc.cells.find( cell => cell.id === id )
 
@@ -43,9 +45,9 @@ export async function updateCellById( id:string, process:(cell:Cell) => void ) {
  * @param id 
  * @returns 
  */
-export async function deleteCellById( id:string ) {
+export async function deleteCellById( notebook:NotebookID, id:string ) {
 
-    const doc = await db.get( DOCUMENT_ID )
+    const doc = await db.get( notebook )
     
     const new_cells = doc.cells.filter( cell => cell.id !== id )
 
@@ -62,9 +64,9 @@ export async function deleteCellById( id:string ) {
  * @param cell 
  * @returns 
  */
-export async function insertCellAtIndex( index:number, cell:Cell ) {
+export async function insertCellAtIndex( notebook:NotebookID, index:number, cell:Cell ) {
 
-    const doc = await db.get( DOCUMENT_ID )
+    const doc = await db.get( notebook )
       
     doc.cells = doc.cells.splice( index, 0, cell )
 
@@ -75,28 +77,28 @@ export async function insertCellAtIndex( index:number, cell:Cell ) {
  * 
  * @returns 
  */
- export const saveCells = async ( cells: Array<Cell> ) =>
-        await db.put( {
-             _id: DOCUMENT_ID,
-             cells: cells
-        })
-
+ export const saveCells = async ( notebook:NotebookID, cells: Array<Cell> ) => {
+    const doc = await db.get( notebook )    
+    doc.cells = cells   
+    return await db.put( doc )
+}
 
 /**
  * 
  * @returns 
  */
-export async function loadCells( ) {
+export async function loadCells( notebook:NotebookID ) {
 
     try { 
-        const doc = await db.get( DOCUMENT_ID )
+        
+        const doc = await db.get( notebook )
 
         return doc.cells
     }
     catch( err:any ) {
-        console.warn( `doc '${DOCUMENT_ID} not found!`, err )
+        console.warn( `doc '${notebook} not found!`, err )
         
-        await db.put( { _id:DOCUMENT_ID, cells:initData }, { force: true })
+        await db.put( { _id:notebook, cells:initData }, { force: true })
 
         return initData
     }
