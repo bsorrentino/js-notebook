@@ -1,4 +1,4 @@
-import {Cell} from './redux/cell'
+import {Cell} from './cell'
 import PouchDB from 'pouchdb'
 
 export interface NotebookDoc extends PouchDB.Core.IdMeta {
@@ -19,8 +19,11 @@ export async function info( ) {
 /* 
 * @returns 
 */
-export const loadNotebooks = async() =>
-    await db.allDocs()
+export const loadNotebooks = async ( include_docs = false ) => {
+    const result = await db.allDocs( { include_docs: include_docs })
+    console.log( 'all docs', result )
+    return result
+}
 
 /* 
 * @returns 
