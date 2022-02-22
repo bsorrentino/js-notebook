@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useLayoutEffect, useState } from 'react'
+import { FunctionComponent, useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import * as db from '../../db'
 
 type NotebookListProps = {}
@@ -14,16 +14,24 @@ const PanelTabs = () => (
     </p>
 )
 
-const NotebookRow = ( docId: string ) => (
-    <a className="panel-block">
-    {/*
-        <span className="panel-icon">
-            <i className="fas fa-book" aria-hidden="true"></i>
-        </span>
-    */}
-        <button className="button is-link" >{ docId.toUpperCase() }</button>    
+const NotebookRow = ( docId: string ) => {
+
+    const id = docId.toUpperCase()
+    const clickHandler = useCallback(() => 
+        window.location.href=`/notebook#${id}` , [id] )
+
+    return (<a className="panel-block">
+        {/*
+            <span className="panel-icon">
+                <i className="fas fa-book" aria-hidden="true"></i>
+            </span>
+        */}
+        <button className="button is-link" 
+                onClick={ clickHandler } >
+        { id }
+        </button>    
     </a>
-)
+)}
 
 const NotebookList: FunctionComponent<NotebookListProps> = () => {
     const [notebooks, setNotebooks] = useState<Array<string>>([])
