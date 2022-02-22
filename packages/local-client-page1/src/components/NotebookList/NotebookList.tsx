@@ -17,17 +17,15 @@ const PanelTabs = () => (
 const NotebookRow = ( docId: string ) => {
 
     const id = docId.toUpperCase()
-    const clickHandler = useCallback(() => 
-        window.location.href=`/notebook#${id}` , [id] )
 
-    return (<a className="panel-block">
+    return (<a className="panel-block" key={id}>
         {/*
             <span className="panel-icon">
                 <i className="fas fa-book" aria-hidden="true"></i>
             </span>
         */}
         <button className="button is-link" 
-                onClick={ clickHandler } >
+                onClick={ () => window.location.href=`/notebook#${id}` } >
         { id }
         </button>    
     </a>
