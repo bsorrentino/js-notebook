@@ -16,12 +16,17 @@ import {
 
 const slice = () => {
 
-  const hash = window.location.hash.trim().substring(1)
+  let notebookId = window.location.hash.trim().substring(1)
   console.log( window.location )
-  if( hash.length === 0 ) throw 'parameter "notebook id" not provided!'
+  if( notebookId.length === 0 ){
+
+    // throw 'parameter "notebook id" not provided!'
+    console.warn( 'parameter "notebook id" not provided!', 'default used')
+    notebookId = 'playground'
+  } 
 
   const initialState: CellsState = {
-    notebook: hash,
+    notebook: notebookId,
     loading: false,
     error: null,
     order: [],
