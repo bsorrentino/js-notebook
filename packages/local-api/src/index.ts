@@ -34,10 +34,11 @@ export const serve = (
       return (join) ? path.join( result, join ) : result 
     }
 
-    const local_client_path = packageModulePath( path.join('@jscript-notebook', 'local-client', 'dist', 'index.html') )
-    const local_pkg_path    = packageModulePath( path.join('@jscript-notebook', 'local-pkg', 'README.md' ), 'node_modules')
+    const local_client_page1_path = packageModulePath( path.join('@jscript-notebook', 'local-client-page1', 'dist', 'index.html') )
+    app.use( express.static( local_client_page1_path ) )
 
-    app.use( express.static( local_client_path ) )
+    const local_client_path = packageModulePath( path.join('@jscript-notebook', 'local-client', 'dist', 'index.html') )
+    app.use( '/notebook', express.static( local_client_path ) )
 
     // LOG STATIC REQUEST    
     const log:RequestHandler =  (req, res, next) => {
@@ -46,6 +47,7 @@ export const serve = (
       next();
     }
 
+    const local_pkg_path = packageModulePath( path.join('@jscript-notebook', 'local-pkg', 'README.md' ), 'node_modules')
     app.use('/local', log, express.static( local_pkg_path ))
 
   }
