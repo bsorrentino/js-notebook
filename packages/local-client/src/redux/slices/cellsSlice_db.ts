@@ -16,7 +16,8 @@ import {
 
 const slice = () => {
 
-  let notebookId = window.location.hash.trim().substring(1)
+  
+  let notebookId = decodeURIComponent(window.location.hash.trim().substring(1))
   console.log( window.location )
   if( notebookId.length === 0 ){
 
