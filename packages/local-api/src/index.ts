@@ -1,12 +1,13 @@
 import express, { RequestHandler } from "express";
 import path from "path";
 import { createProxyMiddleware } from "http-proxy-middleware";
-import { createCellsRouter } from "./routes/cells";
+import { createCellsRouter } from "./routes/cells"
+
 
 export const serve = (
-  port: number,
+  port:     number,
   filename: string,
-  dir: string,
+  dir:      string,
   useProxy: boolean
 ) => {
   const app = express();
@@ -16,24 +17,28 @@ export const serve = (
   app.use(cellsRouter);
 
   if (useProxy) {
+
     app.use(
       createProxyMiddleware({
         target: "http://localhost:3000",
         ws: true,
         logLevel: "silent",
       })
-    );
+    )
   } else {
 
-    const packageModulePath = (module: string) => {
-      let _path = require.resolve(module)
+    const packageModulePath = (module: string, join?: string) => {
+      const _path = require.resolve(module)
       console.log(`${module} path: ${_path}`)
-      return path.dirname(_path)
+      const result = path.dirname(_path)
+      return (join) ? path.join( result, join ) : result 
     }
 
-    app.use(express.static(packageModulePath("@jscript-notebook/local-client/dist/index.html")));
+    const local_client_page1_path = packageModulePath( path.join('@jscript-notebook', 'local-client-page1', 'dist', 'index.html') )
+    app.use( express.static( local_client_page1_path ) )
 
-    const local_pkg_path = packageModulePath('@jscript-notebook/local-pkg/README.md')
+    const local_client_path = packageModulePath( path.join('@jscript-notebook', 'local-client', 'dist', 'index.html') )
+    app.use( '/notebook', express.static( local_client_path ) )
 
     // LOG STATIC REQUEST    
     const log:RequestHandler =  (req, res, next) => {
@@ -41,11 +46,11 @@ export const serve = (
       console.log(url, routePath);
       next();
     }
-    app.use('/local', log, express.static(path.join(local_pkg_path, 'node_modules')))
+
+    const local_pkg_path = packageModulePath( path.join('@jscript-notebook', 'local-pkg', 'README.md' ), 'node_modules')
+    app.use('/local', log, express.static( local_pkg_path ))
 
   }
 
-  return new Promise<void>((resolve, reject) => {
-    app.listen(port, resolve).on("error", reject);
-  });
-};
+  return new Promise<void>((resolve, reject) => app.listen(port, resolve).on("error", reject) )
+}

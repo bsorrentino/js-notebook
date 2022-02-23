@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Cell } from "../cell";
 import { RootState } from "../store";
-import * as db from '../db'
+import * as db from '../../db'
 import {
   DeleteCell,
   InsertCell,
@@ -11,6 +11,7 @@ import {
 import { makeDebounce } from '../../debounce'
 
 export interface CellsState {
+  notebook: db.NotebookID
   loading: boolean;
   error: string | null;
   order: string[];
@@ -34,21 +35,22 @@ const errorMessage = ( error:any ) => {
 export const fetchCells = createAsyncThunk<
   Cell[],
   undefined,
-  { rejectValue: string }
->("cells/fetchCells", async (_, thunkAPI) => {
+  { rejectValue: string; state: RootState }
+>("cells/fetchCells", async (_, { getState, rejectWithValue }) => {
+
+  const { notebook } = getState().cells
   try {
-    let result =  await db.loadCells();
+    let result =  await db.loadCells( notebook );
 
     // if( result.length === 0 ) {
     //   await db.saveCells( initData )
-
     //   result = initData
     // }
 
     return result
 
   } catch (error: any) {
-    thunkAPI.rejectWithValue( errorMessage(error) )
+    rejectWithValue( errorMessage(error) )
   }
   return [];
 });
@@ -77,10 +79,11 @@ export const updateCellContent = createAsyncThunk<
 
 
   updateCellContentDebounce( async () => {
-    const { id, content } = arg
+    const { notebook } = getState().cells
+    const { id: cellId, content } = arg
     try {
 
-      const result = await db.updateCellById( id, cell => cell.content = content )
+      const result = await db.updateCellById( notebook, cellId, cell => cell.content = content )
       console.log(`cell content updated!`, result)
   
     } catch (error: any) {
@@ -102,11 +105,12 @@ export const updateCellLanguage = createAsyncThunk<
   { rejectValue: string; state: RootState }
 >("cells/updateCellLanguage", async (arg, { getState, rejectWithValue }) => {
 
-  const { id, language } = arg
+  const { notebook } = getState().cells
+  const { id: cellId, language } = arg
 
   try {
 
-    const result = await db.updateCellById( id, cell => cell.language = language )
+    const result = await db.updateCellById( notebook, cellId, cell => cell.language = language )
     console.log(`cell language updated to ${language}!`, result)
 
   } catch (error: any) {
@@ -140,10 +144,11 @@ export const insertCell = createAsyncThunk<
   }
 
   const index = (id) ? state.order.findIndex((i) => i === id) : 0
+  const { notebook } = getState().cells
 
   try {
 
-    const result = await db.insertCellAtIndex( index, cell)
+    const result = await db.insertCellAtIndex( notebook, index, cell)
     console.log('cell inserted!', result)
     return { insertAt: index, newCell:cell }
 
@@ -164,11 +169,12 @@ export const deleteCell = createAsyncThunk<
   { rejectValue: string; state: RootState }
 >("cells/deleteCell", async (arg, { getState, rejectWithValue }) => {
 
+  const { notebook } = getState().cells
   const { id } = arg
 
   try {
 
-    const result = await db.deleteCellById( id )
+    const result = await db.deleteCellById( notebook, id )
 
     console.log('cell deleted!', result)
 
