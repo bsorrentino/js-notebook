@@ -28,12 +28,16 @@ export const loadNotebooks = async ( include_docs = false ) => {
 /* 
 * @returns 
 */
-export const addNotebooks = async ( notebook:NotebookDoc ) =>
+export const addNotebook = async ( notebook:NotebookDoc ) =>
     await db.put( notebook )
     
 /* 
 * @returns 
 */
-export const removeNotebooks = async ( notebookRef: PouchDB.Core.IdMeta & PouchDB.Core.RevisionIdMeta ) =>
-    await db.remove( notebookRef )
+export const removeNotebookById = async ( id:string ) => {
+    const doc = await db.get( id )
+
+    return await db.remove( doc )
+}
+    
  
