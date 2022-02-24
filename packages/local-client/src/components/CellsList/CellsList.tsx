@@ -21,12 +21,12 @@ const CellsList: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const { cellsData, order, hasTypescript } = useSelector(({ cells }) => {
-    let { data, order } = cells;
+  const { notebook, cellsData, order, hasTypescript } = useSelector(({ cells }) => {
+    let { data, order, notebook } = cells;
     const cellsData = order.map((id) => data[id]);
     const hasTypescript =
       cellsData.filter((cell) => cell.language === "typescript").length > 0;
-    return { cellsData, order, hasTypescript };
+    return { notebook, cellsData, order, hasTypescript };
   });
 
   const cells = cellsData.map((cell) => {
@@ -39,6 +39,11 @@ const CellsList: React.FC = () => {
   });
 
   return (
+    <>
+    <div className="box">
+    <span className="tag is-info is-large">Notebook</span>
+    <h1 className="title is-1">{notebook}</h1>
+    </div>
     <div className="cells-list">
       {order.length === 0 && (
         <div className="visible">
@@ -47,6 +52,7 @@ const CellsList: React.FC = () => {
       )}
       {cells}
     </div>
+    </>
   );
 };
 
