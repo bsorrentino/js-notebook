@@ -20,15 +20,10 @@ const PanelTabs = () => (
 
 const NotebookRow = ( params: {docId: string, onDelete:( id:string ) => void } ) => {
 
-    const id = params.docId.toUpperCase()
+    const { docId: id }  = params
 
     return (
         <a className="columns is-vcentered panel-block" key={id} >
-        {/*
-            <span className="panel-icon">
-                <i className="fas fa-book" aria-hidden="true"></i>
-            </span>
-        */}
             <div className="column is-10">{ id }</div>
             <div className="column">
                 <button className="button is-primary is-small is-rounded" style={{width: '100%'}} onClick={ () => window.location.href=`/notebook#${id}` }>Edit</button>
