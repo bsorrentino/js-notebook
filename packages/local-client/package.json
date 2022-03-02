@@ -14,7 +14,6 @@
   },
   "gitHead": "03c0a809fc3245f27bff8fae0c7e7d56022891bf",
   "dependencies": {
-    "@bsorrentino/xrmtoolboxweb-core": "^1.2.4",
     "@monaco-editor/react": "^4.3.1",
     "@reduxjs/toolkit": "^1.7.2",
     "@uiw/react-md-editor": "3.9.5",

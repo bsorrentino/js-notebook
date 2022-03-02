@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@jscript-notebook/local-client": "^0.2.3",
-    "@jscript-notebook/local-client-page1": "^0.2.3",
+    "@jscript-notebook/local-client-start": "^0.2.3",
     "@jscript-notebook/local-pkg": "^0.2.3",
     "cors": "^2.8.5",
     "express": "^4.17.3",

@@ -34,7 +34,7 @@ export const serve = (
       return (join) ? path.join( result, join ) : result 
     }
 
-    const local_client_page1_path = packageModulePath( path.join('@jscript-notebook', 'local-client-page1', 'dist', 'index.html') )
+    const local_client_page1_path = packageModulePath( path.join('@jscript-notebook', 'local-client-start', 'dist', 'index.html') )
     app.use( express.static( local_client_page1_path ) )
 
     const local_client_path = packageModulePath( path.join('@jscript-notebook', 'local-client', 'dist', 'index.html') )
