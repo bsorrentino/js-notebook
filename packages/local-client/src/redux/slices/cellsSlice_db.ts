@@ -1,9 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Cell } from "../cell";
-import {
-  MoveCell,
-} from "../payload-types";
 import { 
+  moveCell,
   CellsState,
   fetchCells, 
   saveCells, 
@@ -39,19 +37,19 @@ const slice = () => {
     name: "cells",
     initialState,
     reducers: {
-      moveCell: (state, action: PayloadAction<MoveCell>) => {
-        const { id, direction } = action.payload;
-        const index = state.order.findIndex((i) => i === id);
+      // moveCell: (state, action: PayloadAction<MoveCell>) => {
+      //   const { id, direction } = action.payload;
+      //   const index = state.order.findIndex((i) => i === id);
   
-        const targetIndex = direction === "up" ? index - 1 : index + 1;
-        // invalid moving direction
-        if (targetIndex < 0 || targetIndex > state.order.length - 1) {
-          return state;
-        }
+      //   const targetIndex = direction === "up" ? index - 1 : index + 1;
+      //   // invalid moving direction
+      //   if (targetIndex < 0 || targetIndex > state.order.length - 1) {
+      //     return state;
+      //   }
   
-        state.order[index] = state.order[targetIndex];
-        state.order[targetIndex] = id;
-      },
+      //   state.order[index] = state.order[targetIndex];
+      //   state.order[targetIndex] = id;
+      // },
       // deleteCell: (state, action: PayloadAction<DeleteCell>) => {
       //   const id = action.payload.id;
       //   state.order = state.order.filter((i) => i !== id);
@@ -196,6 +194,23 @@ const slice = () => {
       builder.addCase(insertCell.rejected, (state, { payload }) => {
         state.saveStatus = payload || "failed to delete cell, please try again";
       });
+
+      ////////////////////////
+      // MoveCell
+      ////////////////////////
+      builder.addCase(moveCell.fulfilled, (state, { payload }) => {      
+        state.order = payload;
+      });
+      
+      builder.addCase(moveCell.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      });
+  
+      builder.addCase(moveCell.rejected, (state, { payload }) => {
+        state.error = "failed to move cell, please try again"
+        state.saveStatus = payload || state.error
+      });
   
   
     },
@@ -205,11 +220,8 @@ const slice = () => {
 
 const cellsSlice = slice()
 
-export const {
-  moveCell,
-} = cellsSlice.actions;
-
 export { 
+  moveCell,
   fetchCells, 
   saveCells, 
   updateCellLanguage, 

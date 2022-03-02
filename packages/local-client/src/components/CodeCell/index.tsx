@@ -5,10 +5,10 @@ import {
   Cell,
   createBundle,
   updateCellContent,
-  deleteCell
+  deleteCell,
+  moveCell
 } from "../../redux";
 import {
-  useActions,
   useCumulativeCode,
   useDispatch,
 } from "../../hooks";
@@ -29,7 +29,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
 
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
-  const { moveCell } = useActions();
   const editorRef = useRef<any>()
 
   let keysPressed: KeysPressed = {};
@@ -97,10 +96,10 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
           <button title="Run Code" onClick={handleSubmit}>
             <span className="material-icons">play_circle</span>
           </button>
-          <button title="Move Up" onClick={() => moveCell({ id: cell.id, direction: "up" })}>
+          <button title="Move Up" onClick={() => dispatch( moveCell({ id: cell.id, direction: "up" }))}>
             <span className="material-icons">arrow_upward</span>
           </button>
-          <button title="Move Down" onClick={() => moveCell({ id: cell.id, direction: "down" })}>
+          <button title="Move Down" onClick={() => dispatch( moveCell({ id: cell.id, direction: "down" }))}>
             <span className="material-icons">arrow_downward</span>
           </button>
           <button title="Delete Cell" onClick={() => dispatch(deleteCell({ id: cell.id }))}>

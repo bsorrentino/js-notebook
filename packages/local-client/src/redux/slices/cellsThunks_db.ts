@@ -7,16 +7,19 @@ import {
   InsertCell,
   UpdateCellLanguage,
   UpdateCellContent,
+  MoveCell,
 } from "../payload-types";
 import { makeDebounce } from '../../debounce'
+import produce from "immer";
 
 export interface CellsState {
   notebook: db.NotebookID
   loading: boolean;
   error: string | null;
-  order: string[];
   saveStatus: string | null;
+  order: string[];
   data: Record<string, Cell>
+
 }
 
 const generateId = () => {
@@ -184,4 +187,48 @@ export const deleteCell = createAsyncThunk<
   }
 
 });
+
+
+/**
+ *  MoveCell
+ */
+ export const moveCell = createAsyncThunk<
+ Array<string>,
+ MoveCell,
+ { rejectValue: string; state: RootState }
+>("cells/moveCell", async (arg, { getState, rejectWithValue }) => {
+  
+  const { order, notebook, data } = getState().cells
+
+  return await produce( 
+    order
+  ,async  draft => {
+    
+    const { id, direction } = arg
+
+    const index = draft.findIndex((i) => i === id);
+
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    // guard: invalid moving direction
+    if (targetIndex < 0 || targetIndex > draft.length - 1) {
+      return 
+    }
+
+    draft[index] = order[targetIndex];
+    draft[targetIndex] = id;
+
+    try {
+
+      const result = await db.saveCells( notebook, draft.map( id => data[id] ) )
+      console.log(`cell order updated!`, result)
+  
+    } catch (error: any) {
+  
+      rejectWithValue(errorMessage(error));
+      
+    }
+  
+  })
+
+ })
 
