@@ -68,8 +68,8 @@ export async function insertCellAtIndex( notebook:NotebookID, index:number, cell
 
     const doc = await db.get( notebook )
       
-    doc.cells = doc.cells.splice( index, 0, cell )
-
+    doc.cells.splice( index, 0, cell )
+    
     return await db.put( doc )
 }
 

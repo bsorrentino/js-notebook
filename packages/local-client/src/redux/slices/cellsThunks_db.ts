@@ -152,7 +152,7 @@ export const insertCell = createAsyncThunk<
   try {
 
     const result = await db.insertCellAtIndex( notebook, index, cell)
-    console.log('cell inserted!', result)
+    console.log(`cell ${cell.id} inserted at index ${index}!`, result)
     return { insertAt: index, newCell:cell }
 
   } catch (error: any) {
