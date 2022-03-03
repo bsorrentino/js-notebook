@@ -1,0 +1,7 @@
+@startuml architecture
+
+!include browser.png.puml
+
+rectangle "Browser\n<$browser,scale=.4,color=blue>" as Navigator
+
+@enduml
