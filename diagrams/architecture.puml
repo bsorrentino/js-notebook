@@ -1,7 +1,31 @@
 @startuml architecture
 
+'left to right direction
+top to bottom direction
+'skinparam linetype ortho
+
+
 !include browser.png.puml
+!include pouchdb.png.puml
 
-rectangle "Browser\n<$browser,scale=.4,color=blue>" as Navigator
+actor User
+rectangle "<size:12>Browser" as Browser #line.dashed {
+    rectangle "Notebooks" as Notebooks <<page>>
+    rectangle "Notebook" as Notebook <<page>>
+    database "    <$pouchdb,scale=.2,color=green>\nPouchdb" as Pouchdb <<storage>>
+    [ esbuild ] <<wasm>> as esbuild
+}
 
+rectangle "<size:12>Web Server" as Server #line.dashed {
+}
+
+cloud "https://unpkg.com" as unpkg
+
+User --> Notebook: 2. add/edit\nnotebook cell\n
+User --> Notebooks: 1. select/create\nnotebook\n\n
+Notebooks <--> Pouchdb
+Notebook <--> Pouchdb
+Notebook --> esbuild: dynamic bundling\nimported package
+Notebook --> Server: Load local\nPackages
+Notebook --> unpkg: Load remote\nPackages
 @enduml
