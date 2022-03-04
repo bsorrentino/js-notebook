@@ -1,7 +1,3 @@
 {
-    "plantuml.diagramsRoot": ".",
-    "plantuml.exportFormat": "png",
-    "plantuml.exportOutDir": ".",
-    "plantuml.jar": "/usr/local/Cellar/plantuml/1.2022.1/libexec/plantuml.jar",
-    "plantuml.exportSubFolder": false
+    "plantuml.jar": "/opt/homebrew/Cellar/plantuml/1.2022.1/libexec/plantuml.jar"
 }
