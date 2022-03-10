@@ -1,0 +1,6 @@
+{
+    "plantuml.exportOutDir": ".",
+    "plantuml.diagramsRoot": ".",
+    "plantuml.exportSubFolder": false,
+    "plantuml.jarArgs": ["-Pteoz=true"]
+}

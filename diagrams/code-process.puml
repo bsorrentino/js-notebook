@@ -1,0 +1,79 @@
+@startuml Notebook: code process
+
+!pragma teoz true
+
+autonumber
+actor user
+
+box Browser
+collections "Code Snippets" as code
+participant Sandbox  as sandbox <<IFrame>>
+participant useCumulative as useCumulative <<function>>
+participant esbuild as esbuild <<wasm>>
+database IndexedDB
+end box
+
+user -> code : execute code
+activate code
+
+code -> useCumulative : call <i>useCumulative</i> to get contents from all previous cells
+activate useCumulative
+return
+
+code -> code : declare <b>show()</b> at the top of the code array,\nbut only use the functional version in the current cell
+
+
+{start} code -> esbuild : code transpiling and bundling
+activate code #red
+activate esbuild #gold
+
+esbuild -> esbuild : import packages
+
+note over code
+try ... catch block
+to handle synchronous 
+build-time error
+end note
+
+alt hasn't been fetched
+
+    esbuild ->] : go to unpkg.com/<packagename>\nand fetch all the source code
+
+    esbuild -> IndexedDB : cache package 
+
+else has been fetched before
+
+    esbuild -> IndexedDB : retrieve source from IndexDB
+
+end
+
+esbuild -> esbuild : code transpiling and bundling
+
+{end} esbuild --> code : return 
+deactivate esbuild
+{start} <-> {end} : code transpiling and bundling time
+deactivate code
+
+'preview component sees update, post a new message alongside code to iframe
+code -> sandbox : register error listener
+code -\ sandbox : post a new message alongside code to iframe
+
+activate code #red
+activate sandbox #gold
+
+note over code
+try ... catch block
+to handle synchronous 
+run-time error
+note over code
+
+an "error" event listener 
+to handle asynchronous 
+run-time error
+end note
+
+sandbox -> sandbox : evaluate the code
+return 
+deactivate code
+
+@enduml

@@ -17,6 +17,10 @@ rectangle "<size:12>Browser" as Browser #line.dashed {
 }
 
 rectangle "<size:12>Web Server" as Server #line.dashed {
+
+    node Packages {
+        
+    }
 }
 
 cloud "https://unpkg.com" as unpkg
@@ -29,3 +33,4 @@ Notebook --> esbuild: dynamic bundling\nimported package
 Notebook --> Server: Load local\nPackages
 Notebook --> unpkg: Load remote\nPackages
 @enduml
+
