@@ -16,11 +16,6 @@
     "lerna:github:publish": "lerna publish --registry=https://npm.pkg.github.com --force-publish",
     "lerna:addBuild": "lerna add @bsorrentino/jsnotebook-client --scope=javascript-notebook"
   },
-  "command": {
-    "publish": {
-      "registry": "https://www.npmjs.com/"
-    }
-  },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.3.2",
     "@types/pouchdb": "^6.4.0",
