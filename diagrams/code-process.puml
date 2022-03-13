@@ -38,15 +38,15 @@ to handle synchronous
 build-time error
 end note
 
-alt hasn't been fetched
+alt#Gold #LightBlue hasn't been fetched
 
     esbuild <[#red]-> server ** : go to local webserver\nand fetch all the source code
-    alt local not found
+    alt #AntiqueWhite local not found
         esbuild <[#red]-> unpkg ** : go to unpkg.com/<packagename>\nand fetch all the source code 
     end
     esbuild -> IndexedDB : cache package 
 
-else has been fetched before
+else #SkyBlue has been fetched before
 
     esbuild -> IndexedDB : retrieve source from IndexDB
 
