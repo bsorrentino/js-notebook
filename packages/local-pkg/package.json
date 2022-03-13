@@ -1,7 +1,13 @@
 {
   "name": "@bsorrentino/jsnotebook-local-pkg",
   "version": "0.4.9",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/js-notebook.git"
+  },
+  "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
   "license": "MIT",
+
   "private": true,
   "scripts": {
     "prepare": "npm i --ignore-scripts"

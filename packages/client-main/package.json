@@ -1,6 +1,11 @@
 {
   "name": "@bsorrentino/jsnotebook-client-main",
   "version": "0.4.9",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/js-notebook.git"
+  },
+  "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
   "license": "MIT",
   "files": [
     "dist"
@@ -27,5 +32,5 @@
     "postcss-modules": "^4.3.0",
     "process": "^0.11.10"
   },
-  "gitHead": "c45255625d26366d63ee32e9a80db80c69726c3a"
+  "gitHead": "ca398eb01398fe83040b8ebb6b1781b05019e48d"
 }
