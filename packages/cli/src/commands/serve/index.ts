@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { serve } from "@jscript-notebook/local-api";
+import { serve } from "@bsorrentino/jsnotebook-server";
 import path from "path";
 import chalk from "chalk";
 

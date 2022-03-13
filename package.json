@@ -1,5 +1,5 @@
 {
-  "name": "js-notebook",
+  "name": "@bsorrentino/jsnotebook",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/enixam/js-notebook",
@@ -13,7 +13,7 @@
     "build": "lerna bootstrap --hoist --strict",
     "start": "lerna run start --parallel",
     "lerna:publish": "lerna publish --registry=https://registry.npmjs.org --force-publish",
-    "lerna:addBuild": "lerna add @jscript-notebook/local-client --scope=javascript-notebook"
+    "lerna:addBuild": "lerna add @bsorrentino/jsnotebook-client --scope=javascript-notebook"
   },
   "command": {
     "publish": {

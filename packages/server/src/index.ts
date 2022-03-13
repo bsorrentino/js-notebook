@@ -3,6 +3,7 @@ import path from "path";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { createCellsRouter } from "./routes/cells"
 
+const SCOPE = '@bsorrentino'
 
 export const serve = (
   port:     number,
@@ -34,10 +35,10 @@ export const serve = (
       return (join) ? path.join( result, join ) : result 
     }
 
-    const local_client_page1_path = packageModulePath( path.join('@jscript-notebook', 'local-client-start', 'dist', 'index.html') )
+    const local_client_page1_path = packageModulePath( path.join( SCOPE, 'jsnotebook-client-main', 'dist', 'index.html') )
     app.use( express.static( local_client_page1_path ) )
 
-    const local_client_path = packageModulePath( path.join('@jscript-notebook', 'local-client', 'dist', 'index.html') )
+    const local_client_path = packageModulePath( path.join( SCOPE, 'jsnotebook-client', 'dist', 'index.html') )
     app.use( '/notebook', express.static( local_client_path ) )
 
     // LOG STATIC REQUEST    
@@ -47,7 +48,7 @@ export const serve = (
       next();
     }
 
-    const local_pkg_path = packageModulePath( path.join('@jscript-notebook', 'local-pkg', 'README.md' ), 'node_modules')
+    const local_pkg_path = packageModulePath( path.join( SCOPE, 'jsnotebook-local-pkg', 'README.md' ), 'node_modules')
     app.use('/local', log, express.static( local_pkg_path ))
 
   }
