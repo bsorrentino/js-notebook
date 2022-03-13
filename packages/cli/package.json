@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-cli",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "license": "MIT",
   "bin": "dist/index.js",
   "files": [
@@ -21,7 +21,7 @@
   },
   "gitHead": "c7a691362e232ef8c0d3aaa1ebd7beebb0530427",
   "dependencies": {
-    "@bsorrentino/jsnotebook-client": "^0.4.6",
-    "@bsorrentino/jsnotebook-server": "^0.4.6"
+    "@bsorrentino/jsnotebook-client": "^0.4.7",
+    "@bsorrentino/jsnotebook-server": "^0.4.7"
   }
 }
