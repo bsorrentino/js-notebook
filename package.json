@@ -12,7 +12,7 @@
     "clean": "lerna clean -y && zx zx-clean.mjs",
     "build": "lerna bootstrap --hoist --strict",
     "start": "lerna run start --parallel",
-    "lerna:bump": "npx lerna version --conventional-commits --no-git-tag-version --no-push",
+    "lerna:bump": "npx lerna version --conventional-commits --no-push",
     "lerna:github:publish": "lerna publish --registry=https://npm.pkg.github.com --force-publish",
     "lerna:addBuild": "lerna add @bsorrentino/jsnotebook-client --scope=javascript-notebook"
   },
