@@ -19,7 +19,7 @@
     "chalk": "^4.1.0",
     "commander": "^7.2.0"
   },
-  "gitHead": "c5f5179fec97aa9f4eb6192a3f63a12a5ae9976e",
+  "gitHead": "7755e087401227ccc187f234472528d7d89b54ad",
   "dependencies": {
     "@bsorrentino/jsnotebook-client": "^0.4.4",
     "@bsorrentino/jsnotebook-server": "^0.4.4"
