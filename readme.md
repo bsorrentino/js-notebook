@@ -43,6 +43,8 @@ In an interactive enviroment, a user typically codes in an tentative and explora
 
 There is also a built-in `show()` function that display values in the DOM of the preview window. That function is defined at the top of the cumulative code array. But with cumulative exectuion, DOM operations from previous cells will intervene that of the current cell. The solution is to declare `show()` once at the top, and feed in different contents inside its function body, so that only the current cell will receive a functional version with all previous cells receiving an empty function body.
 
+## Code Execution Process
+
 With all that, the following diagram summarises the code execution process
 
 ![](diagrams/code-process.png)
