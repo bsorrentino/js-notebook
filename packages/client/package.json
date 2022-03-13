@@ -12,7 +12,7 @@
     "serve": "parcel serve --no-cache index.html",
     "prepare": "parcel build index.html --public-url /notebook"
   },
-  "gitHead": "7755e087401227ccc187f234472528d7d89b54ad",
+  "gitHead": "c7a691362e232ef8c0d3aaa1ebd7beebb0530427",
   "dependencies": {
     "@monaco-editor/react": "^4.3.1",
     "@reduxjs/toolkit": "^1.7.2",
