@@ -8,5 +8,6 @@
   "dependencies": {
     "@bsorrentino/xrmtoolboxweb-core": "^1.2.4",
     "@bsorrentino/xrmtoolboxweb-webapiclient": "^1.2.4"
-  }
+  },
+  "gitHead": "b661d5c97cdad126ade8c43a45726153e8dca185"
 }

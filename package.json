@@ -2,8 +2,8 @@
   "name": "@bsorrentino/jsnotebook",
   "version": "0.2.3",
   "main": "index.js",
-  "repository": "https://github.com/enixam/js-notebook",
-  "author": "qiushi <qiushi.yann@gmail.com>",
+  "repository": "https://github.com/bsorrentino/js-notebook.git",
+  "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
