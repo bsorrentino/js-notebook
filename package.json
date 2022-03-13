@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook",
-  "version": "1.0.0",
+  "version": "0.2.3",
   "main": "index.js",
   "repository": "https://github.com/enixam/js-notebook",
   "author": "qiushi <qiushi.yann@gmail.com>",
