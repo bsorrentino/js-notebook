@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-local-pkg",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "license": "MIT",
   "scripts": {
     "prepare": "npm i --ignore-scripts"
