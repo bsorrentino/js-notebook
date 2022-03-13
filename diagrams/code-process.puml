@@ -1,4 +1,4 @@
-@startuml Notebook: code process
+@startuml code-process
 
 !pragma teoz true
 
@@ -12,6 +12,8 @@ participant useCumulative as useCumulative <<function>>
 participant esbuild as esbuild <<wasm>>
 database IndexedDB
 end box
+participant "\nLoacal\nWebServer\n" as server
+participant "\nunpkg.com\n" as unpkg
 
 user -> code : execute code
 activate code
@@ -29,6 +31,7 @@ activate esbuild #gold
 
 esbuild -> esbuild : import packages
 
+
 note over code
 try ... catch block
 to handle synchronous 
@@ -37,8 +40,10 @@ end note
 
 alt hasn't been fetched
 
-    esbuild ->] : go to unpkg.com/<packagename>\nand fetch all the source code
-
+    esbuild <[#red]-> server ** : go to local webserver\nand fetch all the source code
+    alt local not found
+        esbuild <[#red]-> unpkg ** : go to unpkg.com/<packagename>\nand fetch all the source code 
+    end
     esbuild -> IndexedDB : cache package 
 
 else has been fetched before
