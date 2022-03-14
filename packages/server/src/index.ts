@@ -1,31 +1,52 @@
 import express, { RequestHandler } from "express";
 import path from "path";
-import { createProxyMiddleware } from "http-proxy-middleware";
+import { createProxyMiddleware, Options } from "http-proxy-middleware";
 import { createCellsRouter } from "./routes/cells"
 
-const SCOPE = '@bsorrentino'
+export type Proxy = Options
 
-export const serve = (
-  port:     number,
+export type StaticModule = {
+  scope?:string 
+  name:string
+}
+
+export type CellsRoute = {
   filename: string,
-  dir:      string,
-  useProxy: boolean
-) => {
+  dir: string
+}
+
+export interface Configuration {
+  port: number
+  proxy?: Options
+  mainModule: StaticModule
+  pkgModule?: StaticModule
+  cellRoute?: CellsRoute
+}
+
+export const serve = async ( config:Configuration ) => {
+
+  const { port, cellRoute, proxy, mainModule, pkgModule  } = config
+
   const app = express();
 
-  const cellsRouter = createCellsRouter(filename, dir);
+  if( cellRoute ) {
+    const { filename, dir } = cellRoute
 
-  app.use(cellsRouter);
+    const cellsRouter = createCellsRouter(filename, dir);
 
-  if (useProxy) {
+    app.use(cellsRouter);
+  }
 
-    app.use(
-      createProxyMiddleware({
-        target: "http://localhost:3000",
-        ws: true,
-        logLevel: "silent",
-      })
-    )
+
+  if (proxy) {
+    app.use( createProxyMiddleware(proxy) )
+    // app.use(
+    //   createProxyMiddleware({
+    //     target: "http://localhost:3000",
+    //     ws: true,
+    //     logLevel: "silent",
+    //   })
+    // )
   } else {
 
     const packageModulePath = (module: string, join?: string) => {
@@ -35,23 +56,35 @@ export const serve = (
       return (join) ? path.join( result, join ) : result 
     }
 
-    const local_client_page1_path = packageModulePath( path.join( SCOPE, 'jsnotebook-client-main', 'dist', 'index.html') )
-    app.use( express.static( local_client_page1_path ) )
-
-    const local_client_path = packageModulePath( path.join( SCOPE, 'jsnotebook-client', 'dist', 'index.html') )
-    app.use( '/notebook', express.static( local_client_path ) )
-
-    // LOG STATIC REQUEST    
-    const log:RequestHandler =  (req, res, next) => {
-      const { url, path: routePath } = req;
-      console.log(url, routePath);
-      next();
+    { // static route for main module
+      const { scope = '', name } = mainModule
+      const local_client_page1_path = packageModulePath( path.join( scope, name, 'dist', 'index.html') )
+      app.use( express.static( local_client_page1_path ) )
     }
 
-    const local_pkg_path = packageModulePath( path.join( SCOPE, 'jsnotebook-local-pkg', 'README.md' ), 'node_modules')
-    app.use('/local', log, express.static( local_pkg_path ))
+    {
+      const scope = '@bsorrentino', name = 'jsnotebook-client'
+      const local_client_path = packageModulePath( path.join( scope, name, 'dist', 'index.html') )
+      app.use( '/notebook', express.static( local_client_path ) )  
+    }
+
+
+    if( pkgModule )
+    { // static route for package module
+
+      // LOG STATIC REQUEST    
+      const log:RequestHandler =  (req, _, next) => {
+        const { url, path: routePath } = req;
+        console.log(url, routePath);
+        next();
+      }
+
+      const { scope = '', name } = pkgModule
+      const local_pkg_path = packageModulePath( path.join( scope, name, 'package.json' ), 'node_modules')
+      app.use('/local', log, express.static( local_pkg_path ))
+    }
 
   }
 
-  return new Promise<void>((resolve, reject) => app.listen(port, resolve).on("error", reject) )
+  return new Promise<void>((resolve, reject) => app.listen(port, resolve).on('error', reject) )
 }
