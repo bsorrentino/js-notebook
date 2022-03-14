@@ -17,7 +17,13 @@ const serveAction = async (filename:string|undefined, { port }: Options) => {
   const config:Configuration = {
     port: parseFloat(port),
     mainModulePath: modulePath('jsnotebook-client-main', 'dist'),
-    pkgModulePath: modulePath('jsnotebook-local-pkg', 'node_modules')
+  }
+
+  try {
+    config.pkgModulePath = modulePath('jsnotebook-local-pkg', 'node_modules')
+  }
+  catch(e) {
+    console.warn(e)
   }
 
   if( filename ) {

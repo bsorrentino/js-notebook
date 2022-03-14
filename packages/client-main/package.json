@@ -18,7 +18,6 @@
     "prepare": "parcel build index.html"
   },
   "dependencies": {
-    "@bsorrentino/xrmtoolboxweb-core": "^1.2.4",
     "bulmaswatch": "^0.8.1",
     "pouchdb": "^7.2.2",
     "react": "^17.0.2",
