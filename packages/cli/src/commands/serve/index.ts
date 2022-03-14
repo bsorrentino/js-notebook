@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import { serve } from "@bsorrentino/jsnotebook-server";
+import { serve, Configuration, CellsRoute } from "@bsorrentino/jsnotebook-server";
 import path from "path";
 import chalk from "chalk";
 
@@ -9,26 +9,40 @@ interface Options {
 // not used for now
 const isProduction = process.env.NODE_ENV === "production";
 
-const serveAction = async (filename = "notebook.js", { port }: Options) => {
-  const dir = path.join(process.cwd(), path.dirname(filename));
+const serveAction = async (filename:string|undefined, { port }: Options) => {
+
+  const config:Configuration = {
+    port: parseFloat(port),
+    mainModule: { 
+      scope: '@bsorrentino',
+      name: 'jsnotebook-client-main'
+    },
+    pkgModule: {
+      scope: '@bsorrentino',
+      name: 'jsnotebook-local-pkg'
+    }
+  }
+
+  if( filename ) {
+    config.cellRoute =  {
+      dir: path.join(process.cwd(), path.dirname(filename)),
+      filename: path.basename(filename)
+    } 
+    
+  }
+
   try {
-    await serve(parseFloat(port), path.basename(filename), dir, false);
+
+    await serve( config );
     console.log(
-      `Notebook live at ${chalk.inverse(
-        `http://localhost:${port}`
-      )} \n opened file ${chalk.underline(
-        `${path.basename(filename)}`
-      )} \n browse source code at ${chalk.green(
-        `https://github.com/enixam/js-notebook`
-      )}`
-    );
+      `Notebook live at ${chalk.inverse(`http://localhost:${port}`)} `
+    )
+
   } catch (error:any) {
     if (error.code === "EADDRINUSE") {
-      console.log(
-        chalk.red(
+      console.log( chalk.red(
           `${port} already in use, try using a different port via the --port option`
-        )
-      );
+        ))
     } else {
       console.log(chalk.red(error));
     }
@@ -39,5 +53,5 @@ const serveAction = async (filename = "notebook.js", { port }: Options) => {
 export const serveCommand = new Command()
   .command("serve [filename]")
   .option("-p, --port <number>", "port to run server on", "3001")
-  .description("open a file for editing")
+  .description("open available notebook")
   .action(serveAction);
