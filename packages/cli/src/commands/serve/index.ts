@@ -11,16 +11,13 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const serveAction = async (filename:string|undefined, { port }: Options) => {
 
+  const modulePath = ( moduleName:string, join:string ) => 
+      path.join( path.dirname(require.resolve( path.join('@bsorrentino', moduleName, 'package.json' ) )), join )
+  
   const config:Configuration = {
     port: parseFloat(port),
-    mainModule: { 
-      scope: '@bsorrentino',
-      name: 'jsnotebook-client-main'
-    },
-    pkgModule: {
-      scope: '@bsorrentino',
-      name: 'jsnotebook-local-pkg'
-    }
+    mainModulePath: modulePath('jsnotebook-client-main', 'dist'),
+    pkgModulePath: modulePath('jsnotebook-local-pkg', 'node_modules')
   }
 
   if( filename ) {

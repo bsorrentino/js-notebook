@@ -5,10 +5,7 @@ import { createCellsRouter } from "./routes/cells"
 
 export type Proxy = Options
 
-export type StaticModule = {
-  scope?:string 
-  name:string
-}
+export type StaticModulePath = string
 
 export type CellsRoute = {
   filename: string,
@@ -18,14 +15,15 @@ export type CellsRoute = {
 export interface Configuration {
   port: number
   proxy?: Options
-  mainModule: StaticModule
-  pkgModule?: StaticModule
+  mainModulePath: StaticModulePath
+  pkgModulePath?: StaticModulePath
   cellRoute?: CellsRoute
 }
 
 export const serve = async ( config:Configuration ) => {
+  console.log( config )
 
-  const { port, cellRoute, proxy, mainModule, pkgModule  } = config
+  const { port, cellRoute, proxy, mainModulePath, pkgModulePath  } = config
 
   const app = express();
 
@@ -49,27 +47,15 @@ export const serve = async ( config:Configuration ) => {
     // )
   } else {
 
-    const packageModulePath = (module: string, join?: string) => {
-      const _path = require.resolve(module)
-      console.log(`${module} path: ${_path}`)
-      const result = path.dirname(_path)
-      return (join) ? path.join( result, join ) : result 
-    }
+  const modulePath = ( moduleName:string, join:string ) => 
+      path.join( path.dirname(require.resolve( path.join('@bsorrentino', moduleName, 'package.json' ) )), join )
 
-    { // static route for main module
-      const { scope = '', name } = mainModule
-      const local_client_page1_path = packageModulePath( path.join( scope, name, 'dist', 'index.html') )
-      app.use( express.static( local_client_page1_path ) )
-    }
+    // static route for main module      
+    app.use( express.static( mainModulePath ) )
 
-    {
-      const scope = '@bsorrentino', name = 'jsnotebook-client'
-      const local_client_path = packageModulePath( path.join( scope, name, 'dist', 'index.html') )
-      app.use( '/notebook', express.static( local_client_path ) )  
-    }
+    app.use( '/notebook', express.static( modulePath( 'jsnotebook-client', 'dist' ) ) )  
 
-
-    if( pkgModule )
+    if( pkgModulePath )
     { // static route for package module
 
       // LOG STATIC REQUEST    
@@ -79,9 +65,7 @@ export const serve = async ( config:Configuration ) => {
         next();
       }
 
-      const { scope = '', name } = pkgModule
-      const local_pkg_path = packageModulePath( path.join( scope, name, 'package.json' ), 'node_modules')
-      app.use('/local', log, express.static( local_pkg_path ))
+      app.use('/local', log, express.static( pkgModulePath ))
     }
 
   }

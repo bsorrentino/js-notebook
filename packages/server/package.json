@@ -24,8 +24,6 @@
   },
   "dependencies": {
     "@bsorrentino/jsnotebook-client": "^0.5.0",
-    "@bsorrentino/jsnotebook-client-main": "^0.5.0",
-    "@bsorrentino/jsnotebook-local-pkg": "^0.5.0",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "http-proxy-middleware": "^2.0.3"
