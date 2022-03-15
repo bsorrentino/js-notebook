@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Cell } from "../cell";
 import { RootState } from "../store";
-import * as db from '../../db'
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import * as db from '@bsorrentino/jsnotebook-client-data'
 import {
   DeleteCell,
   InsertCell,

@@ -1,5 +1,5 @@
 import { FunctionComponent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import * as db from '../../db'
+import * as db from '@bsorrentino/jsnotebook-client-data'
 import {DeletionNotebookPopup } from './DeletionNotebookPopup'
 import {AddingNotebookPopup } from './AddingNotebookPopup'
 

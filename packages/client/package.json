@@ -19,6 +19,7 @@
   },
   "gitHead": "ca398eb01398fe83040b8ebb6b1781b05019e48d",
   "dependencies": {
+    "@bsorrentino/jsnotebook-client-data": "^0.5.2",
     "@monaco-editor/react": "^4.3.1",
     "@reduxjs/toolkit": "^1.7.2",
     "@uiw/react-md-editor": "3.9.5",
