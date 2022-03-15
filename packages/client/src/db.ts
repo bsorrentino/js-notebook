@@ -1,6 +1,5 @@
 import {Cell} from './redux/cell'
 import PouchDB from 'pouchdb'
-import { initData } from './redux/initCellsData'
 
 export interface NotebookDoc extends PouchDB.Core.IdMeta {
     cells: Array<Cell>
@@ -98,9 +97,11 @@ export async function loadCells( notebook:NotebookID ) {
     catch( err:any ) {
         console.warn( `doc '${notebook} not found!`, err )
         
-        await db.put( { _id:notebook, cells:initData }, { force: true })
+        const result:Cell[] = []
 
-        return initData
+        await db.put( { _id:notebook, cells:result }, { force: true })
+
+        return result
     }
     
 }
