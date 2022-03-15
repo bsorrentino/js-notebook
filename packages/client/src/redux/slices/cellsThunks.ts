@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Cell } from "../cell";
-import axios from "axios";
 import { RootState } from "../store";
 
 
@@ -10,8 +9,8 @@ export const fetchCells = createAsyncThunk<
   { rejectValue: string }
 >("cells/fetchCells", async (_, thunkAPI) => {
   try {
-    
-    const { data }: { data: Cell[] } = await axios.get("/cells");
+    const response = await fetch("/cells")
+    const data:Cell[] = await response.json()
     return data;
   } catch (error:any) {
     thunkAPI.rejectWithValue(error.message);
@@ -28,7 +27,14 @@ export const saveCells = createAsyncThunk<
   const cells = order.map((id) => data[id]);
   try {
     
-    await axios.post("/cells", { cells });
+    await fetch("/cells", { 
+      method: 'POST',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify(cells)
+     });
   } catch (error:any) {
     rejectWithValue(error.message);
   }

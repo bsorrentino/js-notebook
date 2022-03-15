@@ -1,5 +1,4 @@
 import * as esbuild from "esbuild-wasm";
-import axios from "axios";
 
 import localForage from "localforage";
 
@@ -31,10 +30,12 @@ export const fetchPlugin = (input: string, hasTypescript: boolean) => {
 
       // handle css files
       build.onLoad({ filter: /\.css$/ }, async (args: esbuild.OnLoadArgs) => {
-        const { data, request } = await axios.get(args.path);
+
+        const response = await fetch(args.path);
         const fileType = args.path.match(/.css$/) ? "css" : "jsx";
         let contents;
         if (fileType === "css") {
+          const data = await response.text()
           const replaced = data
             .replace(/\n/g, "")
             .replace(/"/g, '\\"')
@@ -49,7 +50,7 @@ export const fetchPlugin = (input: string, hasTypescript: boolean) => {
         const result: esbuild.OnLoadResult = {
           loader: "jsx",
           contents,
-          resolveDir: new URL("./", request.responseURL).pathname,
+          resolveDir: new URL("./", response.url).pathname,
         };
         await fileCache.setItem(args.path, result);
         return result;
@@ -57,11 +58,13 @@ export const fetchPlugin = (input: string, hasTypescript: boolean) => {
 
       // handle js and jsx files
       build.onLoad({ filter: /.*/ }, async (args: esbuild.OnLoadArgs) => {
-        const { data: contents, request } = await axios.get(args.path);
+        const response = await fetch(args.path);
+        const contents = await response.text()
+
         const result: esbuild.OnLoadResult = {
           loader: "js",
           contents,
-          resolveDir: new URL("./", request.responseURL).pathname,
+          resolveDir: new URL("./", response.url).pathname,
         };
         await fileCache.setItem(args.path, result);
         return result;
