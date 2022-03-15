@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-client-data",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -20,7 +20,5 @@
   },
   "dependencies": {
     "pouchdb": "^7.2.2"
-  },
-  "devDependencies": {
   }
 }
