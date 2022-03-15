@@ -1,15 +1,13 @@
-import {Cell} from './redux/cell'
 import PouchDB from 'pouchdb'
+import {Cell} from './cell'
 
 export interface NotebookDoc extends PouchDB.Core.IdMeta {
     cells: Array<Cell>
 }
 
-export type NotebookID = string
-
 const db = new PouchDB<NotebookDoc>('jsnotebook')
 
-// const DOCUMENT_ID = "notebook#2"
+export type NotebookID = string
 
 /**
  * 
@@ -86,7 +84,7 @@ export async function insertCellAtIndex( notebook:NotebookID, index:number, cell
  * 
  * @returns 
  */
-export async function loadCells( notebook:NotebookID ) {
+ export async function loadCells( notebook:NotebookID ) {
 
     try { 
         
@@ -105,3 +103,30 @@ export async function loadCells( notebook:NotebookID ) {
     }
     
 }
+
+
+/* 
+* @returns 
+*/
+export const loadNotebooks = async ( include_docs = false ) => {
+    const result = await db.allDocs( { include_docs: include_docs })
+    console.log( 'all docs', result )
+    return result
+}
+
+/* 
+* @returns 
+*/
+export const addNotebook = async ( notebook:NotebookDoc ) =>
+    await db.put( notebook )
+    
+/* 
+* @returns 
+*/
+export const removeNotebookById = async ( id:string ) => {
+    const doc = await db.get( id )
+
+    return await db.remove( doc )
+}
+    
+ 
