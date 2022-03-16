@@ -13,7 +13,6 @@ import { makeDebounce } from '../../debounce'
 import produce from "immer";
 
 export interface CellsState {
-  notebook: db.NotebookID
   loading: boolean;
   error: string | null;
   saveStatus: string | null;
@@ -41,9 +40,8 @@ export const fetchCells = createAsyncThunk<
   { rejectValue: string; state: RootState }
 >("cells/fetchCells", async (_, { getState, rejectWithValue }) => {
 
-  const { notebook } = getState().cells
   try {
-    let result =  await db.loadCells( notebook );
+    let result =  await db.loadCells();
 
     // if( result.length === 0 ) {
     //   await db.saveCells( initData )
@@ -82,11 +80,10 @@ export const updateCellContent = createAsyncThunk<
 
 
   updateCellContentDebounce( async () => {
-    const { notebook } = getState().cells
     const { id: cellId, content } = arg
     try {
 
-      const result = await db.updateCellById( notebook, cellId, cell => cell.content = content )
+      const result = await db.updateCellById( cellId, cell => cell.content = content )
       console.log(`cell content updated!`, result)
   
     } catch (error: any) {
@@ -108,12 +105,11 @@ export const updateCellLanguage = createAsyncThunk<
   { rejectValue: string; state: RootState }
 >("cells/updateCellLanguage", async (arg, { getState, rejectWithValue }) => {
 
-  const { notebook } = getState().cells
   const { id: cellId, language } = arg
 
   try {
 
-    const result = await db.updateCellById( notebook, cellId, cell => cell.language = language )
+    const result = await db.updateCellById( cellId, cell => cell.language = language )
     console.log(`cell language updated to ${language}!`, result)
 
   } catch (error: any) {
@@ -147,11 +143,10 @@ export const insertCell = createAsyncThunk<
   }
 
   const index = (id) ? state.order.findIndex((i) => i === id) : 0
-  const { notebook } = getState().cells
-
+  
   try {
 
-    const result = await db.insertCellAtIndex( notebook, index, cell)
+    const result = await db.insertCellAtIndex( index, cell)
     console.log(`cell ${cell.id} inserted at index ${index}!`, result)
     return { insertAt: index, newCell:cell }
 
@@ -172,12 +167,11 @@ export const deleteCell = createAsyncThunk<
   { rejectValue: string; state: RootState }
 >("cells/deleteCell", async (arg, { getState, rejectWithValue }) => {
 
-  const { notebook } = getState().cells
   const { id } = arg
 
   try {
 
-    const result = await db.deleteCellById( notebook, id )
+    const result = await db.deleteCellById( id )
 
     console.log('cell deleted!', result)
 
@@ -198,7 +192,7 @@ export const deleteCell = createAsyncThunk<
  { rejectValue: string; state: RootState }
 >("cells/moveCell", async (arg, { getState, rejectWithValue }) => {
   
-  const { order, notebook, data } = getState().cells
+  const { order, data } = getState().cells
 
   return await produce( 
     order
@@ -219,7 +213,7 @@ export const deleteCell = createAsyncThunk<
 
     try {
 
-      const result = await db.saveCells( notebook, draft.map( id => data[id] ) )
+      const result = await db.saveCells( draft.map( id => data[id] ) )
       console.log(`cell order updated!`, result)
   
     } catch (error: any) {

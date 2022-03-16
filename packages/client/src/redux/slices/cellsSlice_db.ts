@@ -14,18 +14,7 @@ import {
 
 const slice = () => {
 
-  
-  let notebookId = decodeURIComponent(window.location.hash.trim().substring(1))
-  console.log( window.location )
-  if( notebookId.length === 0 ){
-
-    // throw 'parameter "notebook id" not provided!'
-    console.warn( 'parameter "notebook id" not provided!', 'default used')
-    notebookId = 'playground'
-  } 
-
   const initialState: CellsState = {
-    notebook: notebookId,
     loading: false,
     error: null,
     order: [],

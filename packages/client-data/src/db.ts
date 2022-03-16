@@ -5,9 +5,63 @@ export interface NotebookDoc extends PouchDB.Core.IdMeta {
     cells: Array<Cell>
 }
 
-const db = new PouchDB<NotebookDoc>('jsnotebook')
+declare var NOTEBOOK_DB:string|undefined
 
-export type NotebookID = string
+const processQueryString = ( qs:string ):Record<string,string> => {
+    const initValue:Record<string,string> = {}
+
+    if( qs===undefined || qs===null || qs.length===0 ) // GUARD
+        return initValue
+
+    return (qs[0]==='?' ? qs.substring(1) : qs)
+                    .split('&')
+                    .map(v => v.split('='))
+                    .reduce( (prev,current) => {
+                            const [name,value] = current
+                            prev[decodeURIComponent(name)] = decodeURIComponent(value)
+                            return prev
+                    }, initValue )
+}
+
+console.log( window.location.search )
+
+const { database, notebook } = processQueryString(window.location.search)
+
+const notebookId = () => {
+
+    if(  notebook!==undefined && notebook !== null && notebook.trim().length > 0 ) {
+        return notebook
+    }
+
+    // console.warn( 'notebook id  is not specified in query parameter "?notebook=<id>"', 'default used')
+    // return 'playground'
+
+    // throw 'notebook id  is not specified in query parameter "?notebook=<id>"'
+
+    return undefined
+} 
+
+const databaseName = () => {
+    if(  database!==undefined && database !== null && database.trim().length > 0 ) {
+        return database
+    }
+
+    if( NOTEBOOK_DB!==undefined && NOTEBOOK_DB!==null && NOTEBOOK_DB.trim().length > 0 ) {
+        return NOTEBOOK_DB
+    }
+
+    // console.warn('database name is not specified neither in query parameter "?database=<dbname>" nor in global variable "NOTEBOOK_DB"! default is returned')
+    // return 'jsnotebook'
+
+    throw 'database name is not specified neither in query parameter "?database=<dbname>" nor in global variable "NOTEBOOK_DB"!'
+}
+
+export const context = {
+    databaseName: databaseName(),
+    notebookId: notebookId()
+}
+
+const db = new PouchDB<NotebookDoc>( context.databaseName )
 
 /**
  * 
@@ -24,9 +78,10 @@ export async function info( ) {
  * @param process 
  * @returns 
  */
-export async function updateCellById( notebook:NotebookID, id:string, process:(cell:Cell) => void ) {
+export async function updateCellById(  id:string, process:(cell:Cell) => void ) {
+    if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
 
-    const doc = await db.get( notebook )
+    const doc = await db.get( context.notebookId )
     
     const cell = doc.cells.find( cell => cell.id === id )
 
@@ -42,9 +97,10 @@ export async function updateCellById( notebook:NotebookID, id:string, process:(c
  * @param id 
  * @returns 
  */
-export async function deleteCellById( notebook:NotebookID, id:string ) {
+export async function deleteCellById( id:string ) {
+    if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
 
-    const doc = await db.get( notebook )
+    const doc = await db.get( context.notebookId )
     
     const new_cells = doc.cells.filter( cell => cell.id !== id )
 
@@ -61,9 +117,10 @@ export async function deleteCellById( notebook:NotebookID, id:string ) {
  * @param cell 
  * @returns 
  */
-export async function insertCellAtIndex( notebook:NotebookID, index:number, cell:Cell ) {
+export async function insertCellAtIndex( index:number, cell:Cell ) {
+    if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
 
-    const doc = await db.get( notebook )
+    const doc = await db.get( context.notebookId )
       
     doc.cells.splice( index, 0, cell )
     
@@ -74,8 +131,10 @@ export async function insertCellAtIndex( notebook:NotebookID, index:number, cell
  * 
  * @returns 
  */
- export const saveCells = async ( notebook:NotebookID, cells: Array<Cell> ) => {
-    const doc = await db.get( notebook )    
+ export const saveCells = async ( cells: Array<Cell> ) => {
+    if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
+
+    const doc = await db.get( context.notebookId )    
     doc.cells = cells   
     return await db.put( doc )
 }
@@ -84,11 +143,12 @@ export async function insertCellAtIndex( notebook:NotebookID, index:number, cell
  * 
  * @returns 
  */
- export async function loadCells( notebook:NotebookID ) {
+ export async function loadCells() {
+    if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
 
     try { 
         
-        const doc = await db.get( notebook )
+        const doc = await db.get( context.notebookId )
 
         return doc.cells
     }
