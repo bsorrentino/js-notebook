@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-client-main",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -18,7 +18,7 @@
     "prepare": "parcel build index.html"
   },
   "dependencies": {
-    "@bsorrentino/jsnotebook-client-data": "^0.6.0",
+    "@bsorrentino/jsnotebook-client-data": "^0.7.0",
     "bulmaswatch": "^0.8.1",
     "pouchdb": "^7.2.2",
     "react": "^17.0.2",
