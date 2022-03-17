@@ -7,7 +7,7 @@ import {
   UpdateCellContent,
 } from "../payload-types";
 import { Cell } from "@bsorrentino/jsnotebook-client-data";
-import { fetchCells, saveCells } from "./cellsThunks";
+import { fetchCells, exportNotebook } from "./cellsThunks";
 
 export interface CellsState {
   loading: boolean;
@@ -99,15 +99,15 @@ const cellsSlice = createSlice({
       state.error = "";
     });
 
-    builder.addCase(saveCells.fulfilled, (state) => {
+    builder.addCase(exportNotebook.fulfilled, (state) => {
       state.saveStatus = "success";
     });
 
-    builder.addCase(saveCells.pending, (state) => {
+    builder.addCase(exportNotebook.pending, (state) => {
       state.saveStatus = null;
     });
 
-    builder.addCase(saveCells.rejected, (state, { payload }) => {
+    builder.addCase(exportNotebook.rejected, (state, { payload }) => {
       state.saveStatus = payload || "failed to save, please try again";
     });
   },
@@ -121,5 +121,5 @@ export const {
   insertCell,
 } = cellsSlice.actions;
 
-export { fetchCells, saveCells };
+export { fetchCells, exportNotebook };
 export const cellsReducer = cellsSlice.reducer;

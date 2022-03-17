@@ -17,6 +17,9 @@ const serveAction = async (filename:string|undefined, { port }: Options) => {
   const config:Configuration = {
     port: parseFloat(port),
     mainModulePath: modulePath('jsnotebook-client-main', 'dist'),
+    cellRoute: {
+      dir: process.cwd(),
+    } 
   }
 
   try {
@@ -24,14 +27,6 @@ const serveAction = async (filename:string|undefined, { port }: Options) => {
   }
   catch(e) {
     console.warn(e)
-  }
-
-  if( filename ) {
-    config.cellRoute =  {
-      dir: path.join(process.cwd(), path.dirname(filename)),
-      filename: path.basename(filename)
-    } 
-    
   }
 
   try {

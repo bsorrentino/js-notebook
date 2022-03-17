@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import CellItem from "./CellItem";
 import { useDispatch, useSelector } from "../../hooks";
-import { fetchCells, saveCells } from "../../redux";
+import { fetchCells, exportNotebook } from "../../redux";
 import AddCell from "../AddCell";
+import * as db from '@bsorrentino/jsnotebook-client-data'
 
 const CellsList: React.FC = () => {
   const dispatch = useDispatch();
@@ -13,21 +14,23 @@ const CellsList: React.FC = () => {
   }, []);
 
   // save cells to file every 1 minute
-  useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(saveCells());
-    }, 60000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     dispatch(exportNotebook());
+  //   }, 60000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
-  const { notebook, cellsData, order, hasTypescript } = useSelector(({ cells }) => {
-    let { data, order, notebook } = cells;
+  const { cellsData, order, hasTypescript } = useSelector(({ cells }) => {
+    let { data, order } = cells;
     const cellsData = order.map((id) => data[id]);
     const hasTypescript =
       cellsData.filter((cell) => cell.language === "typescript").length > 0;
-    return { notebook, cellsData, order, hasTypescript };
+    return { cellsData, order, hasTypescript };
   });
+
+  const { notebookId:notebook  } = db.context
 
   const cells = cellsData.map((cell) => {
     return (
@@ -40,9 +43,16 @@ const CellsList: React.FC = () => {
 
   return (
     <>
-    <div className="box">
-    <span className="tag is-info is-large">Notebook</span>
-    <h1 className="title is-1">{notebook}</h1>
+    <div className="columns is-vcentered is-variable is-0">
+      <div className="column is-2">
+        <span className="tag is-info is-large">Notebook</span>
+      </div>
+      <div className="column is-9">
+          <h1 className="title">{notebook}</h1>
+      </div>
+      <div className="column">
+        <button className="button is-outlined" onClick={ () => dispatch(exportNotebook())}>Export</button>
+      </div>
     </div>
     <div className="cells-list">
       {order.length === 0 && (

@@ -8,7 +8,6 @@ export type Proxy = Options
 export type StaticModulePath = string
 
 export type CellsRoute = {
-  filename: string,
   dir: string
 }
 
@@ -17,23 +16,19 @@ export interface Configuration {
   proxy?: Options
   mainModulePath: StaticModulePath
   pkgModulePath?: StaticModulePath
-  cellRoute?: CellsRoute
+  cellRoute: CellsRoute
 }
 
 export const serve = async ( config:Configuration ) => {
   console.log( config )
 
-  const { port, cellRoute, proxy, mainModulePath, pkgModulePath  } = config
+  const { port, cellRoute, proxy, mainModulePath, pkgModulePath, cellRoute: { dir } } = config
 
   const app = express();
 
-  if( cellRoute ) {
-    const { filename, dir } = cellRoute
+  const cellsRouter = createCellsRouter(dir);
 
-    const cellsRouter = createCellsRouter(filename, dir);
-
-    app.use(cellsRouter);
-  }
+  app.use(cellsRouter);
 
 
   if (proxy) {

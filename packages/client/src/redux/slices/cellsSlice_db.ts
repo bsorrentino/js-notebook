@@ -4,7 +4,7 @@ import {
   moveCell,
   CellsState,
   fetchCells, 
-  saveCells, 
+  exportNotebook, 
   insertCell,
   deleteCell,
   updateCellContent, 
@@ -93,17 +93,17 @@ const slice = () => {
       });
   
       ////////////////////////
-      // saveCells
+      // export notebook
       ////////////////////////
-      builder.addCase(saveCells.fulfilled, (state) => {
+      builder.addCase(exportNotebook.fulfilled, (state) => {
         state.saveStatus = "success";
       });
   
-      builder.addCase(saveCells.pending, (state) => {
+      builder.addCase(exportNotebook.pending, (state) => {
         state.saveStatus = null;
       });
   
-      builder.addCase(saveCells.rejected, (state, { payload }) => {
+      builder.addCase(exportNotebook.rejected, (state, { payload }) => {
         state.saveStatus = payload || "failed to save, please try again";
       });
   
@@ -212,7 +212,7 @@ const cellsSlice = slice()
 export { 
   moveCell,
   fetchCells, 
-  saveCells, 
+  exportNotebook, 
   updateCellLanguage, 
   updateCellContent,
   deleteCell,

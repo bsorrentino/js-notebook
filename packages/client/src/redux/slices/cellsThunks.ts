@@ -18,11 +18,11 @@ export const fetchCells = createAsyncThunk<
   return [];
 });
 
-export const saveCells = createAsyncThunk<
+export const exportNotebook = createAsyncThunk<
   void,
   undefined,
   { rejectValue: string; state: RootState }
->("cells/saveCells", async (_, { getState, rejectWithValue }) => {
+>("cells/export", async (_, { getState, rejectWithValue }) => {
   const { data, order } = getState().cells;
   const cells = order.map((id) => data[id]);
   try {

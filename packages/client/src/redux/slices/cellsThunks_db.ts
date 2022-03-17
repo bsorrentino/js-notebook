@@ -57,14 +57,40 @@ export const fetchCells = createAsyncThunk<
 });
 
 /**
- * saveCells
+ * exportNotebook
  */
-export const saveCells = createAsyncThunk<
+export const exportNotebook = createAsyncThunk<
   void,
   undefined,
   { rejectValue: string; state: RootState }
->("cells/saveCells", async (_, { getState, rejectWithValue }) => {
-  console.log('save cells invoked!')
+>("cells/export", async (_, { getState, rejectWithValue }) => {
+
+  const { databaseName, notebookId } = db.context
+  if( !notebookId ) { // GUARD
+    rejectWithValue( 'notebook id has not been specified in query parameter "?notebook=<id>"' )
+    return 
+  }
+
+  const { data, order } = getState().cells;
+  
+  const cells = order.map(id => data[id]);
+
+  try {
+    console.log( 'exporting notebook .... ')
+    await fetch(`/cells/${databaseName}/${notebookId}`, { 
+      method: 'POST',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify(cells)
+     });
+     console.log( 'notebook exported!')
+  } catch (error:any) {
+    rejectWithValue(error.message);
+  }
+
+
 });
 
 const updateCellContentDebounce = makeDebounce(700)

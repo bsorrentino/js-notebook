@@ -8,6 +8,6 @@ export {
   insertCell,
   deleteCell,
   fetchCells,
-  saveCells,
+  exportNotebook,
 } from "./slices/cellsSlice_db";
 export { createBundle } from "./slices/bundlerSlice";
