@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Cell } from "../cell";
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 import { RootState } from "../store";
 
 

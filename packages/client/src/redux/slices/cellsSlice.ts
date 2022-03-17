@@ -6,9 +6,8 @@ import {
   UpdateCellLanguage,
   UpdateCellContent,
 } from "../payload-types";
-import { Cell } from "../cell";
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 import { fetchCells, saveCells } from "./cellsThunks";
-import { initData } from '../initCellsData'
 
 export interface CellsState {
   loading: boolean;
@@ -80,7 +79,7 @@ const cellsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchCells.fulfilled, (state, { payload }) => {
 
-      const cells = (payload.length !== 0) ? payload : initData 
+      const cells = (payload.length !== 0) ? payload : [] 
       
       state.order = cells.map((cell) => cell.id);
       state.data = cells.reduce<Record<string,Cell>>((accumulator, cell) => {
