@@ -7,22 +7,45 @@ At beginning I forked by the awesome [qiushiyan/js-notebook] project, afterthat 
  ---- |  ---- | -----
    Support **multiple notebooks** | No | Yes 
    Support **local package fetching** | No | Yes
+   Support **import / export notebook from/to local file system** | No | Yes
    Support **extension model** | No | Yes
 
 ## Architecture
 
 ![](diagrams/architecture.png)
 
+## Modules
+
+folder | package | description
+ ---- |  ---- | -----
+   [`client-main`] | `@bsorrentino/jsnotebook-client-main` | manages notebook **selection**, **creation** and **deletion**  
+   [`client`] | `@bsorrentino/jsnotebook-client` | manages notebook **editing**, **execution**, **import** and **export** 
+   [`client-data`] | `@bsorrentino/jsnotebook-client-data` | contains **data model** and **db operation**
+   [`server`] | `@bsorrentino/jsnotebook-server` | server for I/O operations 
+   [`local-pkg`] | `@bsorrentino/jsnotebook-local-pkg` | contains the local dependencies fetched throught [`server`]
+   [`cli`] | `@bsorrentino/jsnotebook-cli` | digest command-line arguments and pass it down to [`server`] 
+
 ## Technologies
 
-The app uses a multi-package setip with the help of [lerna]. Inside the [packages](packages) folder, there are [`cli`](packages/cli) for digesting command-line arguments and pass it down to server, [`server`] which sets up an express server for I/O operations , and [`server`], which implements the actual user interface and code execution logic.
+### Language 
 
+The App is develope using [`TypeScript`] language
 
-The **cli** and **local serve**r** are implemented using [`commander`] and [`express`]. The frontend is mainly put together with [React] and [TypeScript], with
+### UI / UX 
 
-* [`Redux`] and [`Redux Toolkit`]: for state management and asynchronous logic via Redux Thunk
-* [`esbuild-wasm`]: for code transpiling and bundling inside the browser
+The UI is developed using [`React`] combined with [`Bulma`] as CSS framework and [`Redux`] plus [`Redux Toolkit`] for state management and asynchronous logic via Redux Thunk, while [`esbuild-wasm`] is used for code transpiling and bundling inside the browser.
 
+### Client Side Database
+
+As client side database has been chosen [`PouchDB`]
+
+### Services 
+
+the static content and the http services are developed using [`express`] 
+
+## ALM
+
+The app is managed as a multi-package  (ie. monorepo) using [`lerna`] and the code boundler is [`parcel`].
 
 ## Challenges
 
@@ -60,14 +83,22 @@ With all that, the following diagram summarises the code execution process insid
 
 * Inspired by project [qiushiyan/js-notebook]
 
-[lerna]: https://github.com/lerna/lerna
+[`lerna`]: https://github.com/lerna/lerna
 [`esbuild-wasm`]: https://www.npmjs.com/package/esbuild-wasm
 [qiushiyan/js-notebook]: https://github.com/qiushiyan/js-notebook
-[React]: https://www.npmjs.com/package/react
-[TypeScript]: https://www.npmjs.com/package/typescript
+[`React`]: https://www.npmjs.com/package/react
+[`Bulma`]: https://bulma.io
+[`TypeScript`]: https://www.npmjs.com/package/typescript
 [`commander`]: https://www.npmjs.com/package/commander
 [`express`]: https://www.npmjs.com/package/express
 [`Redux`]: https://www.npmjs.com/package/redux
 [`Redux Toolkit`]: https://www.npmjs.com/package/@reduxjs/toolkit
 [`useCumulative`]: packages/client/src/hooks/index.ts
+[`parcel`]: https://parceljs.org
+[`client-data`]: packages/client-data
+[`client-main`]: packages/client-main
+[`client`]: packages/client
 [`server`]: packages/server
+[`cli`]: packages/cli
+[`local-pkg`]: packages/local-pkg
+[`PouchDB`]: https://pouchdb.com
