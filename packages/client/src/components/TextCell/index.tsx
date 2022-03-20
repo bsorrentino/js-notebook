@@ -1,6 +1,7 @@
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 import React from "react";
 import { useDispatch } from "../../hooks";
-import { Cell, deleteCell, moveCell } from "../../redux";
+import { deleteCell, moveCell } from "../../redux";
 import TextEditor from "./TextEditor";
 
 interface TextCellProps {

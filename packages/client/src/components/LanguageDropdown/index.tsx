@@ -1,6 +1,7 @@
+import { CellLanguages } from "@bsorrentino/jsnotebook-client-data";
 import React, { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
-import { CellLanguages, updateCellLanguage } from "../../redux";
+import { updateCellLanguage } from "../../redux"
 
 interface LanguageDropdownProps {
   id: string;
@@ -11,7 +12,6 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   id,
   initialLanguage,
 }) => {
-  //const { updateCellLanguage } = useActions();
   const dispatch = useDispatch()
   const [language, setLanguage] = useState<CellLanguages>(initialLanguage);
 

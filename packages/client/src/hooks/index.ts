@@ -5,13 +5,6 @@ import {
   useSelector as _useSelector,
 } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  moveCell,
-  updateCellContent,
-  updateCellLanguage,
-  insertCell,
-  deleteCell,
-} from "../redux";
 
 type AppDispatch = typeof store.dispatch;
 
@@ -21,16 +14,13 @@ export const useSelector: TypedUseSelectorHook<RootState> = _useSelector;
 
 // action creators
 const actionCreators = {
-  moveCell,
-  updateCellContent,
-  updateCellLanguage,
-  insertCell,
-  deleteCell,
-};
+  
+}
+
 export const useActions = () => {
   const dispatch = useDispatch();
   return bindActionCreators(actionCreators, dispatch);
-};
+}
 
 export const useCumulativeCode = (id: string) => {
   return useSelector((state) => {
@@ -49,7 +39,7 @@ export const useCumulativeCode = (id: string) => {
         !concat ? root.innerHTML = value : root.innerHTML = root.innerHTML + '<br/>' + value
       }
     }
-  `;
+  `
     const { data, order } = state.cells;
     const orderedCodeCells = order
       .map((id) => data[id])

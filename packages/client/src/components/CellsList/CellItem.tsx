@@ -1,7 +1,7 @@
 import React from "react";
-import { Cell } from "../../redux";
 import TextCell from "../TextCell";
 import CodeCell from "../CodeCell";
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 
 interface CellItemProps {
   cell: Cell;

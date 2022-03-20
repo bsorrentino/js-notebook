@@ -8,6 +8,7 @@ import {
   UpdateCellLanguage,
   UpdateCellContent,
   MoveCell,
+  ImportNotebook
 } from "../payload-types";
 import { makeDebounce } from '../../debounce'
 import produce from "immer";
@@ -57,14 +58,67 @@ export const fetchCells = createAsyncThunk<
 });
 
 /**
- * saveCells
+ * importNotebook
  */
-export const saveCells = createAsyncThunk<
+ export const importNotebook = createAsyncThunk<
+ Array<Cell>,
+ ImportNotebook,
+ { rejectValue: string; state: RootState }
+>("cells/import", async ( args, { rejectWithValue }) => {
+
+ const { cells } = args
+
+ try {
+
+  const result = await db.saveCells( cells )
+  console.log(`cell content updated!`, result)
+
+  return cells
+
+} catch (error: any) {
+
+  rejectWithValue(errorMessage(error));
+  return []
+  
+}
+
+});
+
+/**
+ * exportNotebook
+ */
+export const exportNotebook = createAsyncThunk<
   void,
   undefined,
   { rejectValue: string; state: RootState }
->("cells/saveCells", async (_, { getState, rejectWithValue }) => {
-  console.log('save cells invoked!')
+>("cells/export", async (_, { getState, rejectWithValue }) => {
+
+  const { databaseName, notebookId } = db.context
+  if( !notebookId ) { // GUARD
+    rejectWithValue( 'notebook id has not been specified in query parameter "?notebook=<id>"' )
+    return 
+  }
+
+  const { data, order } = getState().cells;
+  
+  const cells = order.map(id => data[id]);
+
+  try {
+    console.log( 'exporting notebook .... ')
+    await fetch(`/cells/${databaseName}/${notebookId}`, { 
+      method: 'POST',
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify(cells)
+     });
+     console.log( 'notebook exported!')
+  } catch (error:any) {
+    rejectWithValue(error.message);
+  }
+
+
 });
 
 const updateCellContentDebounce = makeDebounce(700)

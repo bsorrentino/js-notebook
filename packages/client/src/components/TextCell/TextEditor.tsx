@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import { Cell } from "../../redux";
-import { useActions } from "../../hooks";
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { updateCellContent } from "../../redux"
+import { useDispatch } from "../../hooks";
 
 interface TextEditorProps {
   cell: Cell;
 }
 
 const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
-  const { updateCellContent } = useActions();
+  const dispatch = useDispatch();
   const [editMode, setEditMode] = useState<boolean>(false);
   const mdEditor = useRef<any>();
 
@@ -37,7 +38,7 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell }) => {
       {editMode && (
         <MDEditor
           value={cell.content}
-          onChange={(e) => updateCellContent({ id: cell.id, content: e || "" })}
+          onChange={(e) => dispatch( updateCellContent({ id: cell.id, content: e ?? '' }))}
         />
       )}
     </div>

@@ -1,33 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import CellItem from "./CellItem";
 import { useDispatch, useSelector } from "../../hooks";
-import { fetchCells, saveCells } from "../../redux";
+import { fetchCells } from "../../redux";
 import AddCell from "../AddCell";
+import * as db from '@bsorrentino/jsnotebook-client-data'
+import { ImportNotebook } from "../ImportNotebook/ImportNotebook";
+import { ExportNotebook } from "../ExportNotebook/ExportNotebook";
+// import {shallowEqual } from 'react-redux'
 
 const CellsList: React.FC = () => {
-  const dispatch = useDispatch();
+
+  const dispatch = useDispatch()
 
   // fetch cells from file
-  useEffect(() => {
-    dispatch(fetchCells());
-  }, []);
+  useEffect(() => { dispatch(fetchCells()) }, [])
+  
+    const { cellsData, order, hasTypescript, saveStatus } = useSelector(({ cells }) => {
+    const { data, order, saveStatus } = cells;
 
-  // save cells to file every 1 minute
-  useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(saveCells());
-    }, 60000);
+    console.log( 'useSelector', saveStatus )
 
-    return () => clearInterval(interval);
-  }, []);
+    let hasTypescript = false
 
-  const { notebook, cellsData, order, hasTypescript } = useSelector(({ cells }) => {
-    let { data, order, notebook } = cells;
-    const cellsData = order.map((id) => data[id]);
-    const hasTypescript =
-      cellsData.filter((cell) => cell.language === "typescript").length > 0;
-    return { notebook, cellsData, order, hasTypescript };
-  });
+    const cellsData = order.map(id => {
+      hasTypescript = data[id].language === 'typescript'
+      return data[id]
+    })
+    
+    return { cellsData, order, hasTypescript, saveStatus };
+  } )
+
+  const { notebookId:notebook } = db.context
 
   const cells = cellsData.map((cell) => {
     return (
@@ -40,9 +43,20 @@ const CellsList: React.FC = () => {
 
   return (
     <>
-    <div className="box">
-    <span className="tag is-info is-large">Notebook</span>
-    <h1 className="title is-1">{notebook}</h1>
+    <div className="columns is-vcentered is-variable is-0">
+      <div className="column is-2">
+        <span className="tag is-info is-large">Notebook</span>
+      </div>
+      <div className="column is-8">
+          <h1 className="title">{notebook}</h1>
+      </div>
+      <div className="column">
+        <ExportNotebook saveStatus={saveStatus}/>
+      </div>
+      <div className="column">
+        <ImportNotebook/>
+      </div>
+      
     </div>
     <div className="cells-list">
       {order.length === 0 && (

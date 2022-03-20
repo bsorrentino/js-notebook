@@ -1,4 +1,4 @@
-import { CellTypes, CellLanguages } from "../cell";
+import { Cell, CellLanguages, CellTypes } from "@bsorrentino/jsnotebook-client-data";
 
 type MoveDirection = "up" | "down";
 
@@ -35,4 +35,8 @@ export interface BundlerInput {
 export interface BundlerOutput {
   code: string;
   error: string;
+}
+
+export interface ImportNotebook {
+  cells: Cell[];
 }

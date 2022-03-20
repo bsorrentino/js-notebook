@@ -19,9 +19,8 @@
     "start": "node dist/index.js serve -p 1234"
   },
   "devDependencies": {
-    "@types/chalk": "^2.2.0",
     "@types/webrtc": "^0.0.27",
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.2",
     "commander": "^7.2.0"
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",

@@ -1,4 +1,4 @@
-import PouchDB from 'pouchdb'
+import PouchDB from 'pouchdb-browser'
 import {Cell} from './cell'
 
 export interface NotebookDoc extends PouchDB.Core.IdMeta {
