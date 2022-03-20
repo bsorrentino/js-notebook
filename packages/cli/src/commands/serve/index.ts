@@ -50,7 +50,7 @@ const serveAction = async ( { port }: Options) => {
 };
 
 export const serveCommand = new Command()
-  .command("serve [filename]")
+  .command("serve")
   .option("-p, --port <number>", "port to run server on", "3001")
   .description("open available notebook")
   .action(serveAction);

@@ -24,7 +24,6 @@ export const createCellsRouter = (dir: string) => {
   }
 
   return express.Router()
-    .use(express.json())
     .get<ExtraRequestArg>('/cells/:databaseName/:notebookId', getFullPath, async (req, res) => {
 
       console.log("fetching cells ...");
@@ -42,12 +41,10 @@ export const createCellsRouter = (dir: string) => {
         }
       }
     })
-    .post<ExtraRequestArg>('/cells/:databaseName/:notebookId', getFullPath, async (req, res) => {
+    .post<ExtraRequestArg>('/cells/:databaseName/:notebookId', getFullPath, express.json(), async (req, res) => {
       console.log("saving notebook ...", req.body);
 
-      const cells = req.body
-
-      await fs.writeFile(req.params.fullPath, JSON.stringify(cells, undefined, 2), "utf-8");
+      await fs.writeFile(req.params.fullPath, JSON.stringify(req.body, undefined, 2), "utf-8");
 
       res.send({ status: "ok" });
     })

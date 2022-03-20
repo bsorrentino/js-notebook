@@ -1,12 +1,13 @@
 import 'zx/globals'
 
 [ 
-    path.join( 'packages', 'local-client-start', '.parcel-cache' ),
-    path.join( 'packages', 'local-client-start', 'dist' ),
-    path.join( 'packages', 'local-client', '.parcel-cache' ),
-    path.join( 'packages', 'local-client', 'dist' ),
-    path.join( 'packages', 'local-api', 'dist' ),
+    path.join( 'packages', 'client', '.parcel-cache' ),
+    path.join( 'packages', 'client-main', '.parcel-cache' ),
+    path.join( 'packages', 'client', 'dist' ),
+    path.join( 'packages', 'client-main', 'dist' ),
+    path.join( 'packages', 'clent-data', 'dist' ),
     path.join( 'packages', 'cli', 'dist' ),
+    path.join( 'packages', 'server', 'dist' ),
 ]
 .forEach( async (p) => await fs.remove( p ) )
 

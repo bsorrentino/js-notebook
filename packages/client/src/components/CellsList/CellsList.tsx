@@ -4,10 +4,11 @@ import { useDispatch, useSelector } from "../../hooks";
 import { fetchCells, exportNotebook } from "../../redux";
 import AddCell from "../AddCell";
 import * as db from '@bsorrentino/jsnotebook-client-data'
+import { ImportNotebook } from "../ImportNotebook/ImportNotebook";
+import { ExportNotebook } from "../ExportNotebook/ExportNotebook";
 // import {shallowEqual } from 'react-redux'
 
 const CellsList: React.FC = () => {
-  const link = useRef<HTMLAnchorElement>(null)
 
   const dispatch = useDispatch()
 
@@ -29,14 +30,7 @@ const CellsList: React.FC = () => {
     return { cellsData, order, hasTypescript, saveStatus };
   } )
 
-  // download event
-  useEffect( () => {
-    console.log( 'saveStatus',saveStatus )
-    if( saveStatus === 'exportNotebook.success' )
-      link.current?.click()
-  }, [saveStatus])
-
-  const { databaseName, notebookId:notebook,   } = db.context
+  const { notebookId:notebook } = db.context
 
   const cells = cellsData.map((cell) => {
     return (
@@ -53,13 +47,16 @@ const CellsList: React.FC = () => {
       <div className="column is-2">
         <span className="tag is-info is-large">Notebook</span>
       </div>
-      <div className="column is-9">
+      <div className="column is-8">
           <h1 className="title">{notebook}</h1>
       </div>
       <div className="column">
-        <button className="button is-outlined" onClick={ () => dispatch(exportNotebook())}>Export</button>
-        <a ref={link} style={{visibility: 'hidden'}} href={`/export/${databaseName}/${notebook}`} download>link</a>
+        <ExportNotebook saveStatus={saveStatus}/>
       </div>
+      <div className="column">
+        <ImportNotebook/>
+      </div>
+      
     </div>
     <div className="cells-list">
       {order.length === 0 && (
