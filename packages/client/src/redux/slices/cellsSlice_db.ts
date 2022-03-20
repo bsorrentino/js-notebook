@@ -8,7 +8,8 @@ import {
   insertCell,
   deleteCell,
   updateCellContent, 
-  updateCellLanguage 
+  updateCellLanguage, 
+  importNotebook
 } from "./cellsThunks_db"
 
 
@@ -82,33 +83,45 @@ const slice = () => {
         }, {})
         state.saveStatus = 'fetchCells.success'
       })
-      
       builder.addCase(fetchCells.pending, (state) => {
         state.loading = true
         state.saveStatus = 'fetchCells.loading'
       })
-  
       builder.addCase(fetchCells.rejected, (state, { payload }) => {
         state.error = "failed to fetch cells, please try again"
         state.saveStatus = 'fetchCells.error'
       })
-  
+      ////////////////////////
+      // import notebook
+      ////////////////////////
+      builder.addCase(importNotebook.fulfilled, (state, {payload}) => {
+        state.order = payload.map( cell => cell.id )
+        state.data = payload.reduce<Record<string,Cell>>( (prev, current) => {
+          prev[current.id] = current
+          return prev
+        } , {})
+        state.saveStatus = 'importNotebook.success'
+      })
+      builder.addCase(importNotebook.pending, (state) => {
+        state.saveStatus = 'importNotebook.pending'
+      })
+      builder.addCase(importNotebook.rejected, (state, { payload }) => {
+        state.error = payload || "failed to save, please try again"
+        state.saveStatus = 'importNotebook.error'
+      })
       ////////////////////////
       // export notebook
       ////////////////////////
       builder.addCase(exportNotebook.fulfilled, (state) => {
         state.saveStatus = 'exportNotebook.success'
       })
-  
       builder.addCase(exportNotebook.pending, (state) => {
         state.saveStatus = 'exportNotebook.pending'
       })
-  
       builder.addCase(exportNotebook.rejected, (state, { payload }) => {
         state.error = payload || "failed to save, please try again"
         state.saveStatus = 'exportNotebook.error'
       })
-  
       ////////////////////////
       // updateCellContent
       ////////////////////////
@@ -118,16 +131,13 @@ const slice = () => {
         state.saveStatus = "updateCellContent.success"
   
       })
-  
       builder.addCase(updateCellContent.pending, (state) => {
         state.saveStatus = 'updateCellContent.pending'
       })
-  
       builder.addCase(updateCellContent.rejected, (state, { payload }) => {
         state.error = payload ?? "failed to update content, please try again"
         state.saveStatus = 'updateCellContent.error'
-      })
-  
+      })  
       ////////////////////////
       // updateCellLanguage
       ////////////////////////
@@ -135,17 +145,14 @@ const slice = () => {
         const { id, language } = action.meta.arg
         state.data[id].language = language
         state.saveStatus = "updateCellLanguage.success"
-    })
-  
+      })
       builder.addCase(updateCellLanguage.pending, (state) => {
         state.saveStatus = 'updateCellLanguage.success'
       })
-  
       builder.addCase(updateCellLanguage.rejected, (state, { payload }) => {
         state.error = payload ?? "failed to update language, please try again"
         state.saveStatus = 'updateCellLanguage.error'
       })
-  
       ////////////////////////
       // deleteCell
       ////////////////////////
@@ -155,16 +162,13 @@ const slice = () => {
         delete state.data[id]
         state.saveStatus = "deleteCell.success"
       })
-  
       builder.addCase(deleteCell.pending, (state) => {
         state.saveStatus = 'deleteCell.pending'
       })
-  
       builder.addCase(deleteCell.rejected, (state, { payload }) => {
         state.error = payload ?? "failed to delete cell, please try again"
         state.saveStatus = 'deleteCell.error'
       })
-  
       ////////////////////////
       // insertCell
       ////////////////////////
@@ -180,29 +184,24 @@ const slice = () => {
         }
         state.saveStatus = "insertCell.success"
       })
-  
       builder.addCase(insertCell.pending, (state) => {
         state.saveStatus = 'insertCell.pending'
       })
-  
       builder.addCase(insertCell.rejected, (state, { payload }) => {
         state.error = payload ?? "failed to delete cell, please try again"
         state.saveStatus = 'insertCell.error'
       })
-
       ////////////////////////
       // MoveCell
       ////////////////////////
       builder.addCase(moveCell.fulfilled, (state, { payload }) => {      
         state.order = payload
         state.saveStatus = 'moveCell.success'
-      })
-      
+      })      
       builder.addCase(moveCell.pending, (state) => {
         state.loading = true
         state.saveStatus = 'moveCell.pending'
       })
-  
       builder.addCase(moveCell.rejected, (state, { payload }) => {
         state.error = payload ?? "failed to move cell, please try again"
         state.saveStatus = 'moveCell.error' 
@@ -216,6 +215,12 @@ const slice = () => {
 
 const cellsSlice = slice()
 
+// export sync action
+export const {
+  
+} = cellsSlice.actions;
+
+// export async actions
 export { 
   moveCell,
   fetchCells, 
@@ -223,6 +228,7 @@ export {
   updateCellLanguage, 
   updateCellContent,
   deleteCell,
-  insertCell
+  insertCell,
+  importNotebook
 }
 export const cellsReducer = cellsSlice.reducer

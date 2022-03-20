@@ -1,31 +1,24 @@
-import { useMemo, useState } from "react"
+import { useDispatch } from "react-redux"
+import { importNotebook } from "../../redux"
 
+interface ImportNotebookProps {}
 
+export  const ImportNotebook: React.FC<ImportNotebookProps> = () => {
 
-export  const ImportNotebook: React.FC = () => {
-
-    const [file, _setFile] = useState<File>()
+    const dispatch = useDispatch()
 
     const setFile = ( file:File ) => { 
+       
+        console.log( 'setFile', file )
 
-        _setFile( file )
-
-        // Create an object of formData 
-        const formData = new FormData(); 
-       
-        // Update the formData object 
-        formData.append( 
-          "importFile", 
-          file, 
-          file.name 
-        ); 
-       
-        // Details of the uploaded file 
-        console.log(file); 
-       
-        // Request made to the backend api 
-        // Send formData object 
-        //axios.post("api/uploadfile", formData); 
+        file.text()
+            .then( contents => {
+                console.log( contents )
+                dispatch( importNotebook( { cells: JSON.parse( contents ) } ))
+            })
+            .catch( err => {
+                console.error( err )
+            })
     }
        
     return (

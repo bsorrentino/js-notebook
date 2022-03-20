@@ -2,6 +2,7 @@ import store from "./store";
 export default store;
 
 export {
+  importNotebook,
   moveCell,
   updateCellContent,
   updateCellLanguage,

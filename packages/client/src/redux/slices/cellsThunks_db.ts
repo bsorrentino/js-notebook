@@ -8,6 +8,7 @@ import {
   UpdateCellLanguage,
   UpdateCellContent,
   MoveCell,
+  ImportNotebook
 } from "../payload-types";
 import { makeDebounce } from '../../debounce'
 import produce from "immer";
@@ -54,6 +55,33 @@ export const fetchCells = createAsyncThunk<
     rejectWithValue( errorMessage(error) )
   }
   return [];
+});
+
+/**
+ * importNotebook
+ */
+ export const importNotebook = createAsyncThunk<
+ Array<Cell>,
+ ImportNotebook,
+ { rejectValue: string; state: RootState }
+>("cells/import", async ( args, { rejectWithValue }) => {
+
+ const { cells } = args
+
+ try {
+
+  const result = await db.saveCells( cells )
+  console.log(`cell content updated!`, result)
+
+  return cells
+
+} catch (error: any) {
+
+  rejectWithValue(errorMessage(error));
+  return []
+  
+}
+
 });
 
 /**
