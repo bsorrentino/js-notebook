@@ -20,7 +20,6 @@
   "dependencies": {
     "@bsorrentino/jsnotebook-client-data": "^0.7.0",
     "bulmaswatch": "^0.8.1",
-    "pouchdb": "^7.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
