@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import CellItem from "./CellItem";
 import { useDispatch, useSelector } from "../../hooks";
-import { fetchCells, exportNotebook } from "../../redux";
+import { fetchCells } from "../../redux";
 import AddCell from "../AddCell";
 import * as db from '@bsorrentino/jsnotebook-client-data'
 import { ImportNotebook } from "../ImportNotebook/ImportNotebook";

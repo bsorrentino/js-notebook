@@ -2,7 +2,6 @@ import React, { KeyboardEvent, useCallback, useRef } from "react";
 import Preview from "./Preview";
 import Resizable from "../Resizable";
 import {
-  Cell,
   createBundle,
   updateCellContent,
   deleteCell,
@@ -17,6 +16,7 @@ import * as classes from "./CodeCell.module.css";
 import Editor, { OnMount } from "@monaco-editor/react";
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 
 type KeysPressed = Record<string, boolean>
 

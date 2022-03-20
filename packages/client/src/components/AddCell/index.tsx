@@ -8,7 +8,6 @@ interface AddCellProps {
 }
 
 const AddCell: React.FC<AddCellProps> = ({ prevCellId }) => {
-  // const { insertCell } = useActions();
   const dispatch = useDispatch()
   return (
     <div className={classes["add-cell"]}>
