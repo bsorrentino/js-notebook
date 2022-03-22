@@ -67,11 +67,13 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
   };
 
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
+    // console.log( 'handleEditorMount', monacoEditor, monaco )
     editorRef.current = monacoEditor;
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       // noSemanticValidation: true,
       noSyntaxValidation: true,
     });
+    
   };
 
   const handleFormatCode = useCallback( () => {
@@ -125,7 +127,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
 
       </div>
 
-      <Resizable direction="vertical">
+      
         <div
           style={{ height: "100%", display: "flex", flexDirection: "column" }}
           onKeyDown={handleKeyDown}
@@ -136,15 +138,16 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
               onChange={handleChangeCode}
               onMount={handleEditorMount}
               value={cell?.content}
-              height="100%"
+              height="500px"
               language={cell.language ?? "javascript"}
               theme="vs-dark"
               options={MonacoEditorOptions}
             />
           </div>
+          <hr/>
           <Preview id={cell.id} />
         </div>
-      </Resizable>
+      
 
     </div>
   );
