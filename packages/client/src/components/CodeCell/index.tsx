@@ -14,6 +14,7 @@ import {
 import LanguageDropdown from "../LanguageDropdown";
 import * as classes from "./CodeCell.module.css";
 import Editor, { OnMount } from "@monaco-editor/react";
+import * as monaco from 'monaco-editor'
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import { Cell } from "@bsorrentino/jsnotebook-client-data";
@@ -25,6 +26,21 @@ interface CodeCellProps {
   hasTypescript: boolean;
 }
 
+const MonacoEditorOptions:monaco.editor.IStandaloneEditorConstructionOptions = {
+  wordWrap: 'on',
+  minimap: { enabled: false },
+  showUnused: false,
+  folding: false,
+  fontSize: 14,
+  scrollBeyondLastLine: false,
+  automaticLayout: true,
+  tabSize: 2,
+}
+
+/**
+ * CodeCell Widget
+ * 
+ */
 const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
 
   const dispatch = useDispatch();
@@ -123,16 +139,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
               height="100%"
               language={cell.language ?? "javascript"}
               theme="vs-dark"
-              options={{
-                wordWrap: "on",
-                minimap: { enabled: false },
-                showUnused: false,
-                folding: false,
-                fontSize: 20,
-                scrollBeyondLastLine: false,
-                automaticLayout: true,
-                tabSize: 2,
-              }}
+              options={MonacoEditorOptions}
             />
           </div>
           <Preview id={cell.id} />
