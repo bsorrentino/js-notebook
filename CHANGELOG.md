@@ -1,3 +1,22 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.8.0](https://github.com/bsorrentino/js-notebook/compare/v0.7.0...v0.8.0) (2022-03-22)
+
+
+### Features
+
+* add export notebook action ([e3bae60](https://github.com/bsorrentino/js-notebook/commit/e3bae6098afcdbb4a1f3ae8cdddf3927c57041d1)), closes [#8](https://github.com/bsorrentino/js-notebook/issues/8)
+* add import button (first step) ([34de261](https://github.com/bsorrentino/js-notebook/commit/34de261f29105397e6feb2d454d11d78f2417943)), closes [#8](https://github.com/bsorrentino/js-notebook/issues/8)
+* complete export (ie. download) implementation ([5755f1a](https://github.com/bsorrentino/js-notebook/commit/5755f1a61d53a3d2fbafa18f4fea50f1a0a08acd)), closes [#8](https://github.com/bsorrentino/js-notebook/issues/8)
+* finalize import notebook implementation ([4617eb5](https://github.com/bsorrentino/js-notebook/commit/4617eb5c45b8c0ba67300c31744279b70dd67864)), closes [#8](https://github.com/bsorrentino/js-notebook/issues/8)
+
+
+
+
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
