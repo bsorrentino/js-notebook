@@ -14,7 +14,7 @@
     "access": "public"
   },
   "scripts": {
-    "serve": "parcel serve --no-cache index.html",
+    "serve": "parcel serve --no-cache index.html --public-url /notebook",
     "prepare": "parcel build index.html --public-url /notebook"
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",
@@ -27,10 +27,10 @@
     "esbuild-wasm": "0.14.22",
     "localforage": "^1.10.0",
     "prettier": "^2.5.1",
+    "re-resizable": "^6.9.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.6",
-    "react-resizable": "^3.0.4",
     "redux": "^4.1.2"
   },
   "devDependencies": {
