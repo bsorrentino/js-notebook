@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/bsorrentino/js-notebook/compare/v0.8.0...v0.9.0) (2022-03-23)
+
+
+### Features
+
+* integrate new resizable model ([621a44e](https://github.com/bsorrentino/js-notebook/commit/621a44ec86a012dbc1cdb47daf877ab12c17975a)), closes [#11](https://github.com/bsorrentino/js-notebook/issues/11)
+
+
+
+
+
 # [0.8.0](https://github.com/bsorrentino/js-notebook/compare/v0.7.0...v0.8.0) (2022-03-22)
 
 
