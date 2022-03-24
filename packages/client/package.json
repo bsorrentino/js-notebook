@@ -14,8 +14,10 @@
     "access": "public"
   },
   "scripts": {
-    "serve": "parcel serve --no-cache index.html --public-url /notebook",
-    "prepare": "parcel build index.html --public-url /notebook"
+    "cleanall": "zx ../zx-package-clean.mjs --all",
+    "clean": "zx ../zx-package-clean.mjs",
+    "prepare": "npm run clean && parcel build index.html --public-url /notebook",
+    "serve": "parcel serve --no-cache index.html --public-url /notebook"
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",
   "dependencies": {

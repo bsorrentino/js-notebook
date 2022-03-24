@@ -14,8 +14,10 @@
     "access": "public"
   },
   "scripts": {
+    "cleanall": "zx ../zx-package-clean.mjs --all",
+    "clean": "zx ../zx-package-clean.mjs",
     "serve": "parcel serve --no-cache index.html",
-    "prepare": "parcel build index.html"
+    "prepare": "npm run clean && parcel build index.html"
   },
   "dependencies": {
     "@bsorrentino/jsnotebook-client-data": "^0.9.0",

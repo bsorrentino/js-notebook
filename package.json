@@ -9,8 +9,8 @@
   "private": true,
   "scripts": {
     "commit": "cz",
-    "cleanall": "lerna clean -y && zx zx-clean.mjs --all",
-    "clean": "lerna clean -y && zx zx-clean.mjs",
+    "clean": "lerna run cleanall && lerna clean -y",
+    "cleanall": "npm run cleanall && zx zx-clean.mjs",
     "build": "lerna bootstrap --hoist --strict",
     "start": "lerna run start --parallel",
     "lerna:bump": "npx lerna version --conventional-commits --no-push",

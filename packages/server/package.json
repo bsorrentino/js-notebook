@@ -16,7 +16,9 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "tsc"
+    "cleanall": "zx ../zx-package-clean.mjs --all",
+    "clean": "zx ../zx-package-clean.mjs",
+    "prepare": "npm run clean &&  tsc"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
