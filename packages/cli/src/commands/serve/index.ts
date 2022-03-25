@@ -16,10 +16,7 @@ const serveAction = async ( { port }: Options) => {
       path.join( path.dirname(require.resolve( path.join('@bsorrentino', moduleName, 'package.json' ) )), join )
   
   const config:Configuration = {
-    port: parseFloat(port),
-    cellRoute: {
-      dir: os.tmpdir(),
-    } 
+    port: parseFloat(port)
   }
 
   try {
@@ -33,7 +30,7 @@ const serveAction = async ( { port }: Options) => {
 
     await serve( config );
     console.log(
-      `Notebook live at ${chalk.inverse(`http://localhost:${port}`)} `
+      `Notebook live at ${chalk.inverse(`http://localhost:${port}/notebooks`)} `
     )
 
   } catch (error:any) {

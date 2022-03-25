@@ -2,6 +2,7 @@ import express, { RequestHandler } from "express";
 import path from "path";
 import { createProxyMiddleware, Options } from "http-proxy-middleware";
 import { createCellsRouter } from "./routes/cells"
+import os from 'os'
 
 export type Proxy = Options
 
@@ -19,10 +20,9 @@ export type CellsRoute = {
 export interface Configuration {
   port: number
   proxy?: Options
-  mainModulePathName?: StaticModulePath
   pkgModulePath?: StaticModulePath
   extraModulePath?: CustomStaticModulePath
-  cellRoute: CellsRoute
+  cellRoute?: CellsRoute
 }
 
 export const serve = async ( config:Configuration ) => {
@@ -30,17 +30,15 @@ export const serve = async ( config:Configuration ) => {
 
   const { 
     port, 
-    cellRoute, 
     proxy, 
-    mainModulePathName = '/', 
     pkgModulePath, 
     extraModulePath, 
-    cellRoute: { dir } 
+    cellRoute = { dir: os.tmpdir() } 
   } = config
 
   const app = express();
 
-  const cellsRouter = createCellsRouter(dir);
+  const cellsRouter = createCellsRouter( cellRoute.dir );
 
   app.use(cellsRouter);
 
@@ -60,7 +58,7 @@ export const serve = async ( config:Configuration ) => {
         path.join( path.dirname(require.resolve( path.join('@bsorrentino', moduleName, 'package.json' ) )), join )
 
     // static route for main module      
-    app.use( mainModulePathName, express.static( modulePath( 'jsnotebook-client-main', 'dist' ) ) )
+    app.use( '/notebooks', express.static( modulePath( 'jsnotebook-client-main', 'dist' ) ) )
 
     app.use( '/notebook', express.static( modulePath( 'jsnotebook-client', 'dist' ) ) )  
 

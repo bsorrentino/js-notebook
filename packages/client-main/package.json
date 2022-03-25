@@ -16,8 +16,8 @@
   "scripts": {
     "cleanall": "zx ../zx-package-clean.mjs --all",
     "clean": "zx ../zx-package-clean.mjs",
-    "serve": "parcel serve --no-cache index.html",
-    "prepare": "npm run clean && parcel build index.html"
+    "serve": "parcel serve --no-cache index.html --public-url /notebooks",
+    "prepare": "npm run clean && parcel build index.html --public-url /notebooks"
   },
   "dependencies": {
     "@bsorrentino/jsnotebook-client-data": "^0.10.0",
