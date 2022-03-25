@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-client-main",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -16,11 +16,11 @@
   "scripts": {
     "cleanall": "zx ../zx-package-clean.mjs --all",
     "clean": "zx ../zx-package-clean.mjs",
-    "serve": "parcel serve --no-cache index.html",
-    "prepare": "npm run clean && parcel build index.html"
+    "serve": "parcel serve --no-cache index.html --public-url /notebooks",
+    "prepare": "npm run clean && parcel build index.html --public-url /notebooks"
   },
   "dependencies": {
-    "@bsorrentino/jsnotebook-client-data": "^0.10.0",
+    "@bsorrentino/jsnotebook-client-data": "^0.11.0",
     "bulmaswatch": "^0.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"

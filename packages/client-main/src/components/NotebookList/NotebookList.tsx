@@ -16,8 +16,6 @@ const PanelTabs = () => (
     </p>
 )
 
-
-
 const NotebookRow = ( params: {docId: string, onDelete:( id:string ) => void } ) => {
 
     const { docId: id }  = params
