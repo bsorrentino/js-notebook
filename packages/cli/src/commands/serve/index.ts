@@ -17,7 +17,6 @@ const serveAction = async ( { port }: Options) => {
   
   const config:Configuration = {
     port: parseFloat(port),
-    mainModulePath: modulePath('jsnotebook-client-main', 'dist'),
     cellRoute: {
       dir: os.tmpdir(),
     } 

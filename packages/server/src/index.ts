@@ -7,6 +7,11 @@ export type Proxy = Options
 
 export type StaticModulePath = string
 
+export interface CustomStaticModulePath {
+  route: string
+  path: string
+}
+
 export type CellsRoute = {
   dir: string
 }
@@ -14,15 +19,24 @@ export type CellsRoute = {
 export interface Configuration {
   port: number
   proxy?: Options
-  mainModulePath: StaticModulePath
+  mainModulePathName?: StaticModulePath
   pkgModulePath?: StaticModulePath
+  extraModulePath?: CustomStaticModulePath
   cellRoute: CellsRoute
 }
 
 export const serve = async ( config:Configuration ) => {
   console.log( config )
 
-  const { port, cellRoute, proxy, mainModulePath, pkgModulePath, cellRoute: { dir } } = config
+  const { 
+    port, 
+    cellRoute, 
+    proxy, 
+    mainModulePathName = '/', 
+    pkgModulePath, 
+    extraModulePath, 
+    cellRoute: { dir } 
+  } = config
 
   const app = express();
 
@@ -42,16 +56,22 @@ export const serve = async ( config:Configuration ) => {
     // )
   } else {
 
-  const modulePath = ( moduleName:string, join:string ) => 
-      path.join( path.dirname(require.resolve( path.join('@bsorrentino', moduleName, 'package.json' ) )), join )
+    const modulePath = ( moduleName:string, join:string ) => 
+        path.join( path.dirname(require.resolve( path.join('@bsorrentino', moduleName, 'package.json' ) )), join )
 
     // static route for main module      
-    app.use( express.static( mainModulePath ) )
+    app.use( mainModulePathName, express.static( modulePath( 'jsnotebook-client-main', 'dist' ) ) )
 
     app.use( '/notebook', express.static( modulePath( 'jsnotebook-client', 'dist' ) ) )  
 
-    if( pkgModulePath )
-    { // static route for package module
+    if( extraModulePath ) { // static route for extra package module
+
+      const { route, path } = extraModulePath
+      app.use( route, express.static( path ))
+      
+    }
+
+    if( pkgModulePath ) { // static route for package module
 
       // LOG STATIC REQUEST    
       const log:RequestHandler =  (req, _, next) => {
