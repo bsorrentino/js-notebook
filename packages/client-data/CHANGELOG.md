@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.12.0](https://github.com/bsorrentino/js-notebook/compare/v0.11.0...v0.12.0) (2022-03-27)
+
+
+### Features
+
+* complete implementation for supporting of code language at notebook level ([3e3236d](https://github.com/bsorrentino/js-notebook/commit/3e3236db92b23ac397a7118bdbc8e622287978b8)), closes [#12](https://github.com/bsorrentino/js-notebook/issues/12)
+
+
+
+
+
 # [0.11.0](https://github.com/bsorrentino/js-notebook/compare/v0.10.0...v0.11.0) (2022-03-25)
 
 **Note:** Version bump only for package @bsorrentino/jsnotebook-client-data
