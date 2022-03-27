@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import CellItem from "./CellItem";
 import { useDispatch, useSelector } from "../../hooks";
-import { fetchCells } from "../../redux";
+import { fetchNotebook } from "../../redux";
 import AddCell from "../AddCell";
 import * as db from '@bsorrentino/jsnotebook-client-data'
 import { ImportNotebook } from "../ImportNotebook/ImportNotebook";
@@ -13,29 +13,27 @@ const CellsList: React.FC = () => {
   const dispatch = useDispatch()
 
   // fetch cells from file
-  useEffect(() => { dispatch(fetchCells()) }, [])
-  
-    const { cellsData, order, hasTypescript, saveStatus } = useSelector(({ cells }) => {
-    const { data, order, saveStatus } = cells;
+  useEffect(() => { 
+    dispatch(fetchNotebook()) 
+  },[])
+
+  useEffect
+  const { language = 'javascript', cellsData, order, saveStatus } = useSelector(({ cells }) => {
+    const { language, data, order, saveStatus } = cells;
 
     console.log( 'useSelector', saveStatus )
 
-    let hasTypescript = false
-
-    const cellsData = order.map(id => {
-      hasTypescript = data[id].language === 'typescript'
-      return data[id]
-    })
+    const cellsData = order.map(id => data[id] )
     
-    return { cellsData, order, hasTypescript, saveStatus };
-  } )
+    return { language, cellsData, order, saveStatus };
+  })
 
   const { notebookId:notebook } = db.context
 
   const cells = cellsData.map((cell) => {
     return (
       <div className="cells-list-item" key={cell.id}>
-        <CellItem cell={cell} hasTypescript={hasTypescript} />
+        <CellItem cell={cell} language={language} />
         <AddCell prevCellId={cell.id} />
       </div>
     );

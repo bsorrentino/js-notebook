@@ -1,19 +1,19 @@
 import React from "react";
 import TextCell from "../TextCell";
 import CodeCell from "../CodeCell";
-import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 
 interface CellItemProps {
   cell: Cell;
-  hasTypescript: boolean;
+  language: NotebookLanguage;
 }
 
-const CellItem: React.FC<CellItemProps> = ({ cell, hasTypescript }) => {
+const CellItem: React.FC<CellItemProps> = ({ cell, language }) => {
   return (
     <>
       {cell.type === "code" && (
         <div className="cell-list-item">
-            <CodeCell cell={cell} hasTypescript={hasTypescript} />
+            <CodeCell cell={cell} language={language} />
         </div>
       )}
       {cell.type === "text" && (

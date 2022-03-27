@@ -16,14 +16,14 @@ import Editor, { OnMount } from "@monaco-editor/react";
 import * as monaco from 'monaco-editor'
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
-import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { Resizable } from "re-resizable";
 //import * as classes from "./CodeCell.module.css";
 
 
 interface CodeCellProps {
   cell: Cell;
-  hasTypescript: boolean;
+  language: NotebookLanguage
 }
 
 const monacoEditorOptions:monaco.editor.IStandaloneEditorConstructionOptions = {
@@ -49,19 +49,18 @@ const resizableStyle = {
  * CodeCell Widget
  * 
  */
-const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
-
+const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
+  
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>()
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
-
   const [editorHeight, setEditorHeight ] = useState(200)
   
   const handleSubmit = useCallback(() => {
     dispatch(
-      createBundle({ id: cell.id, input: cumulativeCode, hasTypescript })
+      createBundle({ id: cell.id, input: cumulativeCode, hasTypescript: language === 'typescript' })
     )
-  }, [ cell.id, cumulativeCode, hasTypescript ] )
+  }, [ cell.id, cumulativeCode, language ] )
 
   const handleKeyDown = (event: KeyboardEvent) => {
     const { key, altKey, ctrlKey, code, shiftKey } = event 
@@ -74,7 +73,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
     // console.log( 'handleEditorMount', monacoEditor, monaco )
     editorRef.current = monacoEditor
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-      // noSemanticValidation: true,
+      noSemanticValidation: false,
       noSyntaxValidation: true,
     })
     
@@ -110,7 +109,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
         <div className="column is-2">
           <LanguageDropdown
             id={cell.id}
-            initialLanguage={cell.language || "javascript"}
+            initialLanguage={language}
           />
         </div>
         <div className="column is-offset-8 is-4">
@@ -152,7 +151,7 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, hasTypescript }) => {
               onChange={handleChangeCode}
               onMount={handleEditorMount}
               value={cell?.content}
-              language={cell.language ?? "javascript"}
+              language={language}
               theme="vs-dark"
               options={monacoEditorOptions}
             /> 

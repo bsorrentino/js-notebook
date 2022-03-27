@@ -1,2 +1,2 @@
-export * from './cell'
+export * from './model'
 export * from './db'
