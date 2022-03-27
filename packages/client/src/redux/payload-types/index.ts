@@ -1,4 +1,4 @@
-import { Cell, CellLanguages, CellTypes } from "@bsorrentino/jsnotebook-client-data";
+import { Cell, NotebookLanguage, CellType } from "@bsorrentino/jsnotebook-client-data";
 
 type MoveDirection = "up" | "down";
 
@@ -13,7 +13,7 @@ export interface DeleteCell {
 
 export interface InsertCell {
   id: string | null;
-  type: CellTypes;
+  type: CellType;
 }
 
 export interface UpdateCellContent {
@@ -21,9 +21,8 @@ export interface UpdateCellContent {
   content: string;
 }
 
-export interface UpdateCellLanguage {
-  id: string;
-  language: CellLanguages;
+export interface UpdateNotebookLanguage {
+  language: NotebookLanguage;
 }
 
 export interface BundlerInput {

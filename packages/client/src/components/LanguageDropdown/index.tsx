@@ -1,29 +1,48 @@
-import { CellLanguages } from "@bsorrentino/jsnotebook-client-data";
-import React, { ChangeEvent, useState } from "react";
+import {  NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateCellLanguage } from "../../redux"
+import { updateNotebookLanguage } from "../../redux";
 
 interface LanguageDropdownProps {
   id: string;
-  initialLanguage: CellLanguages;
+  initialLanguage: NotebookLanguage;
 }
 
 const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
   id,
   initialLanguage,
 }) => {
+  const selectEl = useRef<HTMLSelectElement>(null)
   const dispatch = useDispatch()
-  const [language, setLanguage] = useState<CellLanguages>(initialLanguage);
+  const [language, _setLanguage] = useState<NotebookLanguage>(initialLanguage);
+
+  const setLanguage = ( language:NotebookLanguage ) => {
+    _setLanguage( language )
+    document.dispatchEvent( new CustomEvent('notebook.updateLanguage', { detail: language }) ) 
+  }
+
+  useEffect( () => {
+    const handler = ( e:any ) => {
+      if( !selectEl.current ) return // GUARD
+      if( selectEl.current.value != e.detail  ) {
+        console.log( 'notebook.updateLanguage set', selectEl.current.value, e.detail )
+        _setLanguage(  e.detail )
+      }
+    }
+    document.addEventListener( 'notebook.updateLanguage', handler, false)
+
+    return () => document.removeEventListener( 'notebook.updateLanguage', handler)
+  }, [])
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const lang = e.target.value as CellLanguages
+    const lang = e.target.value as NotebookLanguage
     setLanguage(lang);
-    dispatch( updateCellLanguage({ id, language: lang }) )
+    dispatch( updateNotebookLanguage({ language: lang }) )
   };
 
   return (
     <div className="select is-primary">
-      <select value={language} onChange={handleChange}>
+      <select ref={selectEl} value={language} onChange={handleChange}>
         <option value="javascript">JavaScript</option>
         <option value="typescript">TypeScript</option>
       </select>

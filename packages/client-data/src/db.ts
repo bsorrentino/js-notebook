@@ -1,9 +1,5 @@
 import PouchDB from 'pouchdb-browser'
-import {Cell} from './cell'
-
-export interface NotebookDoc extends PouchDB.Core.IdMeta {
-    cells: Array<Cell>
-}
+import {Cell,Notebook, NotebookDoc} from './model'
 
 declare var NOTEBOOK_DB:string|undefined
 
@@ -143,27 +139,44 @@ export async function insertCellAtIndex( index:number, cell:Cell ) {
  * 
  * @returns 
  */
- export async function loadCells() {
+ export async function fetchNotebook() {
     if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
 
     try { 
         
         const doc = await db.get( context.notebookId )
 
-        return doc.cells
+        return doc
     }
     catch( err:any ) {
         console.warn( `doc '${notebook} not found!`, err )
         
-        const result:Cell[] = []
+        const result:Notebook = {
+            language: 'javascript',
+            cells: []
+        }
 
-        await db.put( { _id:notebook, cells:result }, { force: true })
+        await db.put( { _id:notebook, ...result }, { force: true })
 
         return result
     }
     
 }
 
+/* 
+* @returns 
+*/
+export const updateNotebook = async ( data:Partial<Notebook> ) => {
+
+    if( !context.notebookId ) throw 'notebook id has not been specified in query parameter "?notebook=<id>"'
+
+    const doc = await db.get( context.notebookId )
+    
+    const newDoc = { ...doc, ...data }
+    console.log( 'update notebook', newDoc)
+    
+    return await db.put( newDoc )
+}
 
 /* 
 * @returns 

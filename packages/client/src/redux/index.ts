@@ -5,10 +5,10 @@ export {
   importNotebook,
   moveCell,
   updateCellContent,
-  updateCellLanguage,
   insertCell,
   deleteCell,
-  fetchCells,
+  updateNotebookLanguage,
+  fetchNotebook,
   exportNotebook,
-} from "./slices/cellsSlice_db";
+} from "./slices/cellsSlice";
 export { createBundle } from "./slices/bundlerSlice";
