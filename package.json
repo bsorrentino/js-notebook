@@ -10,7 +10,7 @@
   "scripts": {
     "commit": "cz",
     "clean": "lerna run cleanall && lerna clean -y",
-    "cleanall": "npm run cleanall && zx zx-clean.mjs",
+    "cleanall": "npm run clean && zx zx-clean.mjs",
     "build": "lerna bootstrap --hoist --strict",
     "start": "lerna run start --parallel",
     "lerna:bump": "npx lerna version --conventional-commits --no-push",

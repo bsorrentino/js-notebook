@@ -1,15 +1,40 @@
-.preview-wrapper {
-  position: relative;
-  _height: 100%;
-  flex-grow: 1;
+
+$card-backgound-color: white;
+
+.card-header {
+  $padding: 4;
+
+  padding: $padding;
+  background-color: $card-backgound-color !important;
+  border-bottom: solid;
+  border-bottom-width: thin;
+
+
+  .card-header-title {
+    padding: $padding;
+    color: black; 
+  }
+
+  .card-header-icon {
+    padding: $padding;
+    background-color: $card-backgound-color;
+    border-style: none;
+  }
+  
 }
 
-.preview-wrapper iframe {
-  background-color: white;
-  _height: 100%;
-  height: 350px;
-  width: 100%;
-  display: block;
+.preview-wrapper {
+  position: relative;
+  // height: 100%;
+  flex-grow: 1;
+
+  iframe {
+    background-color: $card-backgound-color;
+    // height: 100%;
+    height: 350px;
+    width: 100%;
+    display: block;
+  }
 }
 
 .progress-wrapper {
