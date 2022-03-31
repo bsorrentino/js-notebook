@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/bsorrentino/js-notebook/compare/v0.12.0...v0.13.0) (2022-03-31)
+
+
+### Features
+
+* add fontawesome support ([2bf9d68](https://github.com/bsorrentino/js-notebook/commit/2bf9d681220433fcbbc075419bb4a92cc6e97559))
+* **preview:** complete implementation of collapsable preview panel ([607018d](https://github.com/bsorrentino/js-notebook/commit/607018d79c8cddc9eeac38ef8026f23fd47aa1c9)), closes [#13](https://github.com/bsorrentino/js-notebook/issues/13)
+
+
+
+
+
 # [0.12.0](https://github.com/bsorrentino/js-notebook/compare/v0.11.0...v0.12.0) (2022-03-27)
 
 

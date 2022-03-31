@@ -1,10 +1,6 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useSelector } from "../../hooks";
-import "./Preview.css";
-
-interface PreviewProps {
-  id: string;
-}
+import "./Preview.scss";
 
 const html = `
 <html>
@@ -48,34 +44,63 @@ const html = `
 </html>
 `;
 
+interface PreviewProps {
+  id: string
+}
+
 const Preview: React.FC<PreviewProps> = ({ id }) => {
-  const iframe = useRef<any>();
+
+  const iframe = useRef<HTMLIFrameElement>(null);
+
   const { code, error, loading } = useSelector(
-    (state) => state.bundler[id]
-  ) || {
-    code: "",
-    error: "",
-    loading: false,
-  };
+    (state) => state.bundler[id] ?? {
+      code: '',
+      error: '',
+      loading: false,
+    }
+  )
 
   useEffect(() => {
-    iframe.current.contentWindow.postMessage({ code, error }, "*");
+    iframe.current?.contentWindow?.postMessage({ code, error }, "*");
   }, [code, error]);
+
+  const [cardCollapsed, setCardCollapsed] = useState(true);
+
+  useEffect(() => {
+    if( loading && cardCollapsed ) {
+      setCardCollapsed(false)
+    }
+  }, [loading] );
+
   return (
-    <div className="preview-wrapper">
-      {loading && (
-        <div className="progress-wrapper">
-          <progress className="progress is-small is-primary" max="">
-            Loading
-          </progress>
-        </div>
-      )}
-      <iframe
-        title="preview"
-        ref={iframe}
-        sandbox="allow-scripts allow-same-origin"
-        srcDoc={html}
-      />
+    <div className="card">
+      <header className="card-header">
+        <p className="card-header-title">Result</p>
+        <button
+          onClick={() => setCardCollapsed(!cardCollapsed)}
+          className="card-header-icon"
+          aria-label="more options"
+        >
+          <span className="icon">
+            <i className="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </button>
+      </header>
+      <div className={'preview-wrapper' + (cardCollapsed  ? ' is-hidden' : '')}>
+        {loading && (
+          <div className="progress-wrapper">
+            <progress className="progress is-small is-primary" max="">
+              Loading
+            </progress>
+          </div>
+        )}
+        <iframe
+          title="preview"
+          ref={iframe}
+          sandbox="allow-scripts allow-same-origin"
+          srcDoc={html}
+        />
+      </div>
     </div>
   );
 };
