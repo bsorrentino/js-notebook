@@ -1,5 +1,10 @@
 import { Cell, NotebookLanguage, CellType, Notebook } from "@bsorrentino/jsnotebook-client-data";
 
+export interface ResizeCell {
+  id: string;
+  height: number;
+}
+
 type MoveDirection = "up" | "down";
 
 export interface MoveCell {

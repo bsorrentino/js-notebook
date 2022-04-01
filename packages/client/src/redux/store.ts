@@ -4,7 +4,7 @@ import bundlerReducer from "./slices/bundlerSlice";
 
 export const store = configureStore({
   reducer: {
-    cells: cellsReducer,
+    notebook: cellsReducer,
     bundler: bundlerReducer,
   },
 });

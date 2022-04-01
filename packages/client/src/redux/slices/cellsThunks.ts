@@ -8,7 +8,8 @@ import {
   UpdateNotebookLanguage,
   UpdateCellContent,
   MoveCell,
-  ImportNotebook
+  ImportNotebook,
+  ResizeCell
 } from "../payload-types";
 import { makeDebounce } from '../../debounce'
 import produce from "immer";
@@ -18,19 +19,20 @@ export interface NotebookState {
   error: string | null;
   saveStatus: string | null;
   order: string[];
-  data: Record<string, Cell>
+  cells: Record<string, Cell>
   language: NotebookLanguage
 }
 
-const generateId = () => {
-  return Math.random().toString(36).substr(2, 5);
-};
+const generateId = () => 
+  Math.random().toString(36).substr(2, 5);
 
 const errorMessage = ( error:any ) => {
   const result = error.message ?? error 
   console.error( result )
   return result
 }
+
+const updateCellDebounce = makeDebounce(700)
 
 /**
  * fetchCells
@@ -39,7 +41,7 @@ export const fetchNotebook = createAsyncThunk<
   Notebook|undefined,
   undefined,
   { rejectValue: string; state: RootState }
->("notebook/fetchNotebook", async (_, { getState, rejectWithValue }) => {
+>("notebook/fetchNotebook", async (_, { rejectWithValue }) => {
 
   try {
     const result =  await db.fetchNotebook();
@@ -55,8 +57,7 @@ export const fetchNotebook = createAsyncThunk<
     rejectWithValue( errorMessage(error) )
   }
 
-});
-
+})
 /**
  * importNotebook
  */
@@ -79,8 +80,7 @@ export const fetchNotebook = createAsyncThunk<
   
 }
 
-});
-
+})
 /**
  * exportNotebook
  */
@@ -96,7 +96,7 @@ export const exportNotebook = createAsyncThunk<
     return 
   }
 
-  const { data, order, language } = getState().cells;
+  const { cells: data, order, language } = getState().notebook;
   
   const payload:Notebook = {
     language: language,
@@ -118,11 +118,7 @@ export const exportNotebook = createAsyncThunk<
     rejectWithValue(error.message);
   }
 
-
-});
-
-const updateCellContentDebounce = makeDebounce(700)
-
+})
 /**
  * 
  */
@@ -133,7 +129,7 @@ export const updateCellContent = createAsyncThunk<
 >("cells/updateCellContent", async (arg, { getState, rejectWithValue }) => {
 
 
-  updateCellContentDebounce( async () => {
+  updateCellDebounce( async () => {
     const { id: cellId, content } = arg
     try {
 
@@ -148,8 +144,7 @@ export const updateCellContent = createAsyncThunk<
   
   })
 
-});
-
+})
 /**
  * updateCellLanguage
  */
@@ -172,8 +167,7 @@ export const updateNotebookLanguage = createAsyncThunk<
     
   }
 
-});
-
+})
 /**
  * insertCell
  */
@@ -185,7 +179,7 @@ export const insertCell = createAsyncThunk<
 
   const { id, type } = arg
 
-  const state = getState().cells
+  const state = getState().notebook
 
   const cell_id = generateId()
 
@@ -193,6 +187,7 @@ export const insertCell = createAsyncThunk<
     id: cell_id,
     content: "",
     type: type,
+    height: 200
   }
 
   const index = (id) ? state.order.findIndex((i) => i === id) : 0
@@ -209,8 +204,7 @@ export const insertCell = createAsyncThunk<
 
   }
 
-});
-
+})
 /**
  * deleteCell
  */
@@ -233,9 +227,7 @@ export const deleteCell = createAsyncThunk<
     rejectWithValue(errorMessage(error));
   }
 
-});
-
-
+})
 /**
  *  MoveCell
  */
@@ -245,7 +237,7 @@ export const deleteCell = createAsyncThunk<
  { rejectValue: string; state: RootState }
 >("cells/moveCell", async (arg, { getState, rejectWithValue }) => {
   
-  const { order, data } = getState().cells
+  const { order, cells: data } = getState().notebook
 
   return await produce( 
     order
@@ -278,4 +270,31 @@ export const deleteCell = createAsyncThunk<
   })
 
  })
+/**
+ *  Resize Cell
+ */
+ export const resizeCell = createAsyncThunk<
+ void,
+ ResizeCell,
+ { rejectValue: string; state: RootState }
+>("cells/resizeCell", async (arg, { rejectWithValue }) => {
+  
+  updateCellDebounce( async () => {
+    const { id: cellId, height } = arg
+    try {
+
+      const result = await db.updateCellById( cellId, cell => cell.height = height )
+      console.log(`cell height updated!`, result)
+  
+    } catch (error: any) {
+ 
+      rejectWithValue(errorMessage(error));
+      
+    }
+  
+  })
+  
+})
+
+
 

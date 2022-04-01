@@ -18,12 +18,12 @@ const CellsList: React.FC = () => {
   },[])
 
   useEffect
-  const { language = 'javascript', cellsData, order, saveStatus } = useSelector(({ cells }) => {
-    const { language, data, order, saveStatus } = cells;
+  const { language = 'javascript', cellsData, order, saveStatus } = useSelector(({ notebook }) => {
+    const { language, cells, order, saveStatus } = notebook;
 
     console.log( 'useSelector', saveStatus )
 
-    const cellsData = order.map(id => data[id] )
+    const cellsData = order.map(id => cells[id] )
     
     return { language, cellsData, order, saveStatus };
   })

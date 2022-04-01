@@ -40,7 +40,7 @@ export const useCumulativeCode = (id: string) => {
       }
     }
   `
-    const { data, order } = state.cells;
+    const { cells: data, order } = state.notebook;
     const orderedCodeCells = order
       .map((id) => data[id])
       .filter((c) => c.type === "code");
