@@ -61,24 +61,21 @@ export const fetchNotebook = createAsyncThunk<
  * importNotebook
  */
  export const importNotebook = createAsyncThunk<
- Array<Cell>,
+ Notebook|undefined,
  ImportNotebook,
  { rejectValue: string; state: RootState }
 >("notebook/import", async ( args, { rejectWithValue }) => {
 
- const { cells } = args
-
  try {
 
-  const result = await db.saveCells( cells )
+  const result = await db.updateNotebook( args )
   console.log(`cell content updated!`, result)
 
-  return cells
+  return args
 
 } catch (error: any) {
 
   rejectWithValue(errorMessage(error));
-  return []
   
 }
 
@@ -99,9 +96,12 @@ export const exportNotebook = createAsyncThunk<
     return 
   }
 
-  const { data, order } = getState().cells;
+  const { data, order, language } = getState().cells;
   
-  const cells = order.map(id => data[id]);
+  const payload:Notebook = {
+    language: language,
+    cells: order.map(id => data[id])
+  }
 
   try {
     console.log( 'exporting notebook .... ')
@@ -111,7 +111,7 @@ export const exportNotebook = createAsyncThunk<
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
       },
-      body: JSON.stringify(cells)
+      body: JSON.stringify(payload)
      });
      console.log( 'notebook exported!')
   } catch (error:any) {

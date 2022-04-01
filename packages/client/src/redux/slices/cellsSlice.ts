@@ -97,12 +97,15 @@ const slice = () => {
       // import notebook
       ////////////////////////
       builder.addCase(importNotebook.fulfilled, (state, {payload}) => {
-        state.order = payload.map( cell => cell.id )
-        state.data = payload.reduce<Record<string,Cell>>( (prev, current) => {
-          prev[current.id] = current
-          return prev
-        } , {})
-        state.saveStatus = 'importNotebook.success'
+        if( payload ) {
+          state.language = payload.language
+          state.order = payload.cells.map( cell => cell.id )
+          state.data = payload.cells.reduce<Record<string,Cell>>( (prev, current) => {
+            prev[current.id] = current
+            return prev
+          } , {})  
+          state.saveStatus = 'importNotebook.success'  
+        }
       })
       builder.addCase(importNotebook.pending, (state) => {
         state.saveStatus = 'importNotebook.pending'
