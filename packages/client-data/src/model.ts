@@ -13,7 +13,7 @@ export interface Cell {
 export type NotebookLanguage = "javascript" | "typescript";
 
 export interface Notebook {
-  language?: NotebookLanguage
+  language: NotebookLanguage
   cells: Array<Cell>
 }
 
