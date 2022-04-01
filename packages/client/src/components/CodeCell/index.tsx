@@ -13,12 +13,13 @@ import {
 } from "../../hooks";
 import LanguageDropdown from "../LanguageDropdown";
 import Editor, { OnMount } from "@monaco-editor/react";
-import * as monaco from 'monaco-editor'
+import * as monaco from 'monaco-editor';
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { Resizable } from "re-resizable";
 import { resizeCell } from "../../redux/slices/cellsThunks";
+import { AutoTypings, LocalStorageCache } from "monaco-editor-auto-typings";
 //import * as classes from "./CodeCell.module.css";
 
 
@@ -45,6 +46,28 @@ const resizableStyle = {
   border: "solid 1px #ddd",
   background: "#f0f0f0"
 }
+
+// self.
+// MonacoEnvironment = {
+//   baseUrl: '/local/monaco-editor/esm/vs/',
+
+//   getWorkerUrl: (moduleId:string, label:string) => {
+//     console.log( 'MonacoEnvironment', moduleId, label )
+//     if (label === 'json') {
+//       return '/local/monaco-editor/esm/vs//language/json/json.worker.js'
+//     }
+//     if (label === 'css' || label === 'scss' || label === 'less') {
+//       return '/local/monaco-editor/esm/vs//language/css/css.worker.js'
+//     }
+//     if (label === 'html' || label === 'handlebars' || label === 'razor') {
+//       return '/local/monaco-editor/esm/vs//language/html/html.worker.js'
+//     }
+//     if (label === 'typescript' || label === 'javascript') {
+//       return '/local/monaco-editor/esm/vs/language/typescript/ts.worker.js'
+//     }
+//     return '/local/monaco-editor/esm/vs//editor/editor.worker.js'
+//   }
+// }
 
 /**
  * CodeCell Widget
@@ -89,8 +112,14 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
       noSyntaxValidation: true,
     })
     
+    
     // monaco.languages.typescript.typescriptDefaults.addExtraLib( )
 
+    // Initialize auto typing on monaco editor. Imports will now automatically be typed!
+    const autoTypings = AutoTypings.create(monacoEditor, {
+      sourceCache: new LocalStorageCache(), // Cache loaded sources in localStorage. May be omitted
+      monaco: monaco
+    });
   }
 
   const handleFormatCode = useCallback( () => {
