@@ -14,7 +14,7 @@ export  const ImportNotebook: React.FC<ImportNotebookProps> = () => {
         file.text()
             .then( contents => {
                 console.log( contents )
-                dispatch( importNotebook( { cells: JSON.parse( contents ) } ))
+                dispatch( importNotebook( JSON.parse( contents ) ))
             })
             .catch( err => {
                 console.error( err )
