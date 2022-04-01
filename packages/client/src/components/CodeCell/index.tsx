@@ -18,6 +18,7 @@ import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { Resizable } from "re-resizable";
+import { resizeCell } from "../../redux/slices/cellsThunks";
 //import * as classes from "./CodeCell.module.css";
 
 
@@ -51,10 +52,11 @@ const resizableStyle = {
  */
 const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
   
+  const cellHeight = ( cell.height || 200 ) 
+
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>()
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
-  const [editorHeight, setEditorHeight ] = useState(200)
   
   const handleSubmit = useCallback(() => {
     dispatch(
@@ -142,9 +144,11 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
       <div onKeyDown={handleKeyDown} >
         <Resizable
           style={resizableStyle}
-          defaultSize={{ width: "100%", height: editorHeight }}
+          defaultSize={{ width: "100%", height: cellHeight }}
           onResizeStop={(e, direction, ref, d) => {
-            setEditorHeight(editorHeight + d.height);
+            const newHeight = cellHeight + d.height
+            dispatch( resizeCell( { id: cell.id, height: newHeight }))
+              .then( () => console.log( 'height updated to: ', newHeight, 'from', cellHeight))
           }}
           >
             <Editor

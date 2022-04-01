@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { Cell } from "@bsorrentino/jsnotebook-client-data"
 import { 
   moveCell,
+  resizeCell,
   NotebookState,
   fetchNotebook, 
   exportNotebook, 
@@ -20,7 +21,7 @@ const slice = () => {
     error: null,
     order: [],
     saveStatus: null,
-    data: {},
+    cells: {},
     language: 'javascript'
   }
 
@@ -79,7 +80,7 @@ const slice = () => {
       builder.addCase(fetchNotebook.fulfilled, (state, { payload }) => {      
         state.language = payload!.language ?? 'javascript'
         state.order = payload!.cells.map((cell) => cell.id)
-        state.data = payload!.cells.reduce<Record<string,Cell>>((accumulator, cell) => {
+        state.cells = payload!.cells.reduce<Record<string,Cell>>((accumulator, cell) => {
           accumulator[cell.id] = cell
           return accumulator
         }, {})
@@ -100,7 +101,7 @@ const slice = () => {
         if( payload ) {
           state.language = payload.language
           state.order = payload.cells.map( cell => cell.id )
-          state.data = payload.cells.reduce<Record<string,Cell>>( (prev, current) => {
+          state.cells = payload.cells.reduce<Record<string,Cell>>( (prev, current) => {
             prev[current.id] = current
             return prev
           } , {})  
@@ -132,7 +133,7 @@ const slice = () => {
       ////////////////////////
       builder.addCase(updateCellContent.fulfilled, (state,action) => {
         const { id, content } = action.meta.arg
-        state.data[id].content = content
+        state.cells[id].content = content
         state.saveStatus = "updateCellContent.success"
   
       })
@@ -142,6 +143,22 @@ const slice = () => {
       builder.addCase(updateCellContent.rejected, (state, { payload }) => {
         state.error = payload ?? "failed to update content, please try again"
         state.saveStatus = 'updateCellContent.error'
+      })  
+      ////////////////////////
+      // resizeCell
+      ////////////////////////
+      builder.addCase(resizeCell.fulfilled, (state,action) => {
+        const { id, height } = action.meta.arg
+        state.cells[id].height = height
+        state.saveStatus = "resizeCell.success"
+  
+      })
+      builder.addCase(resizeCell.pending, (state) => {
+        state.saveStatus = 'resizeCell.pending'
+      })
+      builder.addCase(resizeCell.rejected, (state, { payload }) => {
+        state.error = payload ?? "failed to resize cell, please try again"
+        state.saveStatus = 'resizeCell.error'
       })  
       ////////////////////////
       // updateCellLanguage
@@ -164,7 +181,7 @@ const slice = () => {
       builder.addCase(deleteCell.fulfilled, (state,action) => {
         const {id} = action.meta.arg
         state.order = state.order.filter((i) => i !== id)
-        delete state.data[id]
+        delete state.cells[id]
         state.saveStatus = "deleteCell.success"
       })
       builder.addCase(deleteCell.pending, (state) => {
@@ -180,7 +197,7 @@ const slice = () => {
       builder.addCase(insertCell.fulfilled, (state,action) => {
         const { id } = action.meta.arg
         const cell = action.payload!.newCell
-        state.data[cell.id] = cell
+        state.cells[cell.id] = cell
         if (id) {
           const index = state.order.findIndex((i) => i === id)
           state.order.splice(index + 1, 0, cell.id)
@@ -228,6 +245,7 @@ export const {
 // export async actions
 export { 
   moveCell,
+  resizeCell,
   fetchNotebook, 
   exportNotebook, 
   updateNotebookLanguage, 
