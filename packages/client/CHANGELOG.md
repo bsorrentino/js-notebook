@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/bsorrentino/js-notebook/compare/v0.14.0...v0.15.0) (2022-04-01)
+
+
+### Bug Fixes
+
+* fix import using Notebook model ([1dab724](https://github.com/bsorrentino/js-notebook/commit/1dab724c4443db9b31c4735be05e052ad9e9b719))
+
+
+
+
+
 # [0.14.0](https://github.com/bsorrentino/js-notebook/compare/v0.13.0...v0.14.0) (2022-04-01)
 
 
