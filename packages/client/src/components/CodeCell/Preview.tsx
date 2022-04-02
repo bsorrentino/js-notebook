@@ -24,16 +24,16 @@ const html = `
 
         window.addEventListener("message", (event) => {
             const {code, error} = event.data
-            if (code || error) {
-              if (code) {
-                try {
-                  eval(code)
-                } catch(error) {
-                  // handle run-time aerror
-                  handleError(error)
-                }
-              } else if (error) {
-                // bundle-time error
+            if( error ) {
+              // bundle-time error
+              handleError(error)
+              return
+            }
+            if( code ) {
+              try {
+                eval(code)
+              } catch(error) {
+                // handle run-time aerror
                 handleError(error)
               }
             }
