@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/bsorrentino/js-notebook/compare/v0.17.0...v0.18.0) (2022-04-02)
+
+
+### Features
+
+* **codecell:** complete implementation ([0df0aa0](https://github.com/bsorrentino/js-notebook/commit/0df0aa0e5b705acdafbb816965678bc627f3284d)), closes [#14](https://github.com/bsorrentino/js-notebook/issues/14)
+* setup 'monaco-editor-auto-typings' usage ([59eb044](https://github.com/bsorrentino/js-notebook/commit/59eb0449f1f556936a5fae834e766b7a4f2a50c9)), closes [#14](https://github.com/bsorrentino/js-notebook/issues/14)
+
+
+
+
+
 # [0.17.0](https://github.com/bsorrentino/js-notebook/compare/v0.16.0...v0.17.0) (2022-04-02)
 
 
