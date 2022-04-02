@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useCallback, useRef, useState } from "react";
+import { KeyboardEvent, useCallback } from "react";
 import Preview from "./Preview";
 
 import {
@@ -12,16 +12,14 @@ import {
   useDispatch,
 } from "../../hooks";
 import LanguageDropdown from "../LanguageDropdown";
-import Editor, { OnMount } from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
 import * as monaco from 'monaco-editor';
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { Resizable } from "re-resizable";
 import { resizeCell } from "../../redux/slices/cellsThunks";
-import { AutoTypings, LocalStorageCache } from "monaco-editor-auto-typings";
-//import * as classes from "./CodeCell.module.css";
-
+import { useMonacoEditor } from './monaco-editor-hook'
 
 interface CodeCellProps {
   cell: Cell;
@@ -47,37 +45,19 @@ const resizableStyle = {
   background: "#f0f0f0"
 }
 
-// self.
-// MonacoEnvironment = {
-//   baseUrl: '/local/monaco-editor/esm/vs/',
-
-//   getWorkerUrl: (moduleId:string, label:string) => {
-//     console.log( 'MonacoEnvironment', moduleId, label )
-//     if (label === 'json') {
-//       return '/local/monaco-editor/esm/vs//language/json/json.worker.js'
-//     }
-//     if (label === 'css' || label === 'scss' || label === 'less') {
-//       return '/local/monaco-editor/esm/vs//language/css/css.worker.js'
-//     }
-//     if (label === 'html' || label === 'handlebars' || label === 'razor') {
-//       return '/local/monaco-editor/esm/vs//language/html/html.worker.js'
-//     }
-//     if (label === 'typescript' || label === 'javascript') {
-//       return '/local/monaco-editor/esm/vs/language/typescript/ts.worker.js'
-//     }
-//     return '/local/monaco-editor/esm/vs//editor/editor.worker.js'
-//   }
-// }
 
 /**
  * CodeCell Widget
  * 
  */
-const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
+const CodeCell =  ( props:CodeCellProps ) => {
+  
+  const { cell, language } = props 
   
   const cellHeight = ( cell.height || 200 ) 
 
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>()
+  const { editorRef, handleEditorMount }  = useMonacoEditor()
+  
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
   
@@ -94,33 +74,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
     if( shiftKey && key==='Enter' ) handleSubmit();
   }
 
-  const handleEditorMount: OnMount = (monacoEditor, monaco) => {
-    // console.log( 'handleEditorMount', monacoEditor, monaco )
-    editorRef.current = monacoEditor
-
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2016,
-      allowNonTsExtensions: true,
-      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-      module: monaco.languages.typescript.ModuleKind.CommonJS,
-      noEmit: true,
-      typeRoots: ["node_modules/@types"]
-    })
-
-    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: true,
-    })
-    
-    
-    // monaco.languages.typescript.typescriptDefaults.addExtraLib( )
-
-    // Initialize auto typing on monaco editor. Imports will now automatically be typed!
-    const autoTypings = AutoTypings.create(monacoEditor, {
-      sourceCache: new LocalStorageCache(), // Cache loaded sources in localStorage. May be omitted
-      monaco: monaco
-    });
-  }
 
   const handleFormatCode = useCallback( () => {
     if (!editorRef.current ) return // GUARD
