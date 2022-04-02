@@ -74,11 +74,23 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
     // console.log( 'handleEditorMount', monacoEditor, monaco )
     editorRef.current = monacoEditor
+
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monaco.languages.typescript.ScriptTarget.ES2016,
+      allowNonTsExtensions: true,
+      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      module: monaco.languages.typescript.ModuleKind.CommonJS,
+      noEmit: true,
+      typeRoots: ["node_modules/@types"]
+    })
+
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: false,
       noSyntaxValidation: true,
     })
     
+    // monaco.languages.typescript.typescriptDefaults.addExtraLib( )
+
   }
 
   const handleFormatCode = useCallback( () => {
