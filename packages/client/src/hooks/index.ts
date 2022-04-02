@@ -5,6 +5,7 @@ import {
   useSelector as _useSelector,
 } from "react-redux";
 import { bindActionCreators } from "redux";
+import { SHOW } from '../embedded-code'
 
 type AppDispatch = typeof store.dispatch;
 
@@ -24,22 +25,6 @@ export const useActions = () => {
 
 export const useCumulativeCode = (id: string) => {
   return useSelector((state) => {
-    const defineShow = `
-    show = (value, concat = false) => {
-      const root = document.querySelector("#root")
-      if (typeof value === "object") {
-        if (value.$$typeof && value.props) {
-          if (!concat) {
-            ReactDOM.render(value, root)
-          }
-        } else {
-          !concat ? root.innerHTML = JSON.stringify(value) : root.innerHTML = root.innerHTML + '<br/>' + JSON.stringify(value)
-        }
-      } else {
-        !concat ? root.innerHTML = value : root.innerHTML = root.innerHTML + '<br/>' + value
-      }
-    }
-  `
     const { cells: data, order } = state.notebook;
     const orderedCodeCells = order
       .map((id) => data[id])
@@ -47,17 +32,15 @@ export const useCumulativeCode = (id: string) => {
     const cumulativeCodeArray = ["let show;"];
     for (let c of orderedCodeCells) {
       if (c.id !== id) {
-        cumulativeCodeArray.push("show = () => {}" + "\n" + c.content);
+        cumulativeCodeArray.push(`show = () => {}\n${c.content}`);
       } else if (c.id === id) {
-        cumulativeCodeArray.push(defineShow + "\n" + c.content);
+        cumulativeCodeArray.push( `${SHOW.implementation}\n${c.content}`);
         break;
       }
     }
 
-    const cumulativeCode = cumulativeCodeArray.reduce((all, prev) => {
-      return all + "\n" + prev;
-    }, "");
-
-    return cumulativeCode;
+    return cumulativeCodeArray
+              .reduce((all, prev) =>  `${all}\n${prev}`, '');
   });
 };
+ 

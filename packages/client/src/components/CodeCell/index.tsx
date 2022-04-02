@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useCallback, useRef, useState } from "react";
+import { KeyboardEvent, useCallback } from "react";
 import Preview from "./Preview";
 
 import {
@@ -12,15 +12,14 @@ import {
   useDispatch,
 } from "../../hooks";
 import LanguageDropdown from "../LanguageDropdown";
-import Editor, { OnMount } from "@monaco-editor/react";
-import * as monaco from 'monaco-editor'
+import Editor from "@monaco-editor/react";
+import * as monaco from 'monaco-editor';
 import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { Resizable } from "re-resizable";
 import { resizeCell } from "../../redux/slices/cellsThunks";
-//import * as classes from "./CodeCell.module.css";
-
+import { useMonacoEditor } from './monaco-editor-hook'
 
 interface CodeCellProps {
   cell: Cell;
@@ -46,15 +45,19 @@ const resizableStyle = {
   background: "#f0f0f0"
 }
 
+
 /**
  * CodeCell Widget
  * 
  */
-const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
+const CodeCell =  ( props:CodeCellProps ) => {
+  
+  const { cell, language } = props 
   
   const cellHeight = ( cell.height || 200 ) 
 
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>()
+  const { editorRef, handleEditorMount }  = useMonacoEditor()
+  
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
   
@@ -71,27 +74,6 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell, language }) => {
     if( shiftKey && key==='Enter' ) handleSubmit();
   }
 
-  const handleEditorMount: OnMount = (monacoEditor, monaco) => {
-    // console.log( 'handleEditorMount', monacoEditor, monaco )
-    editorRef.current = monacoEditor
-
-    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.ES2016,
-      allowNonTsExtensions: true,
-      moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
-      module: monaco.languages.typescript.ModuleKind.CommonJS,
-      noEmit: true,
-      typeRoots: ["node_modules/@types"]
-    })
-
-    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
-      noSyntaxValidation: true,
-    })
-    
-    // monaco.languages.typescript.typescriptDefaults.addExtraLib( )
-
-  }
 
   const handleFormatCode = useCallback( () => {
     if (!editorRef.current ) return // GUARD
