@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.17.0](https://github.com/bsorrentino/js-notebook/compare/v0.16.0...v0.17.0) (2022-04-02)
+
+
+### Features
+
+* refine monaco-editor configuration ([5a48829](https://github.com/bsorrentino/js-notebook/commit/5a488298b8936ca62d37be26b90507a1de7e95c8))
+
+
+
+
+
 # [0.16.0](https://github.com/bsorrentino/js-notebook/compare/v0.15.0...v0.16.0) (2022-04-01)
 
 
