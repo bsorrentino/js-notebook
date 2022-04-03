@@ -33,6 +33,10 @@ class NotebookSourceResolver implements SourceResolver {
     
     public async resolvePackageJson(packageName: string, version?: string | undefined, subPath?: string | undefined):Promise<string | undefined> {
         try {
+            const result =  await this.unpkgResolver.resolvePackageJson( packageName, version, subPath)
+
+            if( result && result.length > 0 ) return result
+            
             return await this.resolveFile(
                 // `/local/${packageName}${version ? `@${version}` : ''}${subPath ? `/${subPath}` : ''}/package.json`
                 `/local/${packageName}${subPath ? `/${subPath}` : ''}/package.json`
@@ -40,24 +44,26 @@ class NotebookSourceResolver implements SourceResolver {
     
         }
         catch( e ) {
-          console.warn( 'resolvePackageJson', e )
+          console.error( 'resolvePackageJson', e )
 
-          return await this.unpkgResolver.resolvePackageJson( packageName, version, subPath)
         }
         
     }
 
     public async resolveSourceFile(packageName: string, version: string | undefined, path: string):Promise<string | undefined> {
         try {
-            return await this.resolveFile(
+          const result =   await this.unpkgResolver.resolveSourceFile( packageName, version, path)
+
+          if( result && result.length > 0 ) return result
+
+          return await this.resolveFile(
                 // `/local/${packageName}${version ? `@${version}` : ''}/${path}`
                 `/local/${packageName}/${path}`
               );
     
         }
         catch( e ) {
-            console.warn( 'resolveSourceFile', e )
-            return await this.unpkgResolver.resolveSourceFile( packageName, version, path)
+            console.error( 'resolveSourceFile', e )
         }
     }
 
