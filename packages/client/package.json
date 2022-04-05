@@ -16,8 +16,9 @@
   "scripts": {
     "cleanall": "zx ../zx-package-clean.mjs --all",
     "clean": "zx ../zx-package-clean.mjs",
-    "prepare": "npm run clean && parcel build index.html --public-url /notebook",
-    "serve": "parcel serve --no-cache index.html --public-url /notebook"
+    "prepare": "npm run clean && npm run parcel:build:workers && parcel build index.html --public-url /notebook",
+    "serve": "parcel serve --no-cache index.html --public-url /notebook",
+    "parcel:build:workers": "zx ./zx-parcel-build-workers.mjs"
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",
   "dependencies": {
@@ -29,6 +30,7 @@
     "bulmaswatch": "^0.8.1",
     "esbuild-wasm": "0.14.22",
     "localforage": "^1.10.0",
+    "monaco-editor": "^0.33.0",
     "monaco-editor-auto-typings": "^0.2.0",
     "prettier": "^2.5.1",
     "re-resizable": "^6.9.5",
