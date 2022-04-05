@@ -1,7 +1,3 @@
-// self.
-// MonacoEnvironment = {
-//   baseUrl: '/local/monaco-editor/esm/vs/',
-
 import { OnMount } from "@monaco-editor/react";
 import { AutoTypings, LocalStorageCache, SourceResolver, UnpkgSourceResolver } from "monaco-editor-auto-typings";
 import { useEffect, useRef } from "react";
@@ -9,6 +5,9 @@ import * as monaco from 'monaco-editor'
 import { SHOW } from "../../embedded-code";
 
 
+// self.
+// MonacoEnvironment = {
+//   baseUrl: '/local/monaco-editor/esm/vs/',
 //   getWorkerUrl: (moduleId:string, label:string) => {
 //     console.log( 'MonacoEnvironment', moduleId, label )
 //     if (label === 'json') {
