@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.19.0](https://github.com/bsorrentino/js-notebook/compare/v0.18.0...v0.19.0) (2022-04-05)
+
+
+### Bug Fixes
+
+* **monaco-editor:** fix monaco-editor tsWorker (temp solution) ([f7d44ae](https://github.com/bsorrentino/js-notebook/commit/f7d44aea8b947fb54d82cf1b21ecf23f4983e2b3))
+* **monaco-editor:** prepare fix for monaco editor issue microsoft/monaco-editor[#2295](https://github.com/bsorrentino/js-notebook/issues/2295) ([dfa13a7](https://github.com/bsorrentino/js-notebook/commit/dfa13a78fe60f8768c9d4f84e69ef5430c6cc73a))
+
+
+### Features
+
+* change priority to fetch ts types definitions: 1. unpkg.com 2. local ([77e7c77](https://github.com/bsorrentino/js-notebook/commit/77e7c77a4f9bf8ef337adbb7e71eec582b44604a))
+
+
+
+
+
 # [0.18.0](https://github.com/bsorrentino/js-notebook/compare/v0.17.0...v0.18.0) (2022-04-02)
 
 

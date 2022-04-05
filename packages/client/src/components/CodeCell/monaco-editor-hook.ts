@@ -1,7 +1,3 @@
-// self.
-// MonacoEnvironment = {
-//   baseUrl: '/local/monaco-editor/esm/vs/',
-
 import { OnMount } from "@monaco-editor/react";
 import { AutoTypings, LocalStorageCache, SourceResolver, UnpkgSourceResolver } from "monaco-editor-auto-typings";
 import { useEffect, useRef } from "react";
@@ -9,23 +5,26 @@ import * as monaco from 'monaco-editor'
 import { SHOW } from "../../embedded-code";
 
 
-//   getWorkerUrl: (moduleId:string, label:string) => {
-//     console.log( 'MonacoEnvironment', moduleId, label )
-//     if (label === 'json') {
-//       return '/local/monaco-editor/esm/vs//language/json/json.worker.js'
-//     }
-//     if (label === 'css' || label === 'scss' || label === 'less') {
-//       return '/local/monaco-editor/esm/vs//language/css/css.worker.js'
-//     }
-//     if (label === 'html' || label === 'handlebars' || label === 'razor') {
-//       return '/local/monaco-editor/esm/vs//language/html/html.worker.js'
-//     }
-//     if (label === 'typescript' || label === 'javascript') {
-//       return '/local/monaco-editor/esm/vs/language/typescript/ts.worker.js'
-//     }
-//     return '/local/monaco-editor/esm/vs//editor/editor.worker.js'
-//   }
-// }
+self.
+MonacoEnvironment = {
+  baseUrl: '/local/monaco-editor/esm/vs/',
+  getWorkerUrl: (moduleId:string, label:string) => {
+    console.log( 'MonacoEnvironment', moduleId, label )
+    if (label === 'json') {
+      return './json.worker.js'
+    }
+    if (label === 'css' || label === 'scss' || label === 'less') {
+      return './css.worker.js'
+    }
+    if (label === 'html' || label === 'handlebars' || label === 'razor') {
+      return './html.worker.js'
+    }
+    if (label === 'typescript' || label === 'javascript') {
+      return './ts.worker.js'
+    }
+    return './editor.worker.js'
+  }
+}
 
 class NotebookSourceResolver implements SourceResolver {
 
