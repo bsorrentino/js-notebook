@@ -2,12 +2,6 @@ import express, { NextFunction } from "express";
 import fs from "fs/promises";
 import path from "path";
 
-interface Cell {
-  id: string;
-  type: "text" | "code";
-  content: string;
-}
-
 type ExtraRequestArg = { fullPath:string, databaseName:string, notebookId:string }
 /**
  * 
