@@ -1,10 +1,6 @@
 import path from "path";
 import ts from "typescript";
 
-export const createTSCsRouter = (dir: string) => {
-
-}
-
 /**
  * 
  * @link https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API#getting-the-dts-from-a-javascript-file
@@ -43,4 +39,5 @@ export function generateDTS( fileName: string, options: ts.CompilerOptions|undef
     return createdFiles[outputPropName]
   
   }
+
 }

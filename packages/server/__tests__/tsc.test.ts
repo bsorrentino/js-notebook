@@ -1,7 +1,7 @@
 /// <reference types="@types/jest" />
 
 import ts from 'typescript'
-import { generateDTS } from '../src/routes/tsc'
+import { generateDTS } from '../src/tsc'
 
 describe( 'typescipt compiler test', () => {
     

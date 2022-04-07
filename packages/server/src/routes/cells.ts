@@ -1,6 +1,7 @@
 import express, { NextFunction } from "express";
 import fs from "fs/promises";
 import path from "path";
+import { generateDTS } from "../tsc";
 
 type ExtraRequestArg = { fullPath:string, databaseName:string, notebookId:string }
 /**
@@ -19,7 +20,6 @@ export const createCellsRouter = (dir: string) => {
 
   return express.Router()
     .get<ExtraRequestArg>('/cells/:databaseName/:notebookId', getFullPath, async (req, res) => {
-
       console.log("fetching cells ...");
 
       try {
@@ -64,5 +64,17 @@ export const createCellsRouter = (dir: string) => {
         }
       })
     })
+    .post( '/cells/tsc/:fileName', async ( req, res ) => {
 
+      const { body, params: { fileName } } = req
+
+      const filePath = path.join(dir, fileName)
+
+      await fs.writeFile( filePath, body, "utf-8")
+
+      const result = generateDTS( filePath, {})
+
+      res.send( result )
+
+    })
 };
