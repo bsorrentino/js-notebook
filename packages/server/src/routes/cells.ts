@@ -64,17 +64,17 @@ export const createCellsRouter = (dir: string) => {
         }
       })
     })
-    .post( '/cells/tsc/:fileName', async ( req, res ) => {
+    .post( '/dts/:cellId', express.text(), async ( req, res ) => {
 
-      const { body, params: { fileName } } = req
+      const { body, params: { cellId } } = req
 
-      const filePath = path.join(dir, fileName)
+      const filePath = path.join(dir, `${cellId}.ts`)
 
       await fs.writeFile( filePath, body, "utf-8")
 
       const result = generateDTS( filePath, {})
 
-      res.send( result )
+      res.send( result ?? '' )
 
     })
 };

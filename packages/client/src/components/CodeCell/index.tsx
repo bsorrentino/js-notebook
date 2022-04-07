@@ -1,4 +1,4 @@
-import { KeyboardEvent, useCallback } from "react";
+import { KeyboardEvent, useCallback, useEffect } from "react";
 import Preview from "./Preview";
 
 import {
@@ -56,7 +56,7 @@ const CodeCell =  ( props:CodeCellProps ) => {
   
   const cellHeight = ( cell.height || 200 ) 
 
-  const { editorRef, handleEditorMount }  = useMonacoEditor()
+  const { editorRef, handleEditorMount }  = useMonacoEditor( cell )
   
   const dispatch = useDispatch();
   const cumulativeCode = useCumulativeCode(cell.id);
@@ -73,7 +73,6 @@ const CodeCell =  ( props:CodeCellProps ) => {
 
     if( shiftKey && key==='Enter' ) handleSubmit();
   }
-
 
   const handleFormatCode = useCallback( () => {
     if (!editorRef.current ) return // GUARD

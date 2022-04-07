@@ -21,9 +21,12 @@ export interface InsertCell {
   type: CellType;
 }
 
-export interface UpdateCellContent {
+export interface UpdateCellRequest {
   id: string;
   content: string;
+}
+export interface UpdateCellResponse {
+  dts?: string;
 }
 
 export interface UpdateNotebookLanguage {

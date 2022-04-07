@@ -1,6 +1,21 @@
 import path from "path";
-import ts from "typescript";
+import ts, { CancellationToken } from "typescript";
 
+
+class MyCancellationToken implements CancellationToken {
+
+  isCancellationRequested(): boolean {
+
+    console.log( '\n\nisCancellationRequested\n\n' )
+    return false
+  }
+  throwIfCancellationRequested(): void {
+
+    //console.log( '\n\nthrowIfCancellationRequested\n\n' )
+    //throw new Error("request cancelled.");
+  }
+
+}
 /**
  * 
  * @link https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API#getting-the-dts-from-a-javascript-file
@@ -23,12 +38,12 @@ export function generateDTS( fileName: string, options: ts.CompilerOptions|undef
     (fileName: string, contents: string) => createdFiles[fileName] = contents
 
   const file = path.normalize( fileName )
-
+  
   const program = ts.createProgram( [file], compileOptions, host );
 
-  const emitResult = program.emit()
+  const emitResult = program.emit( undefined, undefined, new MyCancellationToken() )
 
-  console.log( createdFiles )
+  console.log( '\n\ncreatedFiles\n\n', createdFiles, '\n\n')
 
   if( !emitResult.emitSkipped ) {
     
