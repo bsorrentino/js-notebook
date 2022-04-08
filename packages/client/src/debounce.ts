@@ -1,5 +1,9 @@
-
-export function makeDebounce(debounceTime: number) {
+/**
+ * 
+ * @param debounceTime 
+ * @returns 
+ */
+export function makeDebounce(debounceTime: number): ( task: () => void ) => void {
   let saveTimer: any
 
   return (task: () => void) => {
@@ -15,23 +19,14 @@ export function makeDebounce(debounceTime: number) {
  * @param debounceTime 
  * @returns 
  */
-export function makeDebounceWithResult<T = void>(debounceTime: number): ( task: () => T ) => Promise<T> {
+export function makeDebounceAsync<T = void>(debounceTime: number): ( task: () => Promise<T> ) => Promise<T> {
   let saveTimer: any
 
-  return (task: () => T) => (
+  return (task: () => Promise<T>) => (
     new Promise((resolve, reject) => {
       if (saveTimer) clearTimeout(saveTimer)
 
-      saveTimer = setTimeout(async () => {
-        try {
-          const result = await task()
-          resolve(result)
-        }
-        catch (e) {
-          reject(e)
-        }
-
-      }, debounceTime)
-    }
-    ))
+      saveTimer = 
+        setTimeout(() => task().then( resolve ).catch( reject ), debounceTime)
+    }))
 }
