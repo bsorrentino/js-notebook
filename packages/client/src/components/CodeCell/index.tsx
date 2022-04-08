@@ -1,4 +1,4 @@
-import { KeyboardEvent, useCallback, useEffect } from "react";
+import { KeyboardEvent, useCallback } from "react";
 import Preview from "./Preview";
 
 import {
@@ -8,7 +8,6 @@ import {
   moveCell
 } from "../../redux";
 import {
-  useCumulativeCode,
   useDispatch,
 } from "../../hooks";
 import LanguageDropdown from "../LanguageDropdown";
@@ -45,25 +44,31 @@ const resizableStyle = {
   background: "#f0f0f0"
 }
 
-
 /**
  * CodeCell Widget
  * 
  */
-const CodeCell =  ( props:CodeCellProps ) => {
+const CodeCell = ( props:CodeCellProps ) => {
   
   const { cell, language } = props 
   
   const cellHeight = ( cell.height || 200 ) 
-
-  const { editorRef, handleEditorMount }  = useMonacoEditor( cell )
   
   const dispatch = useDispatch();
-  const cumulativeCode = useCumulativeCode(cell.id);
+
+  const { 
+    editorRef, 
+    handleEditorMount, 
+    cumulativeCode 
+  } = useMonacoEditor( cell )
   
   const handleSubmit = useCallback(() => {
     dispatch(
-      createBundle({ id: cell.id, input: cumulativeCode, hasTypescript: language === 'typescript' })
+      createBundle({ 
+        id:             cell.id, 
+        input:          cumulativeCode, 
+        hasTypescript:  language === 'typescript' 
+      })
     )
   }, [ cell.id, cumulativeCode, language ] )
 

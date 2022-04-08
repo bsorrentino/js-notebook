@@ -6,6 +6,7 @@ import {
 } from "react-redux";
 import { bindActionCreators } from "redux";
 import { SHOW } from '../embedded-code'
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 
 type AppDispatch = typeof store.dispatch;
 
@@ -18,29 +19,46 @@ const actionCreators = {
   
 }
 
+/**
+ * 
+ * @returns 
+ */
 export const useActions = () => {
   const dispatch = useDispatch();
   return bindActionCreators(actionCreators, dispatch);
 }
 
+/**
+ * 
+ * @param id 
+ * @returns 
+ */
 export const useCumulativeCode = (id: string) => {
-  return useSelector((state) => {
-    const { cells: data, order } = state.notebook;
-    const orderedCodeCells = order
-      .map((id) => data[id])
-      .filter((c) => c.type === "code");
-    const cumulativeCodeArray = ["let show;"];
-    for (let c of orderedCodeCells) {
-      if (c.id !== id) {
-        cumulativeCodeArray.push(`show = () => {}\n${c.content}`);
-      } else if (c.id === id) {
-        cumulativeCodeArray.push( `${SHOW.implementation}\n${c.content}`);
-        break;
-      }
+
+  return useSelector( state => {
+    const { cells: data, order, language } = state.notebook;
+
+    const orderedCodeCells = Array<Cell>()
+
+    for( let i = 0 ; i < order.length; ++i ) {
+        const c = data[order[i]]
+        if( c.type !== 'code') continue
+        orderedCodeCells.push(c)
+        if( id === c.id) break
     }
 
-    return cumulativeCodeArray
-              .reduce((all, prev) =>  `${all}\n${prev}`, '');
-  });
+    return orderedCodeCells.reduce( (result, c) => {
+      if (c.id === id) {
+        result[0] += `${SHOW.implementation}\n${c.content}`
+      }
+      else {
+        if( language === 'typescript' ) result[1] += c.content
+
+        result[0] += `show = () => {}\n${c.content}`
+      }
+      return result
+    }, [ 'let show', '' ] )
+
+  })
 };
  

@@ -4,6 +4,9 @@ import { useEffect, useRef } from "react";
 import * as monaco from 'monaco-editor'
 import { SHOW } from "../../embedded-code";
 import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { makeDebounceAsync } from "../../debounce";
+import { useCumulativeCode } from "../../hooks";
+import CodeCell from ".";
 
 self.
 // @ts-ignore
@@ -82,9 +85,8 @@ class NotebookSourceResolver implements SourceResolver {
 type AbortControllerHolder = { controller: AbortController|null }
 
 /**
- * React hook
  * 
- * @param content 
+ * @param cell 
  * @returns 
  */
 export function useMonacoEditor( cell:Cell ) {
@@ -92,27 +94,34 @@ export function useMonacoEditor( cell:Cell ) {
   const autoTypingsRef  = useRef<AutoTypings>()
   const editorRef       = useRef<monaco.editor.IStandaloneCodeEditor>()
 
+  const [cumulativeCode, prevContent] = useCumulativeCode(cell.id)
+  
   useEffect(() => {
-
     if( abortController.current.controller !== null ) {
       abortController.current.controller.abort()
     }
 
     abortController.current.controller = new AbortController();
 
-    (async () => {
+    fetchDTSdebounce( async () => {
+       const dts = await fetchDTS( { 
+                  cellId: cell.id, 
+                  content: prevContent, 
+                  signal:abortController.current.controller?.signal } )
+       console.log( '\n\n', cell.id, '\n\n', dts, '\n\n',) 
+       
+       const uri = monaco.Uri.from(  { scheme:'memory', path: cell.id} )
+       if( !monaco.editor.getModel(uri) ) {
+          monaco.editor.createModel( dts, 'typescript', uri )
+       }
 
-      const dts = await fetchDTS( cell, abortController.current.controller?.signal )
-      console.log( dts )
-
-    })();
+    })
   
     return () => {
       abortController.current.controller?.abort()
       abortController.current.controller == null
     }
-  }, [ cell.content ] )
-
+  }, [ prevContent ] )
 
   useEffect(() => {
     return () => { // dispose autoTypingsRef
@@ -122,6 +131,7 @@ export function useMonacoEditor( cell:Cell ) {
       }
     }
   }, [])
+
 
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
     // console.log( 'handleEditorMount', monacoEditor, monaco )
@@ -153,21 +163,24 @@ export function useMonacoEditor( cell:Cell ) {
 
   return {
     editorRef,
-    handleEditorMount
+    handleEditorMount,
+    cumulativeCode
   }
 }
 
+/**
+ * 
+ */
+const fetchDTSdebounce = makeDebounceAsync(1000)
 
 /**
  * 
- * @param cell 
+ * @param arg 
  * @returns 
  */
-async function fetchDTS(cell: Cell, signal?: AbortSignal) {
+async function fetchDTS( arg:{ cellId: string, content:string, signal?: AbortSignal} ) {
 
-  if (cell.type !== 'code') return '' // GUARD
-
-  const { id: cellId, content } = cell
+  const { cellId, content, signal } = arg
 
   try {
 

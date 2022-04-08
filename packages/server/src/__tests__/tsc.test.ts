@@ -14,6 +14,7 @@ describe( 'typescipt compiler test', () => {
         expect( result ).toBeDefined()
         expect( result ).not.toBeNull()
 
+        console.log( result )
     })
 
 })

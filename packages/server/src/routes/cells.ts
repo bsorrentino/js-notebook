@@ -1,9 +1,11 @@
 import express, { NextFunction } from "express";
 import fs from "fs/promises";
 import path from "path";
-import { generateDTS } from "../tsc";
+import { generateDTS, DTSCancellationToken } from "../tsc";
 
 type ExtraRequestArg = { fullPath:string, databaseName:string, notebookId:string }
+
+type GenerateDTSRequest = express.Request<{cellId:string, cancellationToken: DTSCancellationToken}>
 /**
  * 
  * @param filename 
@@ -17,6 +19,20 @@ export const createCellsRouter = (dir: string) => {
       req.params.fullPath = path.join( dir, `${req.params.databaseName}_${req.params.notebookId}.json`)
       next()
   }
+
+  const attachRequestCancellation = ( req:GenerateDTSRequest, res:express.Response, next:NextFunction ) => {
+
+    const token = new DTSCancellationToken()
+
+    req.params.cancellationToken = token
+
+    req.socket.on('close', () => {
+      console.log( 'request cancelled')
+      token.requestCancellation()
+    })
+
+    next()
+}
 
   return express.Router()
     .get<ExtraRequestArg>('/cells/:databaseName/:notebookId', getFullPath, async (req, res) => {
@@ -64,17 +80,25 @@ export const createCellsRouter = (dir: string) => {
         }
       })
     })
-    .post( '/dts/:cellId', express.text(), async ( req, res ) => {
+    .post( '/dts/:cellId', express.text(), attachRequestCancellation, async ( req:GenerateDTSRequest, res ) => {
 
-      const { body, params: { cellId } } = req
+      const { body, params: { cancellationToken, cellId } } = req
 
       const filePath = path.join(dir, `${cellId}.ts`)
 
       await fs.writeFile( filePath, body, "utf-8")
 
-      const result = generateDTS( filePath, {})
+      try {
 
-      res.send( result ?? '' )
+        const result = generateDTS( filePath, {}, cancellationToken )
+        // console.log( result )
+        res.send( result ?? '' )
+  
+      }
+      catch( e:any ) {
+        console.log( 'error generating DTS', e.message )
+        res.send( '' )
+      }
 
     })
 };

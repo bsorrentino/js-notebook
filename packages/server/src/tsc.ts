@@ -2,20 +2,30 @@ import path from "path";
 import ts, { CancellationToken } from "typescript";
 
 
-class MyCancellationToken implements CancellationToken {
+export class DTSCancellationToken implements CancellationToken {
+  
+  #requestCancellation = false
+
+  requestCancellation() {
+    this.#requestCancellation = true
+  }
+
+  revokeCancellation() {
+    this.#requestCancellation = false
+  }
 
   isCancellationRequested(): boolean {
-
-    console.log( '\n\nisCancellationRequested\n\n' )
-    return false
+    return  this.#requestCancellation
   }
+
   throwIfCancellationRequested(): void {
 
-    //console.log( '\n\nthrowIfCancellationRequested\n\n' )
-    //throw new Error("request cancelled.");
+    if( this.#requestCancellation )
+      throw new Error("request cancelled.")
   }
 
 }
+
 /**
  * 
  * @link https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API#getting-the-dts-from-a-javascript-file
@@ -23,7 +33,7 @@ class MyCancellationToken implements CancellationToken {
  * @param fileNames 
  */
 
-export function generateDTS( fileName: string, options: ts.CompilerOptions|undefined): string|undefined {
+export function generateDTS( fileName: string, options: ts.CompilerOptions|undefined, cancellationToken?:CancellationToken ): string|undefined {
 
   const compileOptions : ts.CompilerOptions = {
     ...options,
@@ -41,18 +51,17 @@ export function generateDTS( fileName: string, options: ts.CompilerOptions|undef
   
   const program = ts.createProgram( [file], compileOptions, host );
 
-  const emitResult = program.emit( undefined, undefined, new MyCancellationToken() )
-
-  console.log( '\n\ncreatedFiles\n\n', createdFiles, '\n\n')
+  const emitResult = program.emit( undefined, undefined, cancellationToken )
+  
+  // console.log( '\n\ncreatedFiles\n\n', createdFiles, '\n\n')
 
   if( !emitResult.emitSkipped ) {
     
     const outputPropName = path.join( path.dirname(file), path.basename(file).replace( /\.(js|ts)$/, '.d.ts') )
 
-    console.log( outputPropName )
+    // console.log( outputPropName )
     
     return createdFiles[outputPropName]
-  
   }
 
 }
