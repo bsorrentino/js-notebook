@@ -1,9 +1,13 @@
 import * as esbuild from "esbuild-wasm";
+import { getLogger } from '@bsorrentino/jsnotebook-logger'
+
+const logger = getLogger('unpkg-path-plugin')
 
 const LOCAL_DIR = 'local'
 const LOCAL_NAMESPACE = 'local'
 const UNPKG_URL = 'https://unpkg.com'
 const UNPKG_NAMESPACE = 'a'
+
 
 const isPackageInstalled = async (pkg: string): Promise<any | undefined> => {
   try {
@@ -14,7 +18,7 @@ const isPackageInstalled = async (pkg: string): Promise<any | undefined> => {
     }
   }
   catch (e) {
-    console.warn('ERROR: isPackageInstalled!', e);
+    logger.warn('error on isPackageInstalled!', e);
   }
 }
 
@@ -25,7 +29,7 @@ export const unpkgPathPlugin = () => {
     setup(build: esbuild.PluginBuild) {
       // handle root entry file of user input
       build.onResolve({ filter: /(^index\.js$)/ }, (args: esbuild.OnResolveArgs) => {
-        console.log("onResolve.root", args)
+        logger.trace( "onResolve.root", args )
 
         return { path: "index.js", namespace: UNPKG_NAMESPACE };
 
@@ -34,7 +38,7 @@ export const unpkgPathPlugin = () => {
 
       // handle relative imports inside a module
       build.onResolve({ filter: /^\.+\// }, (args: esbuild.OnResolveArgs) => {
-        console.log("onResolve.relative ==>", args)
+        logger.trace( "onResolve.relative ==>", args)
 
         let result: esbuild.OnResolveResult
 
@@ -55,11 +59,11 @@ export const unpkgPathPlugin = () => {
             };
           }
           catch (e) {
-            console.error(`(error resolving url( ${args.path}, ${baseUrl} ) `, e)
+            logger.error(`(error resolving url( ${args.path}, ${baseUrl} ) `, e)
             return
           }
         }
-        console.log("onResolve.relative <==", result)
+        logger.trace("onResolve.relative <==", result)
         return result
       });
 
@@ -67,13 +71,13 @@ export const unpkgPathPlugin = () => {
       // handle main file of a module
       build.onResolve({ filter: /.*/ }, async (args: esbuild.OnResolveArgs) => {
 
-        console.log("onResolve.main ==>", args)
+        logger.trace("onResolve.main ==>", args)
 
         let result: esbuild.OnResolveResult
 
         const packageJson = await isPackageInstalled(args.path)
         if (packageJson) {
-          console.log(`package ${args.path} is locally installed`)
+          logger.trace(`package ${args.path} is locally installed`)
 
           result = {
             path: `/${LOCAL_DIR}/${args.path}/${packageJson.main ?? 'index.js'}`,
@@ -88,7 +92,7 @@ export const unpkgPathPlugin = () => {
         }
 
 
-        console.log("onResolve.main <==", result)
+        logger.trace("onResolve.main <==", result)
         return result
 
 
