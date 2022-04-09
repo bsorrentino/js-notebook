@@ -7,6 +7,12 @@ import {
 import { bindActionCreators } from "redux";
 import { SHOW } from '../embedded-code'
 import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { getLogger, ILogger } from '@bsorrentino/jsnotebook-logger'
+
+let logger:ILogger 
+//(() => { 
+  logger = getLogger( 'hooks' )
+//})()
 
 type AppDispatch = typeof store.dispatch;
 
@@ -34,7 +40,8 @@ export const useActions = () => {
  * @returns 
  */
 export const useCumulativeCode = (id: string) => {
-
+  logger.trace( `useCumulativeCode(${id})`)
+  
   return useSelector( state => {
     const { cells: data, order, language } = state.notebook;
 

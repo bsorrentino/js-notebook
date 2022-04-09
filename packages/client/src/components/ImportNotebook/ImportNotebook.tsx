@@ -1,5 +1,8 @@
 import { useDispatch } from "react-redux"
 import { importNotebook } from "../../redux"
+import { getLogger } from "@bsorrentino/jsnotebook-logger";
+
+const logger = getLogger( 'ImportNotebook' )
 
 interface ImportNotebookProps {}
 
@@ -9,15 +12,15 @@ export  const ImportNotebook: React.FC<ImportNotebookProps> = () => {
 
     const setFile = ( file:File ) => { 
        
-        console.log( 'setFile', file )
+        logger.trace( 'setFile', file )
 
         file.text()
             .then( contents => {
-                console.log( contents )
+                logger.trace( contents )
                 dispatch( importNotebook( JSON.parse( contents ) ))
             })
             .catch( err => {
-                console.error( err )
+                logger.error( err )
             })
     }
        
