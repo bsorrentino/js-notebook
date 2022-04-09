@@ -1,19 +1,22 @@
-import { OnMount } from "@monaco-editor/react";
+import { Monaco, OnMount } from "@monaco-editor/react";
 import { AutoTypings, LocalStorageCache, SourceResolver, UnpkgSourceResolver } from "monaco-editor-auto-typings";
 import { useEffect, useRef } from "react";
 import * as monaco from 'monaco-editor'
 import { SHOW } from "../../embedded-code";
-import { Cell } from "@bsorrentino/jsnotebook-client-data";
 import { makeDebounceAsync } from "../../debounce";
 import { useCumulativeCode } from "../../hooks";
-import CodeCell from ".";
+
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { getLogger, ILogger } from '@bsorrentino/jsnotebook-logger'
+
+const logger = getLogger( 'monaco-editor-hook' )
 
 self.
 // @ts-ignore
 MonacoEnvironment = {
   baseUrl: '/local/monaco-editor/esm/vs/',
   getWorkerUrl: (moduleId: string, label: string) => {
-    console.log('MonacoEnvironment', moduleId, label)
+    logger.debug('MonacoEnvironment', moduleId, label)
     if (label === 'json') {
       return './json.worker.js'
     }
@@ -46,8 +49,8 @@ class NotebookSourceResolver implements SourceResolver {
       );
 
     }
-    catch (e) {
-      console.error('resolvePackageJson', e)
+    catch (e:any) {
+      logger.error('resolvePackageJson', e.message)
 
     }
 
@@ -65,8 +68,8 @@ class NotebookSourceResolver implements SourceResolver {
       );
 
     }
-    catch (e) {
-      console.error('resolveSourceFile', e)
+    catch (e:any) {
+      logger.error('resolveSourceFile', e.message)
     }
   }
 
@@ -95,7 +98,7 @@ export function useMonacoEditor( cell:Cell ) {
   const editorRef       = useRef<monaco.editor.IStandaloneCodeEditor>()
 
   const [cumulativeCode, prevContent] = useCumulativeCode(cell.id)
-  
+
   useEffect(() => {
     if( abortController.current.controller !== null ) {
       abortController.current.controller.abort()
@@ -104,16 +107,25 @@ export function useMonacoEditor( cell:Cell ) {
     abortController.current.controller = new AbortController();
 
     fetchDTSdebounce( async () => {
-       const dts = await fetchDTS( { 
+      logger.trace( `fetchDTS(${cell.id})` ) 
+      const dts = await fetchDTS( { 
                   cellId: cell.id, 
                   content: prevContent, 
                   signal:abortController.current.controller?.signal } )
-       console.log( '\n\n', cell.id, '\n\n', dts, '\n\n',) 
        
-       const uri = monaco.Uri.from(  { scheme:'memory', path: cell.id} )
-       if( !monaco.editor.getModel(uri) ) {
-          monaco.editor.createModel( dts, 'typescript', uri )
-       }
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(dts, `${cell.id}.ts`)
+
+      const model =  editorRef.current?.getModel();
+
+      model?.setValue( model.getValue() )
+
+      //  const uri = monaco.Uri.from(  { scheme:'inmemory', path: cell.id} )
+       
+      //  if( !monaco.editor.getModel(uri) ) {
+      //   logger.trace( () => `monaco.editor.createModel(${cell.id})\n${dts}` ) 
+      //   monaco.editor.createModel( dts, 'typescript', uri )
+
+      //  }
 
     })
   
@@ -126,7 +138,7 @@ export function useMonacoEditor( cell:Cell ) {
   useEffect(() => {
     return () => { // dispose autoTypingsRef
       if (autoTypingsRef.current) {
-        console.log('disposing autotypings')
+        logger.debug('disposing autotypings')
         autoTypingsRef.current.dispose()
       }
     }
@@ -134,9 +146,9 @@ export function useMonacoEditor( cell:Cell ) {
 
 
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
-    // console.log( 'handleEditorMount', monacoEditor, monaco )
+    // logger.log( 'handleEditorMount', monacoEditor, monaco )
     editorRef.current = monacoEditor
-
+   
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES2016,
       allowNonTsExtensions: true,
@@ -145,6 +157,7 @@ export function useMonacoEditor( cell:Cell ) {
       noEmit: true,
       typeRoots: ["node_modules/@types"]
     })
+    monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: false,
@@ -194,11 +207,11 @@ async function fetchDTS( arg:{ cellId: string, content:string, signal?: AbortSig
       body: content
     });
 
-    return res.text()
+    return await res.text()
 
   }
   catch (e) {
-    console.warn('error generating DTS', e)
+    logger.warn('error generating DTS', e)
     return ''
   }
 
