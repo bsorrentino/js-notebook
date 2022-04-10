@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/bsorrentino/js-notebook/compare/v0.19.0...v0.20.0) (2022-04-10)
+
+
+### Features
+
+* add ts declarations as result of useCumulative hook ([98353a4](https://github.com/bsorrentino/js-notebook/commit/98353a4c2e2eaccdf6119e66dc01b1351bcfedb0))
+* complete implementation of emit and include internal ts declaration ([dd50591](https://github.com/bsorrentino/js-notebook/commit/dd5059150fb56eb46e37a0fabfc6e9fe4256f54b))
+* emit ts declaration - implementation refinements ([fd9df39](https://github.com/bsorrentino/js-notebook/commit/fd9df3984eedff874b5853f5ae7d2a4c52472e82))
+* improve debounce ([f9b0224](https://github.com/bsorrentino/js-notebook/commit/f9b02245735eef696ece80b9b812b04d730d6111))
+* integrate logger, continue trying to add DTS dynamically ([2bf4e31](https://github.com/bsorrentino/js-notebook/commit/2bf4e31e79f7fbf630a1cb09227673b5d0180656))
+* logger integration ([ab97f55](https://github.com/bsorrentino/js-notebook/commit/ab97f555355fef9e8efc879510b9b1053f6e7751))
+* logger integration ([f64d05a](https://github.com/bsorrentino/js-notebook/commit/f64d05a0179d7a25a3d276b6f8271283b9a4e6a5))
+
+
+
+
+
 # [0.19.0](https://github.com/bsorrentino/js-notebook/compare/v0.18.0...v0.19.0) (2022-04-05)
 
 
