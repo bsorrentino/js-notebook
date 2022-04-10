@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-server",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -13,8 +13,9 @@
     "access": "public"
   },
   "files": [
-    "dist/!__tests__",
-    "dist/**/*.js"
+    "!dist/__tests__/*",
+    "dist/**/*.js",
+    "dist/**/*.d.ts"
   ],
   "scripts": {
     "cleanall": "zx ../zx-package-clean.mjs --all",
@@ -28,8 +29,8 @@
     "@types/jest": "^27.4.1"
   },
   "dependencies": {
-    "@bsorrentino/jsnotebook-client": "^0.20.0",
-    "@bsorrentino/jsnotebook-client-main": "^0.20.0",
+    "@bsorrentino/jsnotebook-client": "^0.20.1",
+    "@bsorrentino/jsnotebook-client-main": "^0.20.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "http-proxy-middleware": "^2.0.3",
