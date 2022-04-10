@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/bsorrentino/js-notebook/compare/v0.19.0...v0.20.0) (2022-04-10)
+
+
+### Features
+
+* add service to generate ts definitios ([dff32c8](https://github.com/bsorrentino/js-notebook/commit/dff32c8391e83aadf0747f5a66542361089da509))
+* add ts declarations as result of useCumulative hook ([98353a4](https://github.com/bsorrentino/js-notebook/commit/98353a4c2e2eaccdf6119e66dc01b1351bcfedb0))
+* complete implementation of emit and include internal ts declaration ([dd50591](https://github.com/bsorrentino/js-notebook/commit/dd5059150fb56eb46e37a0fabfc6e9fe4256f54b))
+* emit ts declaration - implementation refinements ([fd9df39](https://github.com/bsorrentino/js-notebook/commit/fd9df3984eedff874b5853f5ae7d2a4c52472e82))
+* emit ts declaration - implementation refinements ([3802d68](https://github.com/bsorrentino/js-notebook/commit/3802d6844803c5bb46e6e973a2fcd2b1c272dd5d))
+* **server:** start implementing service to emit ts declaration from source ([7e81a42](https://github.com/bsorrentino/js-notebook/commit/7e81a42cf251a2b228b4ac46f26cbb70e6b1f666))
+
+
+
+
+
 # [0.19.0](https://github.com/bsorrentino/js-notebook/compare/v0.18.0...v0.19.0) (2022-04-05)
 
 **Note:** Version bump only for package @bsorrentino/jsnotebook-server
