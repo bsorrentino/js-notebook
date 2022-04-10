@@ -97,9 +97,9 @@ declare global {
     }
   }
 
-window.loggers = {}
+self.loggers = {}
 
-window.loggers[_default] = new Logger(LogLevel.debug, '_default')
+self.loggers[_default] = new Logger(LogLevel.debug, '_default')
 
 /**
  * 
@@ -108,14 +108,14 @@ window.loggers[_default] = new Logger(LogLevel.debug, '_default')
 export function initLoggers( defaultLevel:LogLevel, loggersInitializer: Array<{ name: string, level?:LogLevel }> ) {
     console.log( ">> initLoggers" )
 
-    const defaultLogger = window.loggers[_default] as Logger
+    const defaultLogger = self.loggers[_default] as Logger
     defaultLogger.logLevel = defaultLevel
 
     loggersInitializer.forEach( l => {
-        window.loggers[l.name.toLocaleLowerCase()] = new Logger( l.level ?? defaultLevel, l.name )
+        self.loggers[l.name.toLocaleLowerCase()] = new Logger( l.level ?? defaultLevel, l.name )
     })
 
-    console.dir( window.loggers )
+    console.dir( self.loggers )
 }
 
 /**
@@ -124,11 +124,11 @@ export function initLoggers( defaultLevel:LogLevel, loggersInitializer: Array<{ 
  * @returns 
  */
 export const getLogger = ( name?: string ):ILogger => {
-    // console.dir( window.loggers )
+    // console.dir( self.loggers )
 
-    const result =  ( name && window.loggers[name.toLocaleLowerCase()] ) ? 
-                            window.loggers[name.toLocaleLowerCase()] :
-                            window.loggers[_default]
+    const result =  ( name && self.loggers[name.toLocaleLowerCase()] ) ? 
+                            self.loggers[name.toLocaleLowerCase()] :
+                            self.loggers[_default]
                             
     // console.log( ">> GETLOGGER ", name )
     return result
