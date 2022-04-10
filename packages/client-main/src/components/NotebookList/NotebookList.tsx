@@ -3,6 +3,10 @@ import * as db from '@bsorrentino/jsnotebook-client-data'
 import {DeletionNotebookPopup } from './DeletionNotebookPopup'
 import {AddingNotebookPopup } from './AddingNotebookPopup'
 
+import { getLogger } from '@bsorrentino/jsnotebook-logger'
+const logger = getLogger( 'NotebookList' )
+
+
 type NotebookListProps = {}
 
 
@@ -60,7 +64,7 @@ const NotebookList: FunctionComponent<NotebookListProps> = () => {
             setItemForDeletion(null)
         }
         catch( err ) {
-            console.error( `error deleting notebook ${id}`, err )
+            logger.error( `error deleting notebook ${id}`, err )
         }
     }, [ itemForDeletion!=null ] )
 
@@ -75,7 +79,7 @@ const NotebookList: FunctionComponent<NotebookListProps> = () => {
             setShowAdding(false)
         }
         catch( err ) {
-            console.error( `error adding notebook ${id}`, err )
+            logger.error( `error adding notebook ${id}`, err )
         }
     }, [ itemForDeletion!=null ] )
     
