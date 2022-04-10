@@ -7,7 +7,7 @@ import { makeDebounceAsync } from "../../debounce";
 import { useCumulativeCode } from "../../hooks";
 
 import { Cell } from "@bsorrentino/jsnotebook-client-data";
-import { getLogger, ILogger } from '@bsorrentino/jsnotebook-logger'
+import { getLogger } from '@bsorrentino/jsnotebook-logger'
 
 const logger = getLogger( 'monaco-editor-hook' )
 
@@ -35,6 +35,9 @@ MonacoEnvironment = {
   }
 }
 
+/**
+ * 
+ */
 class NotebookSourceResolver implements SourceResolver {
 
   unpkgResolver = new UnpkgSourceResolver()
@@ -58,6 +61,13 @@ class NotebookSourceResolver implements SourceResolver {
 
   }
 
+  /**
+   * 
+   * @param packageName 
+   * @param version 
+   * @param path 
+   * @returns 
+   */
   public async resolveSourceFile(packageName: string, version: string | undefined, path: string): Promise<string | undefined> {
     try {
       const result = await this.unpkgResolver.resolveSourceFile(packageName, version, path)
@@ -75,6 +85,11 @@ class NotebookSourceResolver implements SourceResolver {
     }
   }
 
+  /**
+   * 
+   * @param url 
+   * @returns 
+   */
   private async resolveFile(url: string) {
     const res = await fetch(url, { method: 'GET' });
 
@@ -88,6 +103,38 @@ class NotebookSourceResolver implements SourceResolver {
 }
 
 type AbortControllerHolder = { controller: AbortController|null }
+
+const setExtraLibs = async (prevContent:string, monaco: Monaco, cell: Cell, abortController: AbortController|null ) => {
+  
+  const extraLibs:Array<{
+          content: string;
+          filePath?: string;
+        }> = [
+          { content: SHOW.declaration }
+        ]
+  if( prevContent.trim().length > 0 ) { 
+
+    const dts = await fetchDTS( { 
+      cellId: cell.id, 
+      content: prevContent, 
+      signal:abortController?.signal } )
+
+    if( dts ) {
+      logger.trace( () => `setExtraLibs(${cell.id})\n${dts}` ) 
+
+      extraLibs.push( 
+        { 
+          content: dts,
+          filePath:  monaco.Uri.file(`/${TYPES_ROOT}/${cell.id}/index.d.ts`).toString(true)
+        }
+      )
+      
+    }
+  }
+
+  monaco.languages.typescript.typescriptDefaults.setExtraLibs( extraLibs )
+
+}
 
 /**
  * 
@@ -104,7 +151,7 @@ export function useMonacoEditor( cell:Cell ) {
   useEffect(() => {
 
     if( !editorRef.current ) return // GUARD
-    if( prevContent.length === 0 ) return // GUARD
+    if( prevContent.trim().length === 0 ) return // GUARD
 
     const { monaco } = editorRef.current
 
@@ -114,35 +161,9 @@ export function useMonacoEditor( cell:Cell ) {
 
     abortController.current.controller = new AbortController();
 
-    fetchDTSdebounce( async () => {
-       
-      const dts = await fetchDTS( { 
-                  cellId: cell.id, 
-                  content: prevContent, 
-                  signal:abortController.current.controller?.signal } )
-      if( dts ) {
-        logger.trace( () => `setExtraLibs(${cell.id})\n${dts}` ) 
-
-        monaco.languages.typescript.typescriptDefaults.setExtraLibs( [ 
-          { 
-            content: dts,
-            filePath:  monaco.Uri.file(`/${TYPES_ROOT}/${cell.id}/index.d.ts`).toString(true)
-          },
-          { content: SHOW.declaration }
-        ])
-  
-      }
-
-
-      //  const uri = monaco.Uri.from(  { scheme:'inmemory', path: cell.id} )
-       
-      //  if( !monaco.editor.getModel(uri) ) {
-      //   logger.trace( () => `monaco.editor.createModel(${cell.id})\n${dts}` ) 
-      //   monaco.editor.createModel( dts, 'typescript', uri )
-
-      //  }
-
-    })
+    fetchDTSdebounce( async () =>   
+      await setExtraLibs( prevContent, monaco, cell, abortController.current.controller )
+    )
   
     return () => {
       abortController.current.controller?.abort()
@@ -158,7 +179,6 @@ export function useMonacoEditor( cell:Cell ) {
       }
     }
   }, [])
-
 
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
     // logger.log( 'handleEditorMount', monacoEditor, monaco )
@@ -183,6 +203,9 @@ export function useMonacoEditor( cell:Cell ) {
     })
 
     // monaco.languages.typescript.typescriptDefaults.addExtraLib(SHOW.declaration)
+    setExtraLibs( prevContent, monaco, cell, null ).then( () => {
+    
+    })
 
     // Initialize auto typing on monaco editor. Imports will now automatically be typed!
     autoTypingsRef.current = AutoTypings.create(monacoEditor, {
