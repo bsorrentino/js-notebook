@@ -11,6 +11,8 @@ import { getLogger, ILogger } from '@bsorrentino/jsnotebook-logger'
 
 const logger = getLogger( 'monaco-editor-hook' )
 
+const TYPES_ROOT = 'node_modules/@types'
+
 self.
 // @ts-ignore
 MonacoEnvironment = {
@@ -95,11 +97,17 @@ type AbortControllerHolder = { controller: AbortController|null }
 export function useMonacoEditor( cell:Cell ) {
   const abortController = useRef<AbortControllerHolder>({ controller:null })
   const autoTypingsRef  = useRef<AutoTypings>()
-  const editorRef       = useRef<monaco.editor.IStandaloneCodeEditor>()
+  const editorRef       = useRef<{ editor: monaco.editor.IStandaloneCodeEditor, monaco:Monaco}>()
 
   const [cumulativeCode, prevContent] = useCumulativeCode(cell.id)
 
   useEffect(() => {
+
+    if( !editorRef.current ) return // GUARD
+    if( prevContent.length === 0 ) return // GUARD
+
+    const { monaco } = editorRef.current
+
     if( abortController.current.controller !== null ) {
       abortController.current.controller.abort()
     }
@@ -107,17 +115,24 @@ export function useMonacoEditor( cell:Cell ) {
     abortController.current.controller = new AbortController();
 
     fetchDTSdebounce( async () => {
-      logger.trace( `fetchDTS(${cell.id})` ) 
+       
       const dts = await fetchDTS( { 
                   cellId: cell.id, 
                   content: prevContent, 
                   signal:abortController.current.controller?.signal } )
-       
-      monaco.languages.typescript.typescriptDefaults.addExtraLib(dts, `${cell.id}.ts`)
+      if( dts ) {
+        logger.trace( () => `setExtraLibs(${cell.id})\n${dts}` ) 
 
-      const model =  editorRef.current?.getModel();
+        monaco.languages.typescript.typescriptDefaults.setExtraLibs( [ 
+          { 
+            content: dts,
+            filePath:  monaco.Uri.file(`/${TYPES_ROOT}/${cell.id}/index.d.ts`).toString(true)
+          },
+          { content: SHOW.declaration }
+        ])
+  
+      }
 
-      model?.setValue( model.getValue() )
 
       //  const uri = monaco.Uri.from(  { scheme:'inmemory', path: cell.id} )
        
@@ -133,7 +148,7 @@ export function useMonacoEditor( cell:Cell ) {
       abortController.current.controller?.abort()
       abortController.current.controller == null
     }
-  }, [ prevContent ] )
+  }, [ prevContent, editorRef.current ] )
 
   useEffect(() => {
     return () => { // dispose autoTypingsRef
@@ -147,24 +162,27 @@ export function useMonacoEditor( cell:Cell ) {
 
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
     // logger.log( 'handleEditorMount', monacoEditor, monaco )
-    editorRef.current = monacoEditor
+    editorRef.current = { editor: monacoEditor, monaco: monaco }
    
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.ES2016,
-      allowNonTsExtensions: true,
       moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
       module: monaco.languages.typescript.ModuleKind.CommonJS,
+      allowNonTsExtensions: true,
       noEmit: true,
-      typeRoots: ["node_modules/@types"]
+      // esModuleInterop: true,
+      // allowJs: true,      
+      typeRoots: [TYPES_ROOT]
     })
-    monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
+    // monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: false,
-      noSyntaxValidation: true,
+      noSyntaxValidation: false,
+      noSuggestionDiagnostics: true
     })
 
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(SHOW.declaration)
+    // monaco.languages.typescript.typescriptDefaults.addExtraLib(SHOW.declaration)
 
     // Initialize auto typing on monaco editor. Imports will now automatically be typed!
     autoTypingsRef.current = AutoTypings.create(monacoEditor, {
@@ -207,12 +225,12 @@ async function fetchDTS( arg:{ cellId: string, content:string, signal?: AbortSig
       body: content
     });
 
-    return await res.text()
+    if( res.status === 200 ) 
+      return await res.text()
 
   }
   catch (e) {
-    logger.warn('error generating DTS', e)
-    return ''
+    logger.warn('error generating DTS' )
   }
 
 }

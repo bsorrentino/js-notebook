@@ -1,11 +1,13 @@
 import express, { NextFunction } from "express";
 import fs from "fs/promises";
 import path from "path";
+import ts from "typescript";
 import { generateDTS, DTSCancellationToken } from "../tsc";
 
 type ExtraRequestArg = { fullPath:string, databaseName:string, notebookId:string }
 
 type GenerateDTSRequest = express.Request<{cellId:string, cancellationToken: DTSCancellationToken}>
+
 /**
  * 
  * @param filename 
@@ -90,14 +92,21 @@ export const createCellsRouter = (dir: string) => {
 
       try {
 
-        const result = generateDTS( filePath, {}, cancellationToken )
+        const result = generateDTS( filePath, {
+        }, cancellationToken )
         // console.log( result )
-        res.send( result ?? '' )
+
+        if( result ) {
+          res.send( result.replaceAll( /(\s*)export\s+/g, '$1' ) )
+        }
+        else {
+          res.status(204).end()
+        }
   
       }
       catch( e:any ) {
         console.log( 'error generating DTS', e.message )
-        res.send( '' )
+        res.status( 204 ).end()
       }
 
     })

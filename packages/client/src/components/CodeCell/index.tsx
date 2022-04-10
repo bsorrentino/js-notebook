@@ -82,7 +82,9 @@ const CodeCell = ( props:CodeCellProps ) => {
   const handleFormatCode = useCallback( () => {
     if (!editorRef.current ) return // GUARD
 
-    const model = editorRef.current.getModel()
+    const { editor } = editorRef.current
+
+    const model = editor.getModel()
     if( model === null ) return // GUARD
 
     const unformatted = model.getValue()
@@ -93,7 +95,7 @@ const CodeCell = ( props:CodeCellProps ) => {
       semi: true,
       singleQuote: false,
     })
-    editorRef.current.setValue(formatted)
+    editor.setValue(formatted)
   }, [editorRef.current] )
 
   const handleChangeCode = (e: string | undefined) => {
