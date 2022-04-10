@@ -4,7 +4,10 @@ export interface Cell {
   id: string
   type: CellType
   content: string
-  height: number
+  height: number,
+  // typescript declarations for cell
+  // valid only for cell type = 'code' and notebook language = 'typescript'
+  dts?: string 
 }
 
 export type NotebookLanguage = "javascript" | "typescript";

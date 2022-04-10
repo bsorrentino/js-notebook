@@ -8,7 +8,6 @@ import {
   moveCell
 } from "../../redux";
 import {
-  useCumulativeCode,
   useDispatch,
 } from "../../hooks";
 import LanguageDropdown from "../LanguageDropdown";
@@ -45,25 +44,31 @@ const resizableStyle = {
   background: "#f0f0f0"
 }
 
-
 /**
  * CodeCell Widget
  * 
  */
-const CodeCell =  ( props:CodeCellProps ) => {
+const CodeCell = ( props:CodeCellProps ) => {
   
   const { cell, language } = props 
   
   const cellHeight = ( cell.height || 200 ) 
-
-  const { editorRef, handleEditorMount }  = useMonacoEditor()
   
   const dispatch = useDispatch();
-  const cumulativeCode = useCumulativeCode(cell.id);
+
+  const { 
+    editorRef, 
+    handleEditorMount, 
+    cumulativeCode 
+  } = useMonacoEditor( cell )
   
   const handleSubmit = useCallback(() => {
     dispatch(
-      createBundle({ id: cell.id, input: cumulativeCode, hasTypescript: language === 'typescript' })
+      createBundle({ 
+        id:             cell.id, 
+        input:          cumulativeCode, 
+        hasTypescript:  language === 'typescript' 
+      })
     )
   }, [ cell.id, cumulativeCode, language ] )
 
@@ -74,11 +79,12 @@ const CodeCell =  ( props:CodeCellProps ) => {
     if( shiftKey && key==='Enter' ) handleSubmit();
   }
 
-
   const handleFormatCode = useCallback( () => {
     if (!editorRef.current ) return // GUARD
 
-    const model = editorRef.current.getModel()
+    const { editor } = editorRef.current
+
+    const model = editor.getModel()
     if( model === null ) return // GUARD
 
     const unformatted = model.getValue()
@@ -89,7 +95,7 @@ const CodeCell =  ( props:CodeCellProps ) => {
       semi: true,
       singleQuote: false,
     })
-    editorRef.current.setValue(formatted)
+    editor.setValue(formatted)
   }, [editorRef.current] )
 
   const handleChangeCode = (e: string | undefined) => {

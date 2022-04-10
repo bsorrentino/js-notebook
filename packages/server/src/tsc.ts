@@ -1,5 +1,30 @@
 import path from "path";
-import ts from "typescript";
+import ts, { CancellationToken } from "typescript";
+
+
+export class DTSCancellationToken implements CancellationToken {
+  
+  #requestCancellation = false
+
+  requestCancellation() {
+    this.#requestCancellation = true
+  }
+
+  revokeCancellation() {
+    this.#requestCancellation = false
+  }
+
+  isCancellationRequested(): boolean {
+    return  this.#requestCancellation
+  }
+
+  throwIfCancellationRequested(): void {
+
+    if( this.#requestCancellation )
+      throw new Error("request cancelled.")
+  }
+
+}
 
 /**
  * 
@@ -8,7 +33,7 @@ import ts from "typescript";
  * @param fileNames 
  */
 
-export function generateDTS( fileName: string, options: ts.CompilerOptions|undefined): string|undefined {
+export function generateDTS( fileName: string, options: ts.CompilerOptions|undefined, cancellationToken?:CancellationToken ): string|undefined {
 
   const compileOptions : ts.CompilerOptions = {
     ...options,
@@ -23,21 +48,20 @@ export function generateDTS( fileName: string, options: ts.CompilerOptions|undef
     (fileName: string, contents: string) => createdFiles[fileName] = contents
 
   const file = path.normalize( fileName )
-
+  
   const program = ts.createProgram( [file], compileOptions, host );
 
-  const emitResult = program.emit()
-
-  console.log( createdFiles )
+  const emitResult = program.emit( undefined, undefined, cancellationToken )
+  
+  // console.log( '\n\ncreatedFiles\n\n', createdFiles, '\n\n')
 
   if( !emitResult.emitSkipped ) {
     
     const outputPropName = path.join( path.dirname(file), path.basename(file).replace( /\.(js|ts)$/, '.d.ts') )
 
-    console.log( outputPropName )
+    // console.log( outputPropName )
     
     return createdFiles[outputPropName]
-  
   }
 
 }

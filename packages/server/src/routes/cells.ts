@@ -1,9 +1,13 @@
 import express, { NextFunction } from "express";
 import fs from "fs/promises";
 import path from "path";
-import { generateDTS } from "../tsc";
+import ts from "typescript";
+import { generateDTS, DTSCancellationToken } from "../tsc";
 
 type ExtraRequestArg = { fullPath:string, databaseName:string, notebookId:string }
+
+type GenerateDTSRequest = express.Request<{cellId:string, cancellationToken: DTSCancellationToken}>
+
 /**
  * 
  * @param filename 
@@ -17,6 +21,20 @@ export const createCellsRouter = (dir: string) => {
       req.params.fullPath = path.join( dir, `${req.params.databaseName}_${req.params.notebookId}.json`)
       next()
   }
+
+  const attachRequestCancellation = ( req:GenerateDTSRequest, res:express.Response, next:NextFunction ) => {
+
+    const token = new DTSCancellationToken()
+
+    req.params.cancellationToken = token
+
+    req.socket.on('close', () => {
+      console.log( 'request cancelled')
+      token.requestCancellation()
+    })
+
+    next()
+}
 
   return express.Router()
     .get<ExtraRequestArg>('/cells/:databaseName/:notebookId', getFullPath, async (req, res) => {
@@ -64,17 +82,32 @@ export const createCellsRouter = (dir: string) => {
         }
       })
     })
-    .post( '/cells/tsc/:fileName', async ( req, res ) => {
+    .post( '/dts/:cellId', express.text(), attachRequestCancellation, async ( req:GenerateDTSRequest, res ) => {
 
-      const { body, params: { fileName } } = req
+      const { body, params: { cancellationToken, cellId } } = req
 
-      const filePath = path.join(dir, fileName)
+      const filePath = path.join(dir, `${cellId}.ts`)
 
       await fs.writeFile( filePath, body, "utf-8")
 
-      const result = generateDTS( filePath, {})
+      try {
 
-      res.send( result )
+        const result = generateDTS( filePath, {
+        }, cancellationToken )
+        // console.log( result )
+
+        if( result ) {
+          res.send( result.replaceAll( /(\s*)export\s+/g, '$1' ) )
+        }
+        else {
+          res.status(204).end()
+        }
+  
+      }
+      catch( e:any ) {
+        console.log( 'error generating DTS', e.message )
+        res.status( 204 ).end()
+      }
 
     })
 };

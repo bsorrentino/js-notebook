@@ -66,7 +66,7 @@ const NotebookList: FunctionComponent<NotebookListProps> = () => {
 
     const addNotebook = useCallback( async ( id:string ) => {
         try {
-            await db.addNotebook( { _id: id, cells: [] } )
+            await db.addNotebook( { _id: id, language: 'javascript', cells: [] } )
             
             const result = await db.loadNotebooks() 
 
