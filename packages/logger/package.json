@@ -1,0 +1,32 @@
+{
+  "name": "@bsorrentino/jsnotebook-logger",
+  "version": "0.20.0",
+  "description": "commons client side functions, components ",
+  "keywords": [
+    "logger"
+  ],
+  "author": "bsorrentino <bartolomeo.sorrentino@gmail.com>",
+  "homepage": "https://github.com/bsorrentino/js-notebook#readme",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "directories": {
+    "src": "src",
+    "test": "__tests__"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bsorrentino/js-notebook.git"
+  },
+  "scripts": {
+    "cleanall": "zx ../zx-package-clean.mjs --all",
+    "clean": "zx ../zx-package-clean.mjs",
+    "prepare": "npm run clean && tsc"
+  },
+  "bugs": {
+    "url": "https://github.com/bsorrentino/js-notebook/issues"
+  }
+}

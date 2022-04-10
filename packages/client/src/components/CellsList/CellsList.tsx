@@ -3,10 +3,14 @@ import CellItem from "./CellItem";
 import { useDispatch, useSelector } from "../../hooks";
 import { fetchNotebook } from "../../redux";
 import AddCell from "../AddCell";
-import * as db from '@bsorrentino/jsnotebook-client-data'
 import { ImportNotebook } from "../ImportNotebook/ImportNotebook";
 import { ExportNotebook } from "../ExportNotebook/ExportNotebook";
 // import {shallowEqual } from 'react-redux'
+
+import * as db from '@bsorrentino/jsnotebook-client-data'
+import { getLogger } from "@bsorrentino/jsnotebook-logger";
+
+const logger = getLogger( 'CellsList' )
 
 const CellsList: React.FC = () => {
 
@@ -21,7 +25,7 @@ const CellsList: React.FC = () => {
   const { language = 'javascript', cellsData, order, saveStatus } = useSelector(({ notebook }) => {
     const { language, cells, order, saveStatus } = notebook;
 
-    console.log( 'useSelector', saveStatus )
+    logger.trace( 'useSelector', saveStatus )
 
     const cellsData = order.map(id => cells[id] )
     

@@ -1,7 +1,11 @@
-import {  NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateNotebookLanguage } from "../../redux";
+import {  NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
+import { getLogger } from "@bsorrentino/jsnotebook-logger";
+
+const logger = getLogger( 'LanguageDropdown' )
+
 
 interface LanguageDropdownProps {
   id: string;
@@ -25,7 +29,7 @@ const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
     const handler = ( e:any ) => {
       if( !selectEl.current ) return // GUARD
       if( selectEl.current.value != e.detail  ) {
-        console.log( 'notebook.updateLanguage set', selectEl.current.value, e.detail )
+        logger.trace( 'notebook.updateLanguage set', selectEl.current.value, e.detail )
         _setLanguage(  e.detail )
       }
     }

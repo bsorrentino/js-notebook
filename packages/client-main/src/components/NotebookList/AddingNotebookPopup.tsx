@@ -1,5 +1,8 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react"
 import { makeDebounce } from "../../debounce"
+import { getLogger } from '@bsorrentino/jsnotebook-logger'
+
+const logger = getLogger( 'AddingNotebookPopup' )
 
 const inputDebounce = makeDebounce( 800 )
 
@@ -17,7 +20,7 @@ export const AddingNotebookPopup: FunctionComponent<AddingNotebookPopupProps> = 
     const [docId, setDocId] = useState<string>('')
 
     useEffect( () => {
-        console.log( 'setDocId( null )')
+        logger.debug( 'setDocId( null )')
         setDocId( '' )
         if( inputRef.current ) 
             inputRef.current.value = ''

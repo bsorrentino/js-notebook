@@ -1,12 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { Cell, Notebook, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
-import * as db from '@bsorrentino/jsnotebook-client-data'
 import {
   DeleteCell,
   InsertCell,
   UpdateNotebookLanguage,
-  UpdateCellContent,
+  UpdateCellRequest,
   MoveCell,
   ImportNotebook,
   ResizeCell
@@ -22,6 +20,12 @@ export interface NotebookState {
   cells: Record<string, Cell>
   language: NotebookLanguage
 }
+import { Cell, Notebook, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
+import * as db from '@bsorrentino/jsnotebook-client-data'
+import { getLogger } from "@bsorrentino/jsnotebook-logger";
+
+
+const logger = getLogger( 'cellsThunks' )
 
 const generateId = () => 
   Math.random().toString(36).substr(2, 5);
@@ -31,6 +35,7 @@ const errorMessage = ( error:any ) => {
   console.error( result )
   return result
 }
+
 
 const updateCellDebounce = makeDebounce(700)
 
@@ -70,7 +75,7 @@ export const fetchNotebook = createAsyncThunk<
  try {
 
   const result = await db.updateNotebook( args )
-  console.log(`cell content updated!`, result)
+  logger.trace(`cell content updated!`, result)
 
   return args
 
@@ -104,7 +109,7 @@ export const exportNotebook = createAsyncThunk<
   }
 
   try {
-    console.log( 'exporting notebook .... ')
+    logger.debug( 'exporting notebook .... ')
     await fetch(`/cells/${databaseName}/${notebookId}`, { 
       method: 'POST',
       headers: {
@@ -113,7 +118,7 @@ export const exportNotebook = createAsyncThunk<
       },
       body: JSON.stringify(payload)
      });
-     console.log( 'notebook exported!')
+     logger.debug( 'notebook exported!')
   } catch (error:any) {
     rejectWithValue(error.message);
   }
@@ -124,7 +129,7 @@ export const exportNotebook = createAsyncThunk<
  */
 export const updateCellContent = createAsyncThunk<
   void,
-  UpdateCellContent,
+  UpdateCellRequest,
   { rejectValue: string; state: RootState }
 >("cells/updateCellContent", async (arg, { getState, rejectWithValue }) => {
 
@@ -134,7 +139,7 @@ export const updateCellContent = createAsyncThunk<
     try {
 
       const result = await db.updateCellById( cellId, cell => cell.content = content )
-      console.log(`cell content updated!`, result)
+      logger.trace(`cell content updated!`, result)
   
     } catch (error: any) {
  
@@ -159,7 +164,7 @@ export const updateNotebookLanguage = createAsyncThunk<
   try {
 
     const result = await db.updateNotebook( arg )
-    console.log(`cell language updated to ${language}!`, result)
+    logger.trace( () => `cell language updated to ${language}!`, result)
 
   } catch (error: any) {
 
@@ -195,7 +200,7 @@ export const insertCell = createAsyncThunk<
   try {
 
     const result = await db.insertCellAtIndex( index, cell)
-    console.log(`cell ${cell.id} inserted at index ${index}!`, result)
+    logger.trace( () => `cell ${cell.id} inserted at index ${index}!`, result)
     return { insertAt: index, newCell:cell }
 
   } catch (error: any) {
@@ -220,7 +225,7 @@ export const deleteCell = createAsyncThunk<
 
     const result = await db.deleteCellById( id )
 
-    console.log('cell deleted!', result)
+    logger.trace( 'cell deleted!', result)
 
   } catch (error: any) {
     
@@ -259,7 +264,7 @@ export const deleteCell = createAsyncThunk<
     try {
 
       const result = await db.saveCells( draft.map( id => data[id] ) )
-      console.log(`cell order updated!`, result)
+      logger.trace(`cell order updated!`, result)
   
     } catch (error: any) {
   
@@ -284,7 +289,7 @@ export const deleteCell = createAsyncThunk<
     try {
 
       const result = await db.updateCellById( cellId, cell => cell.height = height )
-      console.log(`cell height updated!`, result)
+      logger.trace(`cell height updated!`, result)
   
     } catch (error: any) {
  
