@@ -23,6 +23,8 @@
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",
   "dependencies": {
+    "@babel/parser": "^7.17.9",
+    "@babel/traverse": "^7.17.9",
     "@bsorrentino/jsnotebook-client-data": "^0.20.1",
     "@bsorrentino/jsnotebook-logger": "^0.20.1",
     "@fortawesome/fontawesome-free": "^6.1.1",
@@ -34,6 +36,7 @@
     "localforage": "^1.10.0",
     "monaco-editor": "^0.33.0",
     "monaco-editor-auto-typings": "^0.2.0",
+    "monaco-jsx-highlighter": "^2.0.4",
     "prettier": "^2.5.1",
     "re-resizable": "^6.9.5",
     "react": "^17.0.2",

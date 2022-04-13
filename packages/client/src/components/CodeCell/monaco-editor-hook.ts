@@ -1,5 +1,10 @@
+
 import { Monaco, OnMount } from "@monaco-editor/react";
 import { AutoTypings, LocalStorageCache, SourceResolver, UnpkgSourceResolver } from "monaco-editor-auto-typings";
+import {parse} from "@babel/parser";
+import traverse from "@babel/traverse";
+import MonacoJSXHighlighter from 'monaco-jsx-highlighter';
+
 import { useEffect, useRef } from "react";
 import * as monaco from 'monaco-editor'
 import { SHOW } from "../../embedded-code";
@@ -143,8 +148,8 @@ const setExtraLibs = async (prevContent:string, monaco: Monaco, cell: Cell, abor
  */
 export function useMonacoEditor( cell:Cell ) {
   const abortController = useRef<AbortControllerHolder>({ controller:null })
-  const autoTypingsRef  = useRef<AutoTypings>()
-  const editorRef       = useRef<{ editor: monaco.editor.IStandaloneCodeEditor, monaco:Monaco}>()
+  const pluginRef  = useRef<{ autoTyping: AutoTypings,  monacoJSXHighlighter:MonacoJSXHighlighter }>()
+  const editorRef  = useRef<{ editor: monaco.editor.IStandaloneCodeEditor, monaco:Monaco}>()
 
   const [cumulativeCode, prevContent] = useCumulativeCode(cell.id)
 
@@ -173,9 +178,9 @@ export function useMonacoEditor( cell:Cell ) {
 
   useEffect(() => {
     return () => { // dispose autoTypingsRef
-      if (autoTypingsRef.current) {
+      if (pluginRef.current) {
         logger.debug('disposing autotypings')
-        autoTypingsRef.current.dispose()
+        pluginRef.current.autoTyping.dispose()
       }
     }
   }, [])
@@ -197,7 +202,7 @@ export function useMonacoEditor( cell:Cell ) {
     // monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-      noSemanticValidation: false,
+      noSemanticValidation: true,
       noSyntaxValidation: false,
       noSuggestionDiagnostics: true
     })
@@ -207,12 +212,31 @@ export function useMonacoEditor( cell:Cell ) {
     
     })
 
+
+    // Instantiate the highlighter
+    const monacoJSXHighlighter = new MonacoJSXHighlighter(
+      monaco, parse, traverse, monacoEditor
+    );
+    
+    // Start the JSX highlighting and get the dispose function
+    // let disposeJSXHighlighting = monacoJSXHighlighter.highlightOnDidChangeModelContent();
+    // Enhance monaco's editor.action.commentLine with JSX commenting and get its disposer
+    // let disposeJSXCommenting = monacoJSXHighlighter.addJSXCommentCommand();
+    // <<< You are all set. >>>
+    
     // Initialize auto typing on monaco editor. Imports will now automatically be typed!
-    autoTypingsRef.current = AutoTypings.create(monacoEditor, {
+    const autoTyping = AutoTypings.create(monacoEditor, {
       sourceCache: new LocalStorageCache(), // Cache loaded sources in localStorage. May be omitted
       monaco: monaco,
       sourceResolver: new NotebookSourceResolver()
     });
+
+
+    pluginRef.current = {
+      autoTyping: autoTyping,
+      monacoJSXHighlighter: monacoJSXHighlighter
+    }
+
   }
 
   return {
