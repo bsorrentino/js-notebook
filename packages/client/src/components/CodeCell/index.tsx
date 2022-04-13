@@ -1,4 +1,4 @@
-import { KeyboardEvent, useCallback } from "react";
+import { KeyboardEvent, useCallback, useEffect, useLayoutEffect } from "react";
 import Preview from "./Preview";
 
 import {
@@ -19,6 +19,9 @@ import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { Resizable } from "re-resizable";
 import { resizeCell } from "../../redux/slices/cellsThunks";
 import { useMonacoEditor } from './monaco-editor-hook'
+import { getLogger } from "@bsorrentino/jsnotebook-logger";
+
+const logger = getLogger( 'CodeCell' )
 
 interface CodeCellProps {
   cell: Cell;
@@ -62,6 +65,7 @@ const CodeCell = ( props:CodeCellProps ) => {
     cumulativeCode 
   } = useMonacoEditor( cell )
   
+
   const handleSubmit = useCallback(() => {
     dispatch(
       createBundle({ 
@@ -158,6 +162,7 @@ const CodeCell = ( props:CodeCellProps ) => {
               language={language}
               theme="vs-dark"
               options={monacoEditorOptions}
+              path={`inmemory://model/${cell.id}.tsx`}
             /> 
           </Resizable>
         </div>
