@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-cli",
-  "version": "0.21.1",
+  "version": "0.21.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -27,8 +27,8 @@
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",
   "dependencies": {
-    "@bsorrentino/jsnotebook-client-main": "^0.21.1",
-    "@bsorrentino/jsnotebook-local-pkg": "^0.21.1",
-    "@bsorrentino/jsnotebook-server": "^0.21.1"
+    "@bsorrentino/jsnotebook-client-main": "^0.21.2",
+    "@bsorrentino/jsnotebook-local-pkg": "^0.21.2",
+    "@bsorrentino/jsnotebook-server": "^0.21.2"
   }
 }
