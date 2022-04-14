@@ -13,7 +13,8 @@
     "access": "public"
   },
   "files": [
-    "dist/**/!(__tests__)/*.{js,ts}"
+    "dist/**/*.{js,ts}",
+    "!dist/__tests__/**/*.{js,ts}"
   ],
   "scripts": {
     "cleanall": "zx ../zx-package-clean.mjs --all",
