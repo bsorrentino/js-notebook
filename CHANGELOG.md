@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/bsorrentino/js-notebook/compare/v0.20.1...v0.21.0) (2022-04-14)
+
+
+### Features
+
+* **jsx support:** complete support for JSX syntax ([b97e445](https://github.com/bsorrentino/js-notebook/commit/b97e445df7c2bcfdfedeee521374cff1ff393199)), closes [#15](https://github.com/bsorrentino/js-notebook/issues/15)
+* **jsx:** start integration of monaco-jsx-highlighter [#15](https://github.com/bsorrentino/js-notebook/issues/15) ([9d77402](https://github.com/bsorrentino/js-notebook/commit/9d77402e8079340b3c1fc58ce8166aab96d4f826))
+* **sandbox:** add 'allow-modals' feature ([4a294aa](https://github.com/bsorrentino/js-notebook/commit/4a294aa544749bbb5f0f839dc923d30f936255c0))
+
+
+
+
+
 ## [0.20.1](https://github.com/bsorrentino/js-notebook/compare/v0.20.0...v0.20.1) (2022-04-10)
 
 **Note:** Version bump only for package @bsorrentino/jsnotebook
