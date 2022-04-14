@@ -97,7 +97,7 @@ const Preview: React.FC<PreviewProps> = ({ id }) => {
         <iframe
           title="preview"
           ref={iframe}
-          sandbox="allow-scripts allow-same-origin"
+          sandbox="allow-scripts allow-same-origin allow-modals"
           srcDoc={html}
         />
       </div>

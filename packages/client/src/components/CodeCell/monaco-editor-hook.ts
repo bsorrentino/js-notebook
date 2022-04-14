@@ -1,12 +1,14 @@
+
 import { Monaco, OnMount } from "@monaco-editor/react";
-import { AutoTypings, LocalStorageCache, SourceResolver, UnpkgSourceResolver } from "monaco-editor-auto-typings";
+import { AutoTypings, LocalStorageCache, SourceResolver, UnpkgSourceResolver } from "monaco-editor-auto-typings"
+
 import { useEffect, useRef } from "react";
 import * as monaco from 'monaco-editor'
 import { SHOW } from "../../embedded-code";
 import { makeDebounceAsync } from "../../debounce";
 import { useCumulativeCode } from "../../hooks";
 
-import { Cell } from "@bsorrentino/jsnotebook-client-data";
+import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
 import { getLogger } from '@bsorrentino/jsnotebook-logger'
 
 const logger = getLogger( 'monaco-editor-hook' )
@@ -142,9 +144,9 @@ const setExtraLibs = async (prevContent:string, monaco: Monaco, cell: Cell, abor
  * @returns 
  */
 export function useMonacoEditor( cell:Cell ) {
-  const abortController = useRef<AbortControllerHolder>({ controller:null })
-  const autoTypingsRef  = useRef<AutoTypings>()
-  const editorRef       = useRef<{ editor: monaco.editor.IStandaloneCodeEditor, monaco:Monaco}>()
+  const abortController           = useRef<AbortControllerHolder>({ controller:null })
+  const autoTypingRef             = useRef<AutoTypings>()
+  const editorRef  = useRef<{ editor: monaco.editor.IStandaloneCodeEditor, monaco:Monaco}>()
 
   const [cumulativeCode, prevContent] = useCumulativeCode(cell.id)
 
@@ -171,15 +173,6 @@ export function useMonacoEditor( cell:Cell ) {
     }
   }, [ prevContent, editorRef.current ] )
 
-  useEffect(() => {
-    return () => { // dispose autoTypingsRef
-      if (autoTypingsRef.current) {
-        logger.debug('disposing autotypings')
-        autoTypingsRef.current.dispose()
-      }
-    }
-  }, [])
-
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
     // logger.log( 'handleEditorMount', monacoEditor, monaco )
     editorRef.current = { editor: monacoEditor, monaco: monaco }
@@ -192,6 +185,7 @@ export function useMonacoEditor( cell:Cell ) {
       noEmit: true,
       // esModuleInterop: true,
       // allowJs: true,      
+      jsx: monaco.languages.typescript.JsxEmit.React,
       typeRoots: [TYPES_ROOT]
     })
     // monaco.languages.typescript.typescriptDefaults.setEagerModelSync(true);
@@ -206,13 +200,15 @@ export function useMonacoEditor( cell:Cell ) {
     setExtraLibs( prevContent, monaco, cell, null ).then( () => {
     
     })
-
+        
     // Initialize auto typing on monaco editor. Imports will now automatically be typed!
-    autoTypingsRef.current = AutoTypings.create(monacoEditor, {
+    autoTypingRef.current = AutoTypings.create(monacoEditor, {
+      fileRootPath: 'inmemory://model/',
       sourceCache: new LocalStorageCache(), // Cache loaded sources in localStorage. May be omitted
       monaco: monaco,
       sourceResolver: new NotebookSourceResolver()
-    });
+    })
+
   }
 
   return {
