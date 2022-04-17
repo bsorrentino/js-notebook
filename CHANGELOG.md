@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/bsorrentino/js-notebook/compare/v0.21.2...v0.22.0) (2022-04-17)
+
+
+### Features
+
+* support custom monaco instance ([3887af0](https://github.com/bsorrentino/js-notebook/commit/3887af0a566a107c5a15b481c64c5a51b2363c20))
+* support custom monaco instance ([8553699](https://github.com/bsorrentino/js-notebook/commit/8553699825619ae9f53901a0615b7f3e3904a3af))
+
+
+
+
+
 ## [0.21.2](https://github.com/bsorrentino/js-notebook/compare/v0.21.1...v0.21.2) (2022-04-14)
 
 **Note:** Version bump only for package @bsorrentino/jsnotebook
