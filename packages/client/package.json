@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-client",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -23,8 +23,8 @@
   },
   "gitHead": "f3ce5d2d52d291eb556a1b6302ca734394b2d225",
   "dependencies": {
-    "@bsorrentino/jsnotebook-client-data": "^0.22.0",
-    "@bsorrentino/jsnotebook-logger": "^0.22.0",
+    "@bsorrentino/jsnotebook-client-data": "^0.23.0",
+    "@bsorrentino/jsnotebook-logger": "^0.23.0",
     "@fortawesome/fontawesome-free": "^6.1.1",
     "@monaco-editor/react": "^4.3.1",
     "@reduxjs/toolkit": "^1.7.2",
@@ -33,7 +33,7 @@
     "esbuild-wasm": "0.14.32",
     "localforage": "^1.10.0",
     "monaco-editor": "^0.33.0",
-    "monaco-editor-auto-typings": "https://gitpkg.now.sh/bsorrentino/monaco-editor-auto-typings/packages/core?reference_typeonly_module",
+    "monaco-editor-auto-typings": "https://gitpkg.now.sh/bsorrentino/monaco-editor-auto-typings/packages/core?patched_module",
     "prettier": "^2.5.1",
     "re-resizable": "^6.9.5",
     "react": "^17.0.2",

@@ -185,6 +185,7 @@ export function useMonacoEditor( cell:Cell ) {
       noEmit: true,
       // esModuleInterop: true,
       // allowJs: true,      
+      experimentalDecorators: true,
       jsx: monaco.languages.typescript.JsxEmit.React,
       typeRoots: [TYPES_ROOT]
     })
