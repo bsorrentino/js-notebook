@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/bsorrentino/js-notebook/compare/v0.22.0...v0.23.0) (2022-04-27)
+
+
+### Features
+
+* enable experimentalDecorators ([f2bedd8](https://github.com/bsorrentino/js-notebook/commit/f2bedd89888625ddce54a039e43fa2a9d30c2b5f))
+
+
+
+
+
 # [0.22.0](https://github.com/bsorrentino/js-notebook/compare/v0.21.2...v0.22.0) (2022-04-17)
 
 
