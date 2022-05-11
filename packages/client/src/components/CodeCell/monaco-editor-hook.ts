@@ -157,20 +157,18 @@ export function useMonacoEditor( cell:Cell ) {
 
     const { monaco } = editorRef.current
 
-    if( abortController.current.controller !== null ) {
-      abortController.current.controller.abort()
-    }
-
-    abortController.current.controller = new AbortController();
-
-    fetchDTSdebounce( async () =>   
+    fetchDTSdebounce( async () =>  {
+      abortController.current.controller = new AbortController();
       await setExtraLibs( prevContent, monaco, cell, abortController.current.controller )
-    )
+    })
   
-    return () => {
+    return () => { // abort request
+      logger.trace( `abort request for: ${cell.id}`)
       abortController.current.controller?.abort()
       abortController.current.controller == null
+
     }
+    
   }, [ prevContent, editorRef.current ] )
 
   const handleEditorMount: OnMount = (monacoEditor, monaco) => {
@@ -203,12 +201,13 @@ export function useMonacoEditor( cell:Cell ) {
     })
         
     // Initialize auto typing on monaco editor. Imports will now automatically be typed!
-    autoTypingRef.current = AutoTypings.create(monacoEditor, {
-      fileRootPath: 'inmemory://model/',
-      sourceCache: new LocalStorageCache(), // Cache loaded sources in localStorage. May be omitted
-      monaco: monaco,
-      sourceResolver: new NotebookSourceResolver()
-    })
+     AutoTypings.create(monacoEditor, {
+        fileRootPath: 'inmemory://model/',
+        sourceCache: new LocalStorageCache(), // Cache loaded sources in localStorage. May be omitted
+        monaco: monaco,
+        sourceResolver: new NotebookSourceResolver()
+     })
+     .then( ref => autoTypingRef.current = ref )
 
   }
 
@@ -234,7 +233,7 @@ async function fetchDTS( arg:{ cellId: string, content:string, signal?: AbortSig
   const { cellId, content, signal } = arg
 
   try {
-
+    logger.debug( `fetchDTS(${cellId}) start .....`)
     const res = await fetch(`/dts/${cellId}`, {
       signal: signal,
       method: 'POST',
@@ -245,12 +244,14 @@ async function fetchDTS( arg:{ cellId: string, content:string, signal?: AbortSig
       body: content
     });
 
+    logger.debug( `fetchDTS(${cellId}) status: ${res.status}`)
+
     if( res.status === 200 ) 
       return await res.text()
 
   }
-  catch (e) {
-    logger.warn('error generating DTS' )
+  catch (e:any) {
+    logger.warn('error generating DTS', e.message )
   }
 
 }
