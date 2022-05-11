@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-client-main",
-  "version": "0.24.0",
+  "version": "0.24.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -20,8 +20,8 @@
     "prepare": "npm run clean && parcel build index.html --public-url /notebooks"
   },
   "dependencies": {
-    "@bsorrentino/jsnotebook-client-data": "^0.24.0",
-    "@bsorrentino/jsnotebook-logger": "^0.24.0",
+    "@bsorrentino/jsnotebook-client-data": "^0.24.1",
+    "@bsorrentino/jsnotebook-logger": "^0.24.1",
     "bulmaswatch": "^0.8.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
