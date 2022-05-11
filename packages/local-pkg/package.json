@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-local-pkg",
-  "version": "0.24.1",
+  "version": "0.24.2",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
