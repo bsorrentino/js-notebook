@@ -18,20 +18,20 @@
     "lerna:addBuild": "lerna add @bsorrentino/jsnotebook-client --scope=javascript-notebook"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.3.2",
-    "@types/jest": "^27.4.1",
+    "@parcel/transformer-sass": "^2.5.0",
+    "@types/jest": "^27.5.1",
     "@types/pouchdb": "^6.4.0",
     "buffer": "^6.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "http-server": "^14.1.0",
-    "jest": "^27.5.1",
+    "jest": "^28.1.0",
     "lerna": "^4.0.0",
-    "parcel": "^2.3.2",
-    "sass": "^1.49.8",
+    "parcel": "^2.5.0",
+    "sass": "^1.51.0",
     "standard-version": "^9.3.2",
-    "ts-jest": "^27.1.4",
-    "typescript": "^4.5.5",
-    "zx": "^5.1.0"
+    "ts-jest": "^28.0.2",
+    "typescript": "^4.6.4",
+    "zx": "^6.1.0"
   },
   "config": {
     "commitizen": {
@@ -85,6 +85,5 @@
     ],
     "commitUrlFormat": "https://github.com/bsorrentino/js-notebook/commits/{{hash}}",
     "compareUrlFormat": "https://github.com/bsorrentino/js-notebook.git/compare/{{previousTag}}...{{currentTag}}"
-
   }
 }
