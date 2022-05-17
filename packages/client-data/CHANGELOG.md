@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.24.4](https://github.com/bsorrentino/js-notebook/compare/v0.24.3...v0.24.4) (2022-05-17)
+
+**Note:** Version bump only for package @bsorrentino/jsnotebook-client-data
+
+
+
+
+
 ## [0.24.3](https://github.com/bsorrentino/js-notebook/compare/v0.24.2...v0.24.3) (2022-05-13)
 
 **Note:** Version bump only for package @bsorrentino/jsnotebook-client-data
