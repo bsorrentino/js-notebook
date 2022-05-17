@@ -1,7 +1,8 @@
-# Change Log
+# Changelog
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [](https://github.com/bsorrentino/js-notebook.git/compare/v0.24.4...v) (2022-05-17)
 
 ## [0.24.4](https://github.com/bsorrentino/js-notebook/compare/v0.24.3...v0.24.4) (2022-05-17)
 
