@@ -10,7 +10,7 @@ const LOCAL_NAMESPACE = 'local'
 
 const logger = getLogger(PLUGIN_ID)
 
-logger.trace( `
+logger.trace( () => `
 href          => '${window.location.href}'
 host          => '${window.location.host}'
 hostname      => '${window.location.hostname}'
@@ -23,9 +23,20 @@ search        => '${window.location.search}'
 
 const LOCAL_URL = `${window.location.protocol}//${window.location.host}`
 
+/**
+ * return package url to check if it is locally (ie. on localhost) installed 
+ *
+ * @param   {string}  pkg  package to resolve
+ *
+ * @return  {[string]}       local package url 
+ */
 const processPackageUrlForLocalCheck = ( pkg: string ) => {
 
-  if( pkg.lastIndexOf('/') !== -1 ) {
+  const isJavascriptFile = !pkg.startsWith('@') // not is scoped
+                            && 
+                            pkg.lastIndexOf('/') !== -1 // contains a slash, means that package is like a path
+  // check if package is a javascript file
+  if( isJavascriptFile ) {
     if( !pkg.endsWith('.js') ) {
       pkg = pkg.concat('.js')
     }
@@ -37,6 +48,13 @@ const processPackageUrlForLocalCheck = ( pkg: string ) => {
   return `${LOCAL_URL}/local/${pkg}`
 }
 
+/**
+ * [getLocalPackageUrlIfExists description]
+ *
+ * @param   {string<string>}   pkg  package to resolve
+ *
+ * @return  {Promise<string|undefined>}    package url to resolve | undefined if it isn't found locally (ie. localhost)
+ */
 const getLocalPackageUrlIfExists = async (pkg: string): Promise<string | undefined> => {
 
   const packageUrl = processPackageUrlForLocalCheck(pkg)
