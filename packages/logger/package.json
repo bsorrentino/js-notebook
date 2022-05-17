@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-logger",
-  "version": "0.24.4",
+  "version": "0.25.0",
   "description": "commons client side functions, components ",
   "keywords": [
     "logger"
