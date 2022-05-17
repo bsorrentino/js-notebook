@@ -1,6 +1,6 @@
 {
   "name": "@bsorrentino/jsnotebook-server",
-  "version": "0.24.4",
+  "version": "0.25.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bsorrentino/js-notebook.git"
@@ -28,8 +28,8 @@
     "@types/jest": "^27.5.1"
   },
   "dependencies": {
-    "@bsorrentino/jsnotebook-client": "^0.24.4",
-    "@bsorrentino/jsnotebook-client-main": "^0.24.4",
+    "@bsorrentino/jsnotebook-client": "^0.25.0",
+    "@bsorrentino/jsnotebook-client-main": "^0.25.0",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "http-proxy-middleware": "^2.0.3",
