@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.25.1](https://github.com/bsorrentino/js-notebook/compare/v0.25.0...v0.25.1) (2022-05-17)
+
+
+### Bug Fixes
+
+* **unpkg-path-plugin:** skip path with "@" prefix as candidate javascript file ([d062f23](https://github.com/bsorrentino/js-notebook/commit/d062f23eb1319ce3d79c474bfada90e0ea832233))
+
+
+
+
+
 # [0.25.0](https://github.com/bsorrentino/js-notebook/compare/v0.24.4...v0.25.0) (2022-05-17)
 
 
