@@ -9,10 +9,7 @@ import { SHOW } from '../embedded-code'
 import { Cell } from "@bsorrentino/jsnotebook-client-data";
 import { getLogger, ILogger } from '@bsorrentino/jsnotebook-logger'
 
-let logger:ILogger 
-//(() => { 
-  logger = getLogger( 'hooks' )
-//})()
+const logger = getLogger( 'hooks' )
 
 type AppDispatch = typeof store.dispatch;
 
