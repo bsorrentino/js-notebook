@@ -1,3 +1,24 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# [0.25.0](https://github.com/bsorrentino/js-notebook/compare/v0.24.4...v0.25.0) (2022-05-17)
+
+
+### Bug Fixes
+
+* **unpkgPathPlugin:** fix problem loading the local package for bundling ([6964b3b](https://github.com/bsorrentino/js-notebook/commit/6964b3b108ec1b4adf5446c4f95d3faebfc662b8))
+
+
+### Features
+
+* **NotebookSourceResolver:** switch resolver order from remmote to local ([4242c15](https://github.com/bsorrentino/js-notebook/commit/4242c1532626ea849b887a85634e6edfc7248dbe))
+
+
+
+
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.

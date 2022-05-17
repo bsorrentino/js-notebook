@@ -8,7 +8,7 @@ import { SHOW } from "../../embedded-code";
 import { makeDebounceAsync } from "../../debounce";
 import { useCumulativeCode } from "../../hooks";
 
-import { Cell, NotebookLanguage } from "@bsorrentino/jsnotebook-client-data";
+import { Cell } from "@bsorrentino/jsnotebook-client-data";
 import { getLogger } from '@bsorrentino/jsnotebook-logger'
 
 const logger = getLogger( 'monaco-editor-hook' )
@@ -45,21 +45,21 @@ class NotebookSourceResolver implements SourceResolver {
   unpkgResolver = new UnpkgSourceResolver()
 
   public async resolvePackageJson(packageName: string, version?: string | undefined, subPath?: string | undefined): Promise<string | undefined> {
-    try {
-      const result = await this.unpkgResolver.resolvePackageJson(packageName, version, subPath)
-
-      if (result && result.length > 0) return result
-
-      return await this.resolveFile(
+    return this.resolveFile(
         // `/local/${packageName}${version ? `@${version}` : ''}${subPath ? `/${subPath}` : ''}/package.json`
         `/local/${packageName}${subPath ? `/${subPath}` : ''}/package.json`
-      );
-
-    }
-    catch (e:any) {
+    )
+    .catch( e => {
+      logger.trace(`local package "${packageName}${subPath ? `/${subPath}` : ''}/package.json" not found!`, e.message)
+      return this.unpkgResolver.resolvePackageJson(packageName, version, subPath)
+    })
+    .then( result => 
+      (result && result.length > 0) ? result : undefined
+    )
+    .catch( e => {
       logger.error('resolvePackageJson', e.message)
-
-    }
+      return undefined
+    })
 
   }
 
@@ -71,20 +71,22 @@ class NotebookSourceResolver implements SourceResolver {
    * @returns 
    */
   public async resolveSourceFile(packageName: string, version: string | undefined, path: string): Promise<string | undefined> {
-    try {
-      const result = await this.unpkgResolver.resolveSourceFile(packageName, version, path)
-
-      if (result && result.length > 0) return result
-
-      return await this.resolveFile(
+  
+    return this.resolveFile(
         // `/local/${packageName}${version ? `@${version}` : ''}/${path}`
         `/local/${packageName}/${path}`
-      );
-
-    }
-    catch (e:any) {
-      logger.error('resolveSourceFile', e.message)
-    }
+      )
+      .catch( e => {
+        logger.trace(`local package "${packageName}/${path}" not found!`, e.message)
+        return this.unpkgResolver.resolveSourceFile(packageName, version, path)
+      })
+      .then( result => 
+        (result && result.length > 0) ? result : undefined
+      )
+      .catch( e => {
+        logger.error('resolveSourceFile', e.message)
+        return undefined
+      })
   }
 
   /**
@@ -99,7 +101,7 @@ class NotebookSourceResolver implements SourceResolver {
       return await res.text();
     }
 
-    throw Error(`Error '${res.status} while fetching from Unpkg at '${url}'`);
+    throw Error(`Error '${res.status} while fetching from url '${url}'`);
 
   }
 }
