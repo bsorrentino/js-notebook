@@ -1,4 +1,5 @@
 import express, { NextFunction } from "express";
+import type { DownloadOptions } from "express-serve-static-core"
 import fs from "fs/promises";
 import path from "path";
 import ts from "typescript";
@@ -62,7 +63,7 @@ export const createCellsRouter = (dir: string) => {
     })
     .get<ExtraRequestArg>('/export/:databaseName/:notebookId', getFullPath, async (req, res) => {
 
-      const options = {
+      const options:DownloadOptions = {
         maxAge: 0,	// Sets the max-age property of the Cache-Control header in milliseconds or a string in ms format	
         lastModified: true,	// Sets the Last-Modified header to the last modified date of the file on the OS. Set false to disable it.
         headers: {}, //	Object containing HTTP headers to serve with the file. The header Content-Disposition will be overriden by the filename argument.
