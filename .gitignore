@@ -1,3 +1,5 @@
+package-lock.json
+bun.lockb
 **/node_modules
 **/dist
 dist-ssr
